@@ -320,7 +320,7 @@ body.admin-mode .add-card{display:flex;}
 </head>
 <body>
 <div class="bg-grid"></div>
-<div class="watermark">@elzstore_id</div>
+<div class="watermark" id="watermarkEl"></div>
 
 <!-- ════════════════════════════════════
      SCREEN 1: SHOP (HOME)
@@ -586,8 +586,9 @@ var CFG = {
   supabaseUrl:    'https://lgjcsefaqkqvidkuuomo.supabase.co',
   supabaseKey:    'sb_publishable_QNgbN6O4h3mp2bmdMWeqBA_E9qQ8h7J',
 
-  // ★ TRAKTIR.ID — username akun Trakteer kamu
+  // ★ TRAKTEER — harga per unit di akun Trakteer kamu (Rp 5.000/unit)
   traktirUsername:'Viphunter',
+  trakteerPricePerUnit: 5000,
 
   // ★ BOT NOTIFIKASI — bot yang terima order masuk
   botToken:       'GANTI_BOT_TOKEN',         // dari @BotFather  contoh: '123456:ABC-DEF...'
@@ -595,8 +596,17 @@ var CFG = {
 
   // ★ Default bot untuk VIP link
   defaultBot:     'viphunter_xbot',
+
+  // ★ WATERMARK — teks pojok kanan bawah (kosongkan '' untuk sembunyikan)
+  watermark:      '@elzstore_id',
 };
 // ══════════════════════════════════════════════
+
+// ── RENDER WATERMARK ──
+(function(){
+  var el=document.getElementById('watermarkEl');
+  if(el){el.textContent=CFG.watermark||'';el.style.display=CFG.watermark?'block':'none';}
+})();
 
 // ── TELEGRAM MINI APP INIT ──
 var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : {
@@ -755,7 +765,9 @@ function renderPayment(){
   var orderId='VH'+Date.now().toString().slice(-6);
   var msg=encodeURIComponent('Order '+orderId+' VIP Hunter');
   var cleanUsername=CFG.traktirUsername.replace(/^https?:\/\//,'').replace(/^trakteer?\.(id|com)\//i,'').replace(/^\/+/,'').trim();
-  var traktirUrl='https://trakteer.id/'+cleanUsername+'?amount='+total+'&message='+msg;
+  var pricePerUnit=CFG.trakteerPricePerUnit||5000;
+  var quantity=Math.ceil(total/pricePerUnit);
+  var traktirUrl='https://trakteer.id/'+cleanUsername+'?quantity='+quantity+'&message='+msg;
   if(!cleanUsername||cleanUsername==='GANTI_USERNAME_TRAKTIR'){traktirUrl='https://trakteer.id/';}
   var traktirBtnEl=document.getElementById('traktirBtn');
   traktirBtnEl.href=traktirUrl;
