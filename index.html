@@ -164,6 +164,15 @@ body.admin-mode .add-card{display:flex;}
 .cs-send-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;color:#000;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .cs-send-btn:active{transform:scale(.92);}
 .cs-empty{text-align:center;padding:50px 20px;color:var(--tg-hint);font-size:.82rem;}
+/* GUEST FORM */
+.guest-form-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;gap:14px;}
+.guest-form-box{width:100%;max-width:360px;background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);padding:20px;}
+.guest-form-box h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:#fff;margin-bottom:4px;}
+.guest-form-box p{font-size:.75rem;color:var(--tg-hint);margin-bottom:16px;line-height:1.6;}
+.guest-input{width:100%;background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 13px;border-radius:9px;outline:none;transition:border-color .2s;margin-bottom:10px;}
+.guest-input:focus{border-color:rgba(245,200,66,.5);}
+.guest-submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.guest-submit-btn:active{transform:scale(.97);}
 /* SUCCESS */
 .success-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center;}
 .success-ico{font-size:4rem;margin-bottom:16px;animation:popIn .4s ease both;}
@@ -347,23 +356,23 @@ body.admin-mode .add-card{display:flex;}
     <span class="back-sub" style="color:var(--green);font-weight:600;">● Siap membantu</span>
   </div>
   <div class="cs-wrap">
-    <div class="cs-msgs" id="csMsgs">
-      <div class="cs-empty" id="csEmpty">
-        <div style="font-size:2.5rem;margin-bottom:10px;">💬</div>
-        <p>Belum ada pesan.<br/>Kirim pesan untuk menghubungi admin!</p>
-        <div style="margin-top:14px;background:var(--tg-sec);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:left;">
-          <div style="font-size:.7rem;color:var(--gold);font-weight:700;margin-bottom:6px;">💡 Contoh pertanyaan:</div>
-          <div style="font-size:.72rem;color:var(--tg-hint);line-height:1.8;">
-            • Saya sudah bayar tapi link belum masuk<br/>
-            • Apakah bisa beli lebih dari 1 paket?<br/>
-            • Channel VIP berisi konten apa?
-          </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px;text-align:center;gap:16px;">
+      <div style="font-size:3.5rem;filter:drop-shadow(0 0 16px rgba(245,200,66,.4));">💬</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;color:#fff;">HUBUNGI ADMIN</div>
+      <p style="font-size:.82rem;color:var(--tg-hint);line-height:1.7;max-width:280px;">
+        Klik tombol di bawah untuk chat langsung dengan admin via bot CS kami di Telegram.
+      </p>
+      <div style="background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:14px 16px;width:100%;text-align:left;">
+        <div style="font-size:.65rem;color:var(--gold);font-weight:700;letter-spacing:1.5px;margin-bottom:8px;">💡 CONTOH PERTANYAAN</div>
+        <div style="font-size:.75rem;color:var(--tg-hint);line-height:1.9;">
+          • Saya sudah bayar tapi link belum masuk<br/>
+          • Apakah bisa beli lebih dari 1 paket?<br/>
+          • Channel VIP berisi konten apa?
         </div>
       </div>
-    </div>
-    <div class="cs-input-wrap">
-      <textarea class="cs-input" id="csInput" placeholder="Tulis pesan untuk admin..." rows="1"></textarea>
-      <button class="cs-send-btn" id="csSendBtn">➤</button>
+      <button onclick="openCSBot()" class="bot-pay-btn" style="margin-top:8px;">
+        📲 Chat Admin via Telegram
+      </button>
     </div>
   </div>
 </div>
@@ -473,10 +482,11 @@ var CFG={
   adminPassword:'Malik10_',
   supabaseUrl:'https://lgjcsefaqkqvidkuuomo.supabase.co',
   supabaseKey:'sb_publishable_QNgbN6O4h3mp2bmdMWeqBA_E9qQ8h7J',
-  // ══ GANTI dengan username Telegram ADMIN (tanpa @) ══
   adminTgUsername:'Cs_viphunter_xbot',
   botUsername:'Cs_viphunter_xbot',
   watermark:'@elzstore_id',
+  botToken:'8050084420:AAG-yShtIRHSj5HBKkIUgzZbAWRze-7N-Ig',
+  adminIds:[5918905984, 5734902794],
 };
 (function(){var el=document.getElementById('watermarkEl');if(el&&CFG.watermark)el.textContent=CFG.watermark;})();
 
@@ -496,6 +506,20 @@ var tgUser=tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null
 var tgUserId=tgUser?tgUser.id:null;
 var tgDisplayName=tgUser?(((tgUser.first_name||'')+(tgUser.last_name?' '+tgUser.last_name:'')).trim()||'Pelanggan'):'Pelanggan';
 var tgUsername=tgUser&&tgUser.username?tgUser.username:'';
+
+// Jika buka dari browser biasa (bukan Telegram), buat guest ID
+var isGuestMode = false;
+if(!tgUserId){
+  isGuestMode = true;
+  var storedGuestId=null;
+  try{storedGuestId=localStorage.getItem('vip_guest_id');}catch(e){}
+  if(!storedGuestId){storedGuestId='guest_'+Date.now()+'_'+Math.floor(Math.random()*9999);try{localStorage.setItem('vip_guest_id',storedGuestId);}catch(e){}}
+  tgUserId=storedGuestId;
+  var savedGuestName='';var savedGuestContact='';
+  try{savedGuestName=localStorage.getItem('vip_guest_name')||'';savedGuestContact=localStorage.getItem('vip_guest_contact')||'';}catch(e){}
+  tgDisplayName=savedGuestName||'Tamu (Web)';
+  tgUsername=savedGuestContact||'';
+}
 
 function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast show'+(t?' '+t:'');clearTimeout(el._t);el._t=setTimeout(function(){el.className='toast';},3200);}
 function openModal(id){document.getElementById(id).classList.add('open');}
@@ -533,16 +557,13 @@ tg.BackButton.onClick(function(){
 function goHome(){cart=[];updateBadge();renderGrid();navTo('s-shop','nav-shop');}
 
 // ══ BUKA ADMIN / BOT ══
-function openAdmin(){
-  var url='https://t.me/'+CFG.adminTgUsername;
-  try{if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){Telegram.WebApp.openLink(url);return;}}catch(e){}
-  window.open(url,'_blank');
-}
-function openBot(){
+function openCSBot(){
   var url='https://t.me/'+CFG.botUsername;
   try{if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){Telegram.WebApp.openLink(url);return;}}catch(e){}
   window.open(url,'_blank');
 }
+function openAdmin(){openCSBot();}
+function openBot(){openCSBot();}
 
 // ══ BUAT PESAN ORDER UNTUK ADMIN ══
 function buildOrderMessage(orderId, now){
@@ -735,6 +756,37 @@ document.getElementById('botPayBtn').addEventListener('click',async function(){
 
 // ══ CS CHAT ══
 function renderCS(){
+  // Tampilkan banner jika buka dari browser (bukan Telegram)
+  var isTgUser=tg.initDataUnsafe&&tg.initDataUnsafe.user;
+  var banner=document.getElementById('guestBanner');
+  var guestForm=document.getElementById('guestFormWrap');
+  var csMsgsEl=document.getElementById('csMsgs');
+  var csInputWrap=document.querySelector('.cs-input-wrap');
+
+  if(!isTgUser){
+    // Cek apakah sudah isi nama
+    var savedName='';try{savedName=localStorage.getItem('vip_guest_name')||'';}catch(e){}
+    if(!savedName){
+      // Belum isi nama — tampilkan form, sembunyikan chat
+      if(banner)banner.style.display='none';
+      if(guestForm)guestForm.style.display='flex';
+      if(csMsgsEl)csMsgsEl.style.display='none';
+      if(csInputWrap)csInputWrap.style.display='none';
+      return;
+    }else{
+      // Sudah isi nama — tampilkan banner & chat
+      if(banner)banner.style.display='block';
+      if(guestForm)guestForm.style.display='none';
+      if(csMsgsEl)csMsgsEl.style.display='flex';
+      if(csInputWrap)csInputWrap.style.display='flex';
+    }
+  }else{
+    if(banner)banner.style.display='none';
+    if(guestForm)guestForm.style.display='none';
+    if(csMsgsEl)csMsgsEl.style.display='flex';
+    if(csInputWrap)csInputWrap.style.display='flex';
+  }
+
   var container=document.getElementById('csMsgs');
   container.querySelectorAll('.cs-bubble-wrap').forEach(function(el){el.remove();});
   if(!csMessages.length){document.getElementById('csEmpty').style.display='block';return;}
@@ -754,17 +806,56 @@ function appendBubble(msg,doScroll){
   container.appendChild(wrap);
   if(doScroll!==false)container.scrollTop=container.scrollHeight;
 }
+async function sendToTelegram(text){
+  var results=[];
+  for(var i=0;i<CFG.adminIds.length;i++){
+    try{
+      var r=await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendMessage',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({chat_id:CFG.adminIds[i],text:text,parse_mode:'HTML'})
+      });
+      var d=await r.json();
+      results.push(d.ok);
+    }catch(e){results.push(false);}
+  }
+  return results.some(Boolean);
+}
+
 async function sendCSMessage(){
   var input=document.getElementById('csInput');
   var text=input.value.trim();
   if(!text)return;
-  if(!tgUserId){toast('❌ Buka dari Telegram dulu!','err');return;}
-  input.value='';input.style.height='auto';
+  input.value='';input.style.height='auto';haptic('light');
+
   var now=new Date().toISOString();
-  var msg={id:'cs_'+Date.now(),customer_tg_id:String(tgUserId),customer_name:tgDisplayName,customer_tg:tgUsername,text:text,from_admin:false,created_at:now};
-  csMessages.push(msg);appendBubble(msg,true);haptic('light');
-  try{await sbPost('cs_messages',msg);}
-  catch(e){toast('❌ Gagal kirim: '+e.message,'err');}
+  var ticketId='WEB-'+Date.now();
+  var nama=tgDisplayName||'Tamu (Web)';
+  var kontak=tgUsername||'-';
+
+  // Tampilkan bubble dulu di UI
+  var msg={id:'cs_'+Date.now(),customer_tg_id:String(tgUserId),customer_name:nama,customer_tg:kontak,text:text,from_admin:false,created_at:now};
+  csMessages.push(msg);appendBubble(msg,true);
+
+  // Bangun pesan ke admin
+  var tgText=
+    '🌐 <b>PESAN DARI WEB</b>\n'+
+    '━━━━━━━━━━━━━━━━━━━━\n'+
+    '👤 <b>Nama:</b> '+nama+'\n'+
+    '📲 <b>Telegram:</b> @'+kontak+'\n'+
+    '🎫 <b>Ref:</b> <code>'+ticketId+'</code>\n'+
+    '━━━━━━━━━━━━━━━━━━━━\n'+
+    '💬 '+text+'\n\n'+
+    '💡 <i>Balas pelanggan langsung via @'+kontak+'</i>';
+
+  var ok=await sendToTelegram(tgText);
+  if(ok){
+    toast('✅ Pesan terkirim ke admin!','ok');
+    // Simpan juga ke Supabase sebagai backup
+    try{await sbPost('cs_messages',msg);}catch(e){}
+  }else{
+    toast('❌ Gagal kirim ke admin, coba lagi.','err');
+  }
 }
 async function pollCS(){
   if(!tgUserId)return;
@@ -787,6 +878,21 @@ async function pollCS(){
 function clearCsBadge(){var b=document.getElementById('csBadge');b.textContent='';b.classList.remove('show');}
 setInterval(pollCS,8000);
 document.getElementById('csSendBtn').onclick=sendCSMessage;
+
+// Handler form identitas guest
+document.getElementById('guestStartBtn').addEventListener('click',function(){
+  var name=document.getElementById('guestName').value.trim();
+  var contact=document.getElementById('guestContact').value.trim().replace(/^@/,'');
+  if(!name){toast('❌ Nama wajib diisi!','err');document.getElementById('guestName').focus();return;}
+  if(!contact){toast('❌ Username Telegram wajib diisi!','err');document.getElementById('guestContact').focus();return;}
+  try{localStorage.setItem('vip_guest_name',name);localStorage.setItem('vip_guest_contact',contact);}catch(e){}
+  tgDisplayName=name;
+  tgUsername=contact;
+  haptic('medium');
+  toast('✅ Siap! Kamu bisa mulai chat.','ok');
+  renderCS();
+  pollCS();
+});
 document.getElementById('csInput').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCSMessage();}});
 document.getElementById('csInput').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';});
 
