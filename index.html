@@ -21,10 +21,13 @@
 html,body{height:100%;overflow:hidden;}
 body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-serif;display:flex;flex-direction:column;overscroll-behavior:none;}
 
-/* BG GRID */
 .bg-grid{position:fixed;inset:0;z-index:-1;pointer-events:none;
   background-image:linear-gradient(rgba(245,200,66,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(245,200,66,.025) 1px,transparent 1px);
   background-size:50px 50px;}
+
+/* SCREEN */
+.screen{display:none;flex:1;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
 
 /* TOPBAR */
 .topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
@@ -39,14 +42,26 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
   border:1px solid rgba(245,200,66,.2);color:var(--gold);font-size:.95rem;cursor:pointer;
   display:flex;align-items:center;justify-content:center;transition:all .2s;position:relative;}
 .tb-btn:active{background:var(--gold);color:#000;}
+.cart-badge{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;
+  background:var(--red);color:#fff;font-size:.58rem;font-weight:800;
+  border-radius:50px;display:none;align-items:center;justify-content:center;padding:0 3px;border:2px solid var(--tg-bg);}
+.cart-badge.show{display:flex;}
 .admin-dot{position:absolute;bottom:-2px;right:-2px;width:10px;height:10px;border-radius:50%;
   background:var(--green);border:2px solid var(--tg-bg);display:none;}
 .admin-dot.show{display:block;}
 
 /* SCROLL */
-.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:24px;}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:20px;}
 .scroll::-webkit-scrollbar{width:4px;}
 .scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* BACK HEADER */
+.back-hd{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:12px 16px;
+  border-bottom:1px solid var(--border);background:rgba(14,14,20,.95);backdrop-filter:blur(20px);}
+.back-btn{width:34px;height:34px;border-radius:50%;background:var(--tg-sec);border:1px solid var(--border);
+  color:var(--tg-text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.back-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:#fff;}
+.back-sub{font-size:.7rem;color:var(--tg-hint);margin-left:auto;}
 
 /* HERO */
 .hero{padding:24px 16px 16px;text-align:center;}
@@ -62,7 +77,7 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
 /* INFO BOX */
 .info-box{margin:14px 16px 0;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);
   border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;}
-.info-ico{font-size:1.1rem;flex-shrink:0;margin-top:1px;}
+.info-ico{font-size:1.1rem;flex-shrink:0;}
 .info-txt{font-size:.75rem;color:var(--tg-hint);line-height:1.6;}
 .info-txt strong{color:var(--green);}
 
@@ -72,7 +87,7 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
 .sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#fff;}
 .sec-tag-sm{font-size:.62rem;color:var(--tg-hint);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;}
 
-/* PRODUK GRID - 2 KOLOM */
+/* VIP GRID - 2 KOLOM */
 .vip-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
 .vcard{background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);
   overflow:hidden;transition:transform .15s,border-color .2s;display:flex;flex-direction:column;}
@@ -90,21 +105,22 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
 .tier-custom{background:rgba(245,200,66,.2);border:1px solid rgba(245,200,66,.4);color:var(--gold);}
 .vcard-body{padding:10px;flex:1;display:flex;flex-direction:column;}
 .vcard-name{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:1.5px;color:#fff;line-height:1;margin-bottom:4px;}
-.vcard-desc{font-size:.68rem;color:var(--tg-hint);line-height:1.4;margin-bottom:8px;
+.vcard-desc{font-size:.68rem;color:var(--tg-hint);line-height:1.4;margin-bottom:6px;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .vcard-feats{display:flex;flex-direction:column;gap:3px;margin-bottom:8px;}
 .feat-row{font-size:.63rem;color:var(--tg-hint);padding-left:12px;position:relative;line-height:1.3;}
 .feat-row::before{content:'✦';color:var(--gold);font-size:.45rem;position:absolute;left:0;top:3px;}
 .vcard-foot{border-top:1px solid var(--border);padding:8px 10px;margin-top:auto;}
 .price-lbl{font-size:.5rem;color:var(--tg-hint);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
-.price-val{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:1px;
+.price-val{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;
   background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
 .price-per{font-size:.55rem;color:var(--tg-hint);margin-bottom:8px;}
-.buy-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;
-  background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;
-  font-size:.72rem;padding:8px;border-radius:9px;border:none;cursor:pointer;
-  font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:.5px;}
-.buy-btn:active{transform:scale(.96);opacity:.9;}
+.cart-add-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;
+  background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.22);color:var(--gold);
+  font-weight:700;font-size:.7rem;padding:7px;border-radius:9px;cursor:pointer;
+  font-family:'Outfit',sans-serif;transition:all .2s;}
+.cart-add-btn.added{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);color:var(--green);}
+.cart-add-btn:active{transform:scale(.96);}
 
 /* ADMIN BTNS */
 .admin-acts{display:none;gap:6px;padding:0 10px 10px;}
@@ -121,6 +137,104 @@ body.admin-mode .add-card{display:flex;}
 .add-card-icon{font-size:2rem;opacity:.2;}
 .add-card-txt{color:var(--tg-hint);font-size:.82rem;font-weight:600;}
 
+/* CART */
+.cart-empty{text-align:center;padding:60px 20px;}
+.cart-empty-ico{font-size:3rem;margin-bottom:12px;}
+.cart-item{display:flex;align-items:center;gap:10px;background:var(--tg-sec);
+  border:1px solid var(--border);border-radius:12px;padding:11px;margin:0 16px 10px;}
+.ci-img{width:44px;height:44px;border-radius:9px;background:var(--tg-bg);
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;overflow:hidden;}
+.ci-img img{width:100%;height:100%;object-fit:cover;border-radius:9px;}
+.ci-info{flex:1;min-width:0;}
+.ci-name{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1px;color:#fff;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ci-price{font-size:.7rem;color:var(--gold);font-weight:600;margin-top:1px;}
+.ci-sub{font-size:.64rem;color:var(--tg-hint);}
+.ci-ctrl{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.qb{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:var(--tg-bg);
+  color:var(--tg-text);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.qb:active{border-color:var(--gold);}
+.qv{font-weight:700;font-size:.82rem;min-width:20px;text-align:center;}
+.ci-del{width:26px;height:26px;border-radius:7px;border:1px solid rgba(230,57,70,.2);
+  background:rgba(230,57,70,.07);color:var(--red);font-size:.7rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;margin-left:2px;}
+.ci-del:active{background:var(--red);color:#fff;}
+.cart-summary{margin:4px 16px 16px;background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.sum-row{display:flex;justify-content:space-between;font-size:.78rem;color:var(--tg-hint);margin-bottom:6px;}
+.sum-total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px;margin-top:4px;}
+.sum-total-lbl{font-size:.72rem;color:var(--tg-hint);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
+.sum-total-val{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+/* PAYMENT */
+.pay-box{margin:16px;background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;}
+.pay-hd{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.pay-hd-ico{font-size:1.4rem;}
+.pay-hd-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#fff;}
+.pay-hd-sub{font-size:.7rem;color:var(--tg-hint);margin-top:1px;}
+.pay-body{padding:16px;}
+.order-mini{background:var(--tg-bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:14px;}
+.order-mini-row{display:flex;justify-content:space-between;font-size:.76rem;padding:3px 0;}
+.order-mini-row .lbl{color:var(--tg-hint);}
+.order-mini-row .val{color:var(--tg-text);font-weight:600;}
+.order-mini-divider{border:none;border-top:1px solid var(--border);margin:8px 0;}
+.order-mini-total{display:flex;justify-content:space-between;align-items:center;padding-top:4px;}
+.order-mini-total .lbl{font-size:.7rem;color:var(--tg-hint);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.order-mini-total .val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.saweria-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  background:linear-gradient(135deg,#ff6b35,#f7931e);color:#fff;font-weight:800;font-size:.95rem;
+  padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 20px rgba(255,107,53,.3);font-family:'Outfit',sans-serif;}
+.saweria-btn:active{transform:scale(.97);}
+.pay-divider{display:flex;align-items:center;gap:10px;margin:14px 0;}
+.pay-divider::before,.pay-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.pay-divider span{font-size:.68rem;color:var(--tg-hint);white-space:nowrap;}
+.pay-steps{display:flex;flex-direction:column;gap:8px;}
+.pay-step{display:flex;align-items:flex-start;gap:10px;background:var(--tg-bg);border-radius:10px;padding:10px 12px;}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);
+  color:var(--gold);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-txt{font-size:.76rem;color:var(--tg-hint);line-height:1.5;}
+.step-txt strong{color:var(--tg-text);}
+.confirm-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;font-weight:800;font-size:.92rem;
+  padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;margin-top:14px;
+  box-shadow:0 4px 20px rgba(34,197,94,.25);font-family:'Outfit',sans-serif;}
+.confirm-btn:active{transform:scale(.97);}
+
+/* KONFIRMASI FORM */
+.form-box{margin:16px;}
+.form-section{background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);padding:16px;margin-bottom:12px;}
+.form-section-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.fg{margin-bottom:12px;}
+.fg:last-child{margin-bottom:0;}
+.fg label{display:block;font-size:.68rem;font-weight:700;color:var(--tg-hint);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.fg input,.fg textarea{width:100%;background:var(--tg-bg);border:1px solid var(--border);
+  color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.86rem;padding:10px 12px;
+  border-radius:9px;outline:none;transition:border-color .2s;}
+.fg input:focus,.fg textarea:focus{border-color:rgba(245,200,66,.5);}
+.fg textarea{resize:none;min-height:72px;}
+.submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.95rem;
+  padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 24px rgba(245,200,66,.3);font-family:'Outfit',sans-serif;margin-bottom:8px;}
+.submit-btn:active{transform:scale(.97);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/* SUCCESS */
+.success-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center;}
+.success-ico{font-size:4rem;margin-bottom:16px;animation:popIn .4s ease both;}
+@keyframes popIn{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
+.success-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;color:var(--green);margin-bottom:8px;}
+.success-sub{font-size:.85rem;color:var(--tg-hint);line-height:1.6;margin-bottom:24px;max-width:280px;}
+.order-receipt{background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);
+  padding:16px;width:100%;text-align:left;font-family:'Courier New',monospace;font-size:.72rem;
+  color:var(--tg-text);line-height:1.8;white-space:pre-wrap;max-height:200px;overflow-y:auto;margin-bottom:16px;}
+.back-home-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);font-weight:700;font-size:.9rem;
+  padding:12px;border-radius:12px;cursor:pointer;font-family:'Outfit',sans-serif;}
+.back-home-btn:active{border-color:var(--gold);color:var(--gold);}
+
 /* SPINNER */
 .spinner-wrap{text-align:center;padding:60px 20px;}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);
@@ -128,31 +242,29 @@ body.admin-mode .add-card{display:flex;}
 @keyframes spin{to{transform:rotate(360deg);}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-/* WATERMARK */
-.watermark{position:fixed;bottom:calc(8px + env(safe-area-inset-bottom,0px));right:10px;
-  font-size:.58rem;color:rgba(245,200,66,.18);font-weight:700;letter-spacing:1.5px;pointer-events:none;z-index:1;}
+/* PROOF UPLOAD */
+.proof-upload{border:2px dashed rgba(245,200,66,.3);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(245,200,66,.03);}
+.proof-upload img{max-width:100%;border-radius:8px;margin-top:8px;display:none;}
 
-/* OVERLAY & MODAL */
+/* OVERLAY */
 .overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);
   display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
 .overlay.open{opacity:1;pointer-events:all;}
 .sheet{background:var(--tg-sec);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;
-  max-width:480px;max-height:90vh;overflow-y:auto;transform:translateY(40px);transition:transform .25s;}
+  max-width:480px;max-height:90vh;overflow-y:auto;transform:translateY(40px);transition:transform .25s;position:relative;}
 .overlay.open .sheet{transform:translateY(0);}
 .sheet-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 16px;}
 .sheet-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;
   background:rgba(255,255,255,.06);border:none;color:var(--tg-hint);font-size:.9rem;cursor:pointer;}
 .sheet h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:4px;}
 .sheet-sub{font-size:.75rem;color:var(--tg-hint);margin-bottom:16px;}
-
-/* FORM */
-.fg{margin-bottom:12px;}
-.fg label{display:block;font-size:.65rem;font-weight:700;color:var(--tg-hint);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
-.fg input,.fg textarea,.fg select{width:100%;background:var(--tg-bg);border:1px solid var(--border);
+.sfg{margin-bottom:12px;}
+.sfg label{display:block;font-size:.65rem;font-weight:700;color:var(--tg-hint);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.sfg input,.sfg textarea,.sfg select{width:100%;background:var(--tg-bg);border:1px solid var(--border);
   color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 12px;
   border-radius:9px;outline:none;transition:border-color .2s;}
-.fg input:focus,.fg textarea:focus{border-color:rgba(245,200,66,.5);}
-.fg textarea{resize:none;min-height:64px;}
+.sfg input:focus,.sfg textarea:focus{border-color:rgba(245,200,66,.5);}
+.sfg textarea{resize:none;min-height:64px;}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .btn-row{display:flex;gap:8px;margin-top:16px;}
 .save-btn{flex:1;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;
@@ -161,20 +273,16 @@ body.admin-mode .add-card{display:flex;}
   font-weight:700;font-size:.85rem;padding:12px 18px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}
 .del-btn-big{flex:1;background:rgba(230,57,70,.1);border:1px solid rgba(230,57,70,.3);color:var(--red);
   font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}
-
-/* LOGIN */
-.pw-wrap{position:relative;}
-.pw-wrap input{padding-right:44px;}
-.pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;}
-.login-err{color:var(--red);font-size:.78rem;margin-top:6px;display:none;}
-.login-err.show{display:block;}
-
-/* IMG UPLOAD */
 .img-upload{border:2px dashed rgba(245,200,66,.25);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:4px;}
 .img-upload:hover{border-color:rgba(245,200,66,.5);}
 .up-ico{font-size:1.8rem;margin-bottom:4px;}
 .up-hint{font-size:.72rem;color:var(--tg-hint);}
 .img-upload img{max-width:100%;border-radius:8px;margin-top:8px;}
+.pw-wrap{position:relative;}
+.pw-wrap input{padding-right:44px;}
+.pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;}
+.login-err{color:var(--red);font-size:.78rem;margin-top:6px;display:none;}
+.login-err.show{display:block;}
 
 /* TOAST */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
@@ -183,61 +291,182 @@ body.admin-mode .add-card{display:flex;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.ok{border-color:rgba(34,197,94,.4);color:var(--green);}
 .toast.err{border-color:rgba(230,57,70,.4);color:var(--red);}
+
+.watermark{position:fixed;bottom:calc(8px + env(safe-area-inset-bottom,0px));right:10px;
+  font-size:.58rem;color:rgba(245,200,66,.18);font-weight:700;letter-spacing:1.5px;pointer-events:none;z-index:1;}
 </style>
 </head>
 <body>
 <div class="bg-grid"></div>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="tb-logo">
-    <span class="tb-crown">👑</span>
-    <span class="tb-name">VIP HUNTER</span>
-  </div>
-  <div class="tb-right">
-    <button class="tb-btn" id="keyBtn" title="Admin">
-      🔑
-      <span class="admin-dot" id="adminDot"></span>
-    </button>
-  </div>
-</div>
-
-<!-- MAIN SCROLL -->
-<div class="scroll">
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-tag">Layanan VIP Eksklusif</div>
-    <h1><span class="l1">AKSES</span><span class="l2">VIP HUNTER</span></h1>
-    <p class="hero-sub">Pilih paket VIP kamu, bayar langsung & link VIP dikirim otomatis ke email!</p>
-  </div>
-
-  <!-- INFO BOX -->
-  <div class="info-box">
-    <div class="info-ico">✅</div>
-    <div class="info-txt"><strong>Cara Order:</strong> Pilih paket → Klik Beli → Isi nama & email di Trakteer → Bayar → <strong>Link VIP langsung dikirim ke email kamu!</strong></div>
-  </div>
-
-  <!-- PRODUK -->
-  <div class="sec">
-    <div class="sec-hd">
-      <span class="sec-title">PAKET VIP</span>
-      <span class="sec-tag-sm" id="tProduk">0 paket</span>
+<!-- ══ SCREEN 1: SHOP ══ -->
+<div class="screen active" id="s-shop">
+  <div class="topbar">
+    <div class="tb-logo">
+      <span class="tb-crown">👑</span>
+      <span class="tb-name">VIP HUNTER</span>
     </div>
-    <div class="vip-list" id="grid">
-      <div class="spinner-wrap" style="grid-column:1/-1;">
-        <div class="spinner"></div>
-        <p style="color:var(--tg-hint);font-size:.8rem;">Memuat paket...</p>
+    <div class="tb-right">
+      <button class="tb-btn" id="cartBtn">
+        🛒<span class="cart-badge" id="cartBadge">0</span>
+      </button>
+      <button class="tb-btn" id="keyBtn">
+        🔑<span class="admin-dot" id="adminDot"></span>
+      </button>
+    </div>
+  </div>
+  <div class="scroll">
+    <div class="hero">
+      <div class="hero-tag">Layanan VIP Eksklusif</div>
+      <h1><span class="l1">AKSES</span><span class="l2">VIP HUNTER</span></h1>
+      <p class="hero-sub">Pilih paket VIP, bayar via Saweria, link VIP langsung dikirim bot ke Telegram kamu!</p>
+    </div>
+    <div class="info-box">
+      <div class="info-ico">🤖</div>
+      <div class="info-txt"><strong>Cara Order:</strong> Pilih paket → Keranjang → Bayar via Saweria → Konfirmasi → <strong>Bot kirim link VIP ke Telegram kamu!</strong></div>
+    </div>
+    <div class="sec">
+      <div class="sec-hd">
+        <span class="sec-title">PAKET VIP</span>
+        <span class="sec-tag-sm" id="tProduk">0 paket</span>
+      </div>
+      <div class="vip-list" id="grid">
+        <div class="spinner-wrap" style="grid-column:1/-1;">
+          <div class="spinner"></div>
+          <p style="color:var(--tg-hint);font-size:.8rem;">Memuat paket...</p>
+        </div>
       </div>
     </div>
+    <div style="height:16px;"></div>
   </div>
-
-  <div style="height:16px;"></div>
 </div>
 
-<div class="watermark" id="watermarkEl"></div>
-<div class="toast" id="toast"></div>
+<!-- ══ SCREEN 2: KERANJANG ══ -->
+<div class="screen" id="s-cart">
+  <div class="back-hd">
+    <button class="back-btn" onclick="goTo('s-shop')">←</button>
+    <span class="back-title">KERANJANG</span>
+    <span class="back-sub" id="cartCount">0 item</span>
+  </div>
+  <div class="scroll">
+    <div style="height:12px;"></div>
+    <div id="cartEmpty" class="cart-empty" style="display:none;">
+      <div class="cart-empty-ico">🛒</div>
+      <p style="color:var(--tg-hint);font-size:.88rem;">Keranjang kosong.<br/>Tambahkan paket VIP dulu!</p>
+    </div>
+    <div id="cartItems"></div>
+    <div id="cartSummary" class="cart-summary" style="display:none;">
+      <div id="cartSumItems"></div>
+      <div class="sum-total">
+        <span class="sum-total-lbl">Total</span>
+        <span class="sum-total-val" id="cartTotalVal">—</span>
+      </div>
+    </div>
+    <div id="cartFootBtns" style="display:none;padding:0 16px 16px;flex-direction:column;gap:8px;">
+      <button class="submit-btn" onclick="goTo('s-payment')" style="margin-bottom:0;">💳 Lanjut ke Pembayaran</button>
+      <button onclick="clearCart()" style="background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-hint);font-family:'Outfit',sans-serif;font-weight:700;font-size:.82rem;padding:10px;border-radius:10px;cursor:pointer;">🗑️ Kosongkan Keranjang</button>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+</div>
 
-<!-- MODAL: ADMIN LOGIN -->
+<!-- ══ SCREEN 3: PEMBAYARAN ══ -->
+<div class="screen" id="s-payment">
+  <div class="back-hd">
+    <button class="back-btn" onclick="goTo('s-cart')">←</button>
+    <span class="back-title">PEMBAYARAN</span>
+  </div>
+  <div class="scroll">
+    <div class="pay-box">
+      <div class="pay-hd">
+        <div class="pay-hd-ico">📦</div>
+        <div>
+          <div class="pay-hd-title">RINGKASAN ORDER</div>
+          <div class="pay-hd-sub">Pastikan semua pesanan sudah benar</div>
+        </div>
+      </div>
+      <div class="pay-body">
+        <div class="order-mini" id="payOrderMini"></div>
+        <button class="saweria-btn" id="saweriaBtn">
+          <span>💸</span>
+          <span>Bayar via Saweria</span>
+          <span id="saweriaTotal" style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:1px;margin-left:4px;"></span>
+        </button>
+        <div class="pay-divider"><span>setelah transfer, klik tombol di bawah</span></div>
+        <div class="pay-steps">
+          <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik <strong>Bayar via Saweria</strong> di atas dan lakukan transfer sesuai nominal</div></div>
+          <div class="pay-step"><div class="step-num">2</div><div class="step-txt">Setelah transfer berhasil, kembali ke sini dan klik <strong>Sudah Transfer</strong></div></div>
+          <div class="pay-step"><div class="step-num">3</div><div class="step-txt">Isi username Telegram kamu, bot akan <strong>kirim link VIP langsung</strong> ke akun Telegram kamu!</div></div>
+        </div>
+        <button class="confirm-btn" onclick="goTo('s-confirm')">✅ Sudah Transfer</button>
+      </div>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 4: KONFIRMASI ══ -->
+<div class="screen" id="s-confirm">
+  <div class="back-hd">
+    <button class="back-btn" onclick="goTo('s-payment')">←</button>
+    <span class="back-title">KONFIRMASI ORDER</span>
+  </div>
+  <div class="scroll">
+    <div class="form-box">
+      <div class="form-section">
+        <div class="form-section-title">👤 Data Kamu</div>
+        <div class="fg"><label>Nama Lengkap *</label><input type="text" id="cfName" placeholder="Nama kamu"/></div>
+        <div class="fg"><label>Username Telegram *</label><input type="text" id="cfTg" placeholder="username tanpa @"/></div>
+        <div class="fg"><label>Nomor HP / WhatsApp *</label><input type="tel" id="cfPhone" placeholder="08123456789"/></div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">🎮 Akun yang Diaktifkan</div>
+        <div class="fg"><label>Nomor Akun *</label><input type="text" id="cfAccNum" placeholder="Nomor akun kamu"/></div>
+        <div class="fg"><label>Nama Akun *</label><input type="text" id="cfAccName" placeholder="Nama di akun kamu"/></div>
+        <div class="fg"><label>Username Akun *</label><input type="text" id="cfAccUser" placeholder="Username akun kamu"/></div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">📦 Ringkasan Pesanan</div>
+        <div id="cfOrderPreview" style="font-size:.75rem;color:var(--tg-hint);line-height:1.7;font-family:'Courier New',monospace;white-space:pre-wrap;"></div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">📸 Bukti Transfer *</div>
+        <div class="fg">
+          <div class="proof-upload" id="proofUpload">
+            <div id="proofIco" style="font-size:2rem;margin-bottom:6px;">📷</div>
+            <div id="proofHint" style="font-size:.75rem;color:var(--tg-hint);">Klik upload foto bukti transfer</div>
+            <img id="proofPreview"/>
+          </div>
+          <input type="file" id="proofInput" accept="image/*" style="display:none;"/>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">📝 Catatan (Opsional)</div>
+        <div class="fg"><textarea id="cfNote" placeholder="Catatan tambahan..."></textarea></div>
+      </div>
+      <button class="submit-btn" id="submitBtn" onclick="submitOrder()">📨 Kirim Konfirmasi</button>
+      <p style="font-size:.7rem;color:var(--tg-hint);text-align:center;line-height:1.6;margin-bottom:16px;">
+        Setelah submit, bot akan otomatis kirim link VIP ke Telegram kamu.
+      </p>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 5: SUKSES ══ -->
+<div class="screen" id="s-success">
+  <div class="scroll">
+    <div class="success-wrap">
+      <div class="success-ico">✅</div>
+      <div class="success-title">ORDER TERKIRIM!</div>
+      <p class="success-sub">Bot sedang mengirim link VIP ke Telegram kamu.<br/>Cek pesan dari bot sebentar lagi!</p>
+      <div class="order-receipt" id="successReceipt"></div>
+      <button class="back-home-btn" onclick="goHome()">🏠 Kembali ke Beranda</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: LOGIN -->
 <div class="overlay" id="loginModal">
   <div class="sheet" style="max-width:400px;">
     <div class="sheet-handle"></div>
@@ -245,7 +474,7 @@ body.admin-mode .add-card{display:flex;}
     <div style="text-align:center;font-size:2.2rem;margin-bottom:10px;">🔐</div>
     <h2 style="text-align:center;">ADMIN LOGIN</h2>
     <p class="sheet-sub" style="text-align:center;">Masukkan password admin</p>
-    <div class="fg">
+    <div class="sfg">
       <label>Password</label>
       <div class="pw-wrap">
         <input type="password" id="pwInput" placeholder="••••••••"/>
@@ -257,7 +486,7 @@ body.admin-mode .add-card{display:flex;}
   </div>
 </div>
 
-<!-- MODAL: TAMBAH/EDIT PRODUK -->
+<!-- MODAL: PRODUK -->
 <div class="overlay" id="prodModal">
   <div class="sheet">
     <div class="sheet-handle"></div>
@@ -265,20 +494,18 @@ body.admin-mode .add-card{display:flex;}
     <h2 id="modalTitle">TAMBAH PAKET</h2>
     <p class="sheet-sub" id="modalSub"></p>
     <input type="hidden" id="fId"/>
-
-    <div class="fg">
+    <div class="sfg">
       <label>Gambar / Banner</label>
       <div class="img-upload" id="imgUpload">
         <div class="up-ico">🖼️</div>
-        <div class="up-hint">Klik upload gambar (dikompres otomatis)</div>
+        <div class="up-hint">Klik upload gambar</div>
         <img id="imgPreview" style="display:none;"/>
       </div>
       <input type="file" id="fileInput" accept="image/*" style="display:none;"/>
     </div>
-
     <div class="frow">
-      <div class="fg"><label>Nama Paket *</label><input type="text" id="fName" placeholder="VIP Permanen"/></div>
-      <div class="fg">
+      <div class="sfg"><label>Nama Paket *</label><input type="text" id="fName" placeholder="VIP Permanen"/></div>
+      <div class="sfg">
         <label>Tipe</label>
         <select id="fTier">
           <option value="tier-permanen">♾️ Permanen</option>
@@ -290,21 +517,22 @@ body.admin-mode .add-card{display:flex;}
         </select>
       </div>
     </div>
-
     <div class="frow">
-      <div class="fg"><label>Harga *</label><input type="text" id="fPrice" placeholder="50000"/></div>
-      <div class="fg"><label>Label Harga</label><input type="text" id="fPer" placeholder="/ bulan"/></div>
+      <div class="sfg"><label>Harga *</label><input type="text" id="fPrice" placeholder="50000"/></div>
+      <div class="sfg"><label>Label Harga</label><input type="text" id="fPer" placeholder="/ bulan"/></div>
     </div>
-
-    <div class="fg"><label>Deskripsi *</label><textarea id="fDesc" placeholder="Deskripsi singkat paket..."></textarea></div>
-    <div class="fg"><label>Fitur (satu per baris)</label><textarea id="fFeats" placeholder="Akses premium&#10;Support 24/7&#10;Update rutin"></textarea></div>
-
-    <div class="fg">
-      <label>🔗 Link Trakteer Shop *</label>
-      <input type="text" id="fTrakteer" placeholder="https://trakteer.id/viphunter/shop/nama-produk"/>
-      <div style="font-size:.65rem;color:var(--tg-hint);margin-top:4px;">Link produk dari Trakteer Shop kamu</div>
+    <div class="sfg"><label>Deskripsi *</label><textarea id="fDesc" placeholder="Deskripsi singkat..."></textarea></div>
+    <div class="sfg"><label>Fitur (satu per baris)</label><textarea id="fFeats" placeholder="Akses premium&#10;Support 24/7&#10;Update rutin"></textarea></div>
+    <div class="sfg">
+      <label>🔢 Jumlah Link per Order *</label>
+      <input type="number" id="fLinkCount" placeholder="1" min="1" value="1"/>
+      <div style="font-size:.65rem;color:var(--tg-hint);margin-top:4px;">Berapa link yang dikirim ke pelanggan per 1 order (contoh: 1 atau 17)</div>
     </div>
-
+    <div class="sfg">
+      <label>🔗 Link VIP (satu per baris) *</label>
+      <textarea id="fVipLinks" placeholder="https://t.me/joinchat/link1&#10;https://t.me/joinchat/link2&#10;https://t.me/joinchat/link3" style="min-height:100px;"></textarea>
+      <div style="font-size:.65rem;color:var(--tg-hint);margin-top:4px;">Masukkan semua link, satu per baris. Bot akan kirim sesuai jumlah link per order.</div>
+    </div>
     <div class="btn-row">
       <button class="cancel-btn" onclick="closeModal('prodModal')">Batal</button>
       <button class="save-btn" id="saveProd">💾 Simpan</button>
@@ -317,7 +545,7 @@ body.admin-mode .add-card{display:flex;}
   <div class="sheet" style="max-width:360px;text-align:center;">
     <div class="sheet-handle"></div>
     <div style="font-size:2rem;margin-bottom:8px;">🗑️</div>
-    <h2 style="font-size:1.2rem;">HAPUS PAKET?</h2>
+    <h2>HAPUS PAKET?</h2>
     <p class="sheet-sub" id="delSub" style="margin-bottom:14px;"></p>
     <div class="btn-row">
       <button class="cancel-btn" onclick="closeModal('delModal')">Batal</button>
@@ -326,29 +554,32 @@ body.admin-mode .add-card{display:flex;}
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+<div class="watermark" id="watermarkEl"></div>
+
 <script>
-// ══════════════════════════════════════════════
-//  ⚙️  CONFIG
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════
 var CFG = {
   adminPassword:  'Malik10_',
   supabaseUrl:    'https://lgjcsefaqkqvidkuuomo.supabase.co',
   supabaseKey:    'sb_publishable_QNgbN6O4h3mp2bmdMWeqBA_E9qQ8h7J',
+  botToken:       '8050084420:AAG-yShtIRHSj5HBKkIUgzZbAWRze-7N-Ig',
+  adminChatId:    '@bukan_founder', // Ganti dengan Chat ID numerik asisten
+  saweriaUsername:'GANTI_USERNAME_SAWERIA', // Ganti dengan username Saweria kamu
   watermark:      '@elzstore_id',
 };
 
 // WATERMARK
-(function(){
-  var el=document.getElementById('watermarkEl');
-  if(el){el.textContent=CFG.watermark||'';el.style.display=CFG.watermark?'block':'none';}
-})();
+(function(){var el=document.getElementById('watermarkEl');if(el){el.textContent=CFG.watermark||'';el.style.display=CFG.watermark?'block':'none';}})();
 
-// TELEGRAM INIT
+// TELEGRAM
 var tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:{
   ready:function(){},expand:function(){},
   HapticFeedback:{impactOccurred:function(){},notificationOccurred:function(){}},
   BackButton:{show:function(){},hide:function(){},onClick:function(){},offClick:function(){}},
-  initDataUnsafe:{user:null},colorScheme:'dark',
+  initDataUnsafe:{user:null},
 };
 tg.ready();tg.expand();
 
@@ -361,55 +592,68 @@ async function sbPatch(tbl,id,d){var r=await fetch(SB+'/'+tbl+'?id=eq.'+id,{meth
 async function sbDelete(tbl,id){var r=await fetch(SB+'/'+tbl+'?id=eq.'+id,{method:'DELETE',headers:SBH});if(!r.ok)throw new Error(await r.text());}
 
 // STATE
-var allVIP=[],isAdmin=false,isEdit=false,uploadedImg='',pendingDelId=null;
+var allVIP=[],cart=[],isAdmin=false,isEdit=false,uploadedImg='',proofImg='',pendingDelId=null;
 
 // UTILS
-function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast show'+(t?' '+t:'');clearTimeout(el._t);el._t=setTimeout(function(){el.className='toast';},3000);}
+function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast show'+(t?' '+t:'');clearTimeout(el._t);el._t=setTimeout(function(){el.className='toast';},3200);}
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-function fmtRp(n){return 'Rp '+parseInt(n).toLocaleString('id-ID');}
+function parseNum(s){return parseInt((s||'0').replace(/[^0-9]/g,''))||0;}
+function fmtRp(n){return 'Rp '+n.toLocaleString('id-ID');}
 function haptic(t){try{tg.HapticFeedback.impactOccurred(t||'light');}catch(e){}}
 
-// TIER LABELS
-var TL={'tier-permanen':'♾️ Permanen','tier-bulanan':'📅 Bulanan','tier-gold':'⭐ Gold','tier-silver':'🥈 Silver','tier-diamond':'💎 Diamond','tier-custom':'✦ Custom'};
+// SCREEN ROUTING
+var currentScreen='s-shop';
+function goTo(id){
+  document.getElementById(currentScreen).classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  currentScreen=id;
+  if(id==='s-shop')tg.BackButton.hide();
+  else tg.BackButton.show();
+  if(id==='s-cart')renderCart();
+  if(id==='s-payment')renderPayment();
+  if(id==='s-confirm')renderConfirmPreview();
+}
+tg.BackButton.onClick(function(){
+  var map={'s-cart':'s-shop','s-payment':'s-cart','s-confirm':'s-payment','s-success':'s-shop'};
+  if(map[currentScreen])goTo(map[currentScreen]);else goTo('s-shop');
+});
+function goHome(){
+  cart=[];updateBadge();renderGrid();goTo('s-shop');
+  ['cfName','cfTg','cfPhone','cfAccNum','cfAccName','cfAccUser','cfNote'].forEach(function(id){document.getElementById(id).value='';});
+  proofImg='';
+  document.getElementById('proofPreview').style.display='none';
+  document.getElementById('proofPreview').src='';
+  document.getElementById('proofIco').style.display='block';
+  document.getElementById('proofHint').textContent='Klik upload foto bukti transfer';
+  document.getElementById('proofUpload').style.borderColor='rgba(245,200,66,.3)';
+  document.getElementById('proofInput').value='';
+}
 
 // LOAD VIP
 async function loadVIP(){
-  try{
-    allVIP=await sbGet('vip_packages');
-    renderGrid();
-  }catch(e){
-    document.getElementById('grid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--red);font-size:.8rem;">❌ '+e.message+'</div>';
-  }
+  try{allVIP=await sbGet('vip_packages');renderAll();}
+  catch(e){document.getElementById('grid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--red);font-size:.8rem;">❌ '+e.message+'</div>';}
 }
 
-// RENDER GRID
+// RENDER
+var TL={'tier-permanen':'♾️ Permanen','tier-bulanan':'📅 Bulanan','tier-gold':'⭐ Gold','tier-silver':'🥈 Silver','tier-diamond':'💎 Diamond','tier-custom':'✦ Custom'};
+function renderAll(){document.getElementById('tProduk').textContent=allVIP.length+' paket';renderGrid();}
 function renderGrid(){
-  var g=document.getElementById('grid');
-  g.innerHTML='';
-  document.getElementById('tProduk').textContent=allVIP.length+' paket';
-
+  var g=document.getElementById('grid');g.innerHTML='';
   if(!allVIP.length){
     g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--tg-hint);font-size:.85rem;"><div style="font-size:2.5rem;margin-bottom:10px;">👑</div><p>'+(isAdmin?'Belum ada paket. Tambah sekarang!':'Paket VIP segera hadir.')+'</p></div>';
   }
-
   allVIP.forEach(function(p,i){
-    var imgH=p.img
-      ?'<div class="vcard-img"><img src="'+p.img+'" loading="lazy" alt=""/>'
-      :'<div class="vcard-img" style="font-size:2.5rem;">👑';
+    var inCart=cart.some(function(x){return x.id===p.id;});
+    var imgH=p.img?'<div class="vcard-img"><img src="'+p.img+'" loading="lazy" alt=""/></div>':'<div class="vcard-img">👑</div>';
     var tier=p.tier||'tier-gold';
-    var tierLabel=TL[tier]||'VIP';
     var feats=(p.features||[]).slice(0,3).map(function(f){return '<div class="feat-row">'+f+'</div>';}).join('');
-    var trakteerUrl=p.trakteer_url||'#';
-
-    var card=document.createElement('div');
-    card.className='vcard';
-    card.style.animationDelay=(i*0.06)+'s';
-    card.style.animation='fadeUp .4s ease both';
+    var card=document.createElement('div');card.className='vcard';
+    card.style.animationDelay=(i*0.06)+'s';card.style.animation='fadeUp .4s ease both';
     card.innerHTML=
       imgH+
-      '<div class="vcard-tier '+tier+'">'+tierLabel+'</div>'+
-      '</div>'+
+      '<div class="vcard-tier '+tier+'">'+(TL[tier]||'VIP')+'</div>'+
       '<div class="vcard-body">'+
         '<div class="vcard-name">'+p.name+'</div>'+
         (p.description?'<div class="vcard-desc">'+p.description+'</div>':'')+
@@ -417,9 +661,9 @@ function renderGrid(){
       '</div>'+
       '<div class="vcard-foot">'+
         '<div class="price-lbl">Harga</div>'+
-        '<div class="price-val">'+fmtRp(p.price||0)+'</div>'+
+        '<div class="price-val">'+fmtRp(parseNum(p.price||0))+'</div>'+
         (p.per?'<div class="price-per">'+p.per+'</div>':'')+
-        '<button class="buy-btn" data-url="'+trakteerUrl+'">🛒 Beli Sekarang</button>'+
+        '<button class="cart-add-btn'+(inCart?' added':'')+'" data-id="'+p.id+'">'+(inCart?'✅ Ditambahkan':'🛒 Tambah')+'</button>'+
       '</div>'+
       '<div class="admin-acts">'+
         '<button class="ae-btn" data-id="'+p.id+'">✏️ Edit</button>'+
@@ -427,39 +671,296 @@ function renderGrid(){
       '</div>';
     g.appendChild(card);
   });
-
-  // Tombol beli
-  g.querySelectorAll('.buy-btn').forEach(function(b){
-    b.onclick=function(){
-      haptic('light');
-      var url=b.dataset.url;
-      if(!url||url==='#'){toast('⚠️ Link Trakteer belum diset','err');return;}
-      try{
-        if(window.Telegram&&window.Telegram.WebApp&&typeof Telegram.WebApp.openLink==='function'){
-          Telegram.WebApp.openLink(url);return;
-        }
-      }catch(e){}
-      window.open(url,'_blank');
-    };
+  g.querySelectorAll('.cart-add-btn').forEach(function(b){b.onclick=function(e){e.stopPropagation();haptic('light');addToCart(b.dataset.id);};});
+  g.querySelectorAll('.ae-btn').forEach(function(b){b.onclick=function(e){e.stopPropagation();openEditModal(b.dataset.id);};});
+  g.querySelectorAll('.ad-btn').forEach(function(b){
+    b.onclick=function(e){e.stopPropagation();pendingDelId=b.dataset.id;
+      document.getElementById('delSub').innerHTML='Paket <strong style="color:var(--gold)">'+b.dataset.name+'</strong> akan dihapus permanen.';
+      openModal('delModal');};
   });
-
-  // Admin buttons
   if(isAdmin){
-    g.querySelectorAll('.ae-btn').forEach(function(b){b.onclick=function(e){e.stopPropagation();openEditModal(b.dataset.id);};});
-    g.querySelectorAll('.ad-btn').forEach(function(b){
-      b.onclick=function(e){
-        e.stopPropagation();
-        pendingDelId=b.dataset.id;
-        document.getElementById('delSub').innerHTML='Paket <strong style="color:var(--gold)">'+b.dataset.name+'</strong> akan dihapus permanen.';
-        openModal('delModal');
-      };
-    });
-
-    // Add card
     var ac=document.createElement('div');ac.className='add-card';
     ac.innerHTML='<div class="add-card-icon">➕</div><div class="add-card-txt">Tambah Paket VIP</div>';
     ac.onclick=openAddModal;g.appendChild(ac);
   }
+}
+
+// CART
+function addToCart(id){
+  var p=allVIP.find(function(x){return x.id===id;});if(!p)return;
+  var ex=cart.find(function(x){return x.id===id;});
+  if(ex){ex.qty++;toast('🛒 '+p.name+' +1','ok');}
+  else{cart.push(Object.assign({},p,{qty:1}));toast('🛒 '+p.name+' ditambahkan!','ok');}
+  updateBadge();renderGrid();
+}
+function removeFromCart(id){cart=cart.filter(function(x){return x.id!==id;});updateBadge();renderCart();}
+function setQty(id,qty){if(qty<=0){removeFromCart(id);return;}var item=cart.find(function(x){return x.id===id;});if(item){item.qty=qty;updateBadge();renderCart();}}
+function clearCart(){cart=[];updateBadge();renderCart();renderGrid();toast('🗑️ Keranjang dikosongkan');}
+function updateBadge(){
+  var n=cart.reduce(function(s,x){return s+x.qty;},0);
+  var b=document.getElementById('cartBadge');b.textContent=n;
+  n>0?b.classList.add('show'):b.classList.remove('show');
+  if(document.getElementById('cartCount'))document.getElementById('cartCount').textContent=n+' item';
+}
+function cartTotal(){return cart.reduce(function(s,x){return s+parseNum(x.price)*x.qty;},0);}
+function renderCart(){
+  var items=document.getElementById('cartItems');
+  var empty=document.getElementById('cartEmpty');
+  var summary=document.getElementById('cartSummary');
+  var foot=document.getElementById('cartFootBtns');
+  if(!cart.length){items.innerHTML='';empty.style.display='block';summary.style.display='none';foot.style.display='none';return;}
+  empty.style.display='none';summary.style.display='block';foot.style.display='flex';
+  items.innerHTML=cart.map(function(item){
+    var sub=parseNum(item.price)*item.qty;
+    var imgH=item.img?'<div class="ci-img"><img src="'+item.img+'"/></div>':'<div class="ci-img">👑</div>';
+    return '<div class="cart-item">'+imgH+
+      '<div class="ci-info"><div class="ci-name">'+item.name+'</div>'+
+      '<div class="ci-price">'+fmtRp(parseNum(item.price))+' '+(item.per||'')+'</div>'+
+      (item.qty>1?'<div class="ci-sub">Sub: '+fmtRp(sub)+'</div>':'')+
+      '</div><div class="ci-ctrl">'+
+      '<button class="qb" onclick="setQty(\''+item.id+'\','+(item.qty-1)+')">−</button>'+
+      '<span class="qv">'+item.qty+'</span>'+
+      '<button class="qb" onclick="setQty(\''+item.id+'\','+(item.qty+1)+')">+</button>'+
+      '<button class="ci-del" onclick="removeFromCart(\''+item.id+'\')">✕</button>'+
+      '</div></div>';
+  }).join('');
+  document.getElementById('cartSumItems').innerHTML=cart.map(function(x){
+    return '<div class="sum-row"><span class="lbl">'+x.name+' ×'+x.qty+'</span><span class="val">'+fmtRp(parseNum(x.price)*x.qty)+'</span></div>';
+  }).join('');
+  document.getElementById('cartTotalVal').textContent=fmtRp(cartTotal());
+}
+
+// PAYMENT
+function renderPayment(){
+  var total=cartTotal();
+  var rows=cart.map(function(item,i){
+    return '<div class="order-mini-row"><span class="lbl">'+(i+1)+'. '+item.name+' ×'+item.qty+'</span><span class="val">'+fmtRp(parseNum(item.price)*item.qty)+'</span></div>';
+  }).join('');
+  document.getElementById('payOrderMini').innerHTML=rows+'<hr class="order-mini-divider"/><div class="order-mini-total"><span class="lbl">Total</span><span class="val">'+fmtRp(total)+'</span></div>';
+  document.getElementById('saweriaTotal').textContent=fmtRp(total);
+
+  document.getElementById('saweriaBtn').onclick=function(){
+    haptic('light');
+    var username=CFG.saweriaUsername.replace(/^@/,'');
+    var msg=encodeURIComponent('Order VIP Hunter - '+cart.map(function(x){return x.name+' x'+x.qty;}).join(', '));
+    var url='https://saweria.co/'+username+'?amount='+total+'&message='+msg;
+    try{
+      if(window.Telegram&&window.Telegram.WebApp&&typeof Telegram.WebApp.openLink==='function'){
+        Telegram.WebApp.openLink(url);return;
+      }
+    }catch(e){}
+    window.open(url,'_blank');
+  };
+}
+
+// CONFIRM PREVIEW
+function renderConfirmPreview(){
+  var lines=['📦 PESANAN:'];
+  cart.forEach(function(item,i){
+    var sub=parseNum(item.price)*item.qty;
+    lines.push('  '+(i+1)+'. '+item.name);
+    lines.push('     Qty  : '+item.qty+'x');
+    lines.push('     Harga: '+fmtRp(parseNum(item.price))+' '+(item.per||''));
+    if(item.qty>1)lines.push('     Sub  : '+fmtRp(sub));
+  });
+  lines.push('');
+  lines.push('💰 TOTAL: '+fmtRp(cartTotal()));
+  document.getElementById('cfOrderPreview').textContent=lines.join('\n');
+}
+
+// PROOF UPLOAD
+document.getElementById('proofUpload').onclick=function(){document.getElementById('proofInput').click();};
+document.getElementById('proofInput').addEventListener('change',function(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    var img=new Image();
+    img.onload=function(){
+      var MAX=800,w=img.width,h=img.height;
+      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}}else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}}
+      var c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      proofImg=c.toDataURL('image/jpeg',.7);
+      var pv=document.getElementById('proofPreview');pv.src=proofImg;pv.style.display='block';
+      document.getElementById('proofIco').style.display='none';
+      document.getElementById('proofHint').textContent='✅ Foto bukti terpilih';
+      document.getElementById('proofUpload').style.borderColor='rgba(34,197,94,.5)';
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+// SUBMIT ORDER
+async function submitOrder(){
+  var name=document.getElementById('cfName').value.trim();
+  var tgUser=document.getElementById('cfTg').value.trim().replace('@','');
+  var phone=document.getElementById('cfPhone').value.trim();
+  var accNum=document.getElementById('cfAccNum').value.trim();
+  var accName=document.getElementById('cfAccName').value.trim();
+  var accUser=document.getElementById('cfAccUser').value.trim();
+  var note=document.getElementById('cfNote').value.trim();
+
+  if(!name||!tgUser){toast('❌ Nama dan username Telegram wajib!','err');return;}
+  if(!phone){toast('❌ Nomor HP wajib diisi!','err');return;}
+  if(!accNum||!accName||!accUser){toast('❌ Data akun wajib diisi!','err');return;}
+  if(!proofImg){toast('❌ Bukti transfer wajib diupload!','err');return;}
+
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.textContent='⏳ Mengirim...';
+  haptic('medium');
+
+  var total=cartTotal();
+  var now=new Date();
+  var ds=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+  var ts=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  var orderId='VH'+Date.now();
+
+  // Telegram display name
+  var tgInfo=tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null;
+  var tgDisplayName=tgInfo?(((tgInfo.first_name||'')+(tgInfo.last_name?' '+tgInfo.last_name:'')).trim()||name):name;
+
+  // Kumpulkan link VIP dari semua produk di cart
+  var vipLinks=cart.map(function(item){
+    var prod=allVIP.find(function(p){return p.id===item.id;});
+    var links=prod&&prod.vip_links?prod.vip_links:[];
+    var count=prod&&prod.link_count?parseInt(prod.link_count):1;
+    // Ambil link sesuai jumlah per order x qty
+    var totalLinks=count*item.qty;
+    var assignedLinks=links.slice(0,totalLinks);
+    return {name:item.name,qty:item.qty,count:count,links:assignedLinks};
+  });
+
+  // Pesan notif ke admin
+  var msgAdmin=[
+    '🛒 <b>ORDER BARU — VIP HUNTER</b>',
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    '🗓 <b>'+ds+'</b> · '+ts,
+    '',
+    '👤 <b>Nama TG:</b> '+tgDisplayName,
+    '📋 <b>Nama Form:</b> '+name,
+    '📱 <b>Username TG:</b> @'+tgUser,
+    '📞 <b>No HP:</b> '+phone,
+    (tgInfo?'🔖 <b>TG ID:</b> '+tgInfo.id:''),
+    '',
+    '🎮 <b>DATA AKUN:</b>',
+    '🔢 <b>Nomor:</b> '+accNum,
+    '👤 <b>Nama:</b> '+accName,
+    '🏷 <b>Username:</b> '+accUser,
+    '',
+    '📦 <b>PESANAN:</b>',
+  ].filter(Boolean);
+  cart.forEach(function(item,i){
+    msgAdmin.push('  '+(i+1)+'. <b>'+item.name+'</b> ×'+item.qty+' — '+fmtRp(parseNum(item.price)*item.qty));
+  });
+  msgAdmin.push('');
+  msgAdmin.push('━━━━━━━━━━━━━━━━━━━━━━');
+  msgAdmin.push('💰 <b>TOTAL: '+fmtRp(total)+'</b>');
+  msgAdmin.push('━━━━━━━━━━━━━━━━━━━━━━');
+  if(note)msgAdmin.push('📝 <b>Catatan:</b> '+note);
+  msgAdmin.push('💸 <b>Pembayaran:</b> Saweria');
+  msgAdmin.push('✅ Customer sudah konfirmasi transfer');
+
+  // Pesan link VIP ke pelanggan
+  var msgVIP=[
+    '🎉 <b>ORDER KAMU DITERIMA!</b>',
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    '👋 Halo <b>'+name+'</b>!',
+    '',
+    'Berikut link VIP kamu:',
+    '',
+  ];
+  var hasLink=false;
+  vipLinks.forEach(function(v){
+    if(v.links&&v.links.length>0){
+      hasLink=true;
+      msgVIP.push('📦 <b>'+v.name+'</b> ('+v.links.length+' link)');
+      v.links.forEach(function(lnk,idx){
+        msgVIP.push('🔗 '+(v.links.length>1?'['+(idx+1)+'] ':'')+lnk);
+      });
+      msgVIP.push('');
+    } else {
+      msgVIP.push('📦 <b>'+v.name+'</b>');
+      msgVIP.push('⏳ Link sedang disiapkan admin.');
+      msgVIP.push('');
+    }
+  });
+  if(!hasLink){
+    msgVIP.push('⏳ Link VIP sedang disiapkan admin, harap tunggu sebentar.');
+  }
+  msgVIP.push('━━━━━━━━━━━━━━━━━━━━━━');
+  msgVIP.push('Terima kasih sudah order! 🙏');
+
+  // Receipt
+  var receipt=[
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    '📦 ORDER VIP HUNTER',
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    '🗓 '+ds+' · '+ts,
+    '👤 '+tgDisplayName+' (@'+tgUser+')',
+    '📞 '+phone,
+    '',
+    '🎮 AKUN: '+accName+' ('+accNum+')',
+    '',
+  ].concat(cart.map(function(item,i){return '  '+(i+1)+'. '+item.name+' ×'+item.qty+' — '+fmtRp(parseNum(item.price)*item.qty);}));
+  receipt.push('');
+  receipt.push('💰 TOTAL: '+fmtRp(total));
+  receipt.push('✅ Konfirmasi terkirim');
+
+  try{
+    // 1. Simpan ke Supabase
+    await sbPost('orders',{
+      id:orderId,
+      customer_name:name,customer_tg:tgUser,customer_tg_display:tgDisplayName,
+      customer_phone:phone,acc_number:accNum,acc_name:accName,acc_username:accUser,
+      items:cart,total:total,note:note,status:'pending'
+    });
+
+    if(!CFG.botToken.includes('GANTI')){
+      // 2. Notif ke admin
+      await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendMessage',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({chat_id:CFG.adminChatId,text:msgAdmin.join('\n'),parse_mode:'HTML'})
+      });
+
+      // 3. Kirim foto bukti ke admin
+      try{
+        var base64Data=proofImg.split(',')[1];
+        var byteChars=atob(base64Data);
+        var byteArr=new Uint8Array(byteChars.length);
+        for(var i=0;i<byteChars.length;i++){byteArr[i]=byteChars.charCodeAt(i);}
+        var blob=new Blob([byteArr],{type:'image/jpeg'});
+        var fd=new FormData();
+        fd.append('chat_id',CFG.adminChatId);
+        fd.append('photo',blob,'bukti_'+orderId+'.jpg');
+        fd.append('caption','📸 Bukti Transfer — @'+tgUser+' | '+orderId);
+        await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendPhoto',{method:'POST',body:fd});
+      }catch(e){console.warn('Foto gagal:',e);}
+
+      // 4. Kirim link VIP ke pelanggan via bot
+      try{
+        // Cari chat_id pelanggan dari username
+        var tgId=tgInfo?tgInfo.id:null;
+        var targetId=tgId?tgId:('@'+tgUser);
+        await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendMessage',{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({chat_id:targetId,text:msgVIP.join('\n'),parse_mode:'HTML'})
+        });
+      }catch(e){console.warn('Kirim VIP ke pelanggan gagal:',e);}
+    }
+
+    // 5. Update status
+    await sbPatch('orders',orderId,{status:'confirmed'});
+
+    document.getElementById('successReceipt').textContent=receipt.join('\n');
+    haptic('heavy');
+    goTo('s-success');
+
+  }catch(e){
+    toast('❌ Gagal: '+e.message,'err');
+    console.error(e);
+  }
+  btn.disabled=false;btn.textContent='📨 Kirim Konfirmasi';
 }
 
 // ADMIN
@@ -467,17 +968,12 @@ function setAdmin(on){
   isAdmin=on;
   document.body.classList.toggle('admin-mode',on);
   document.getElementById('adminDot').classList.toggle('show',on);
-  document.getElementById('keyBtn').textContent=on?'➕':'🔑';
-  if(on)document.getElementById('keyBtn').innerHTML='➕<span class="admin-dot show" id="adminDot"></span>';
-  else document.getElementById('keyBtn').innerHTML='🔑<span class="admin-dot" id="adminDot"></span>';
   renderGrid();
 }
-
 document.getElementById('keyBtn').onclick=function(){
-  if(isAdmin){openAddModal();}
+  if(isAdmin)openAddModal();
   else{openModal('loginModal');setTimeout(function(){document.getElementById('pwInput').focus();},200);}
 };
-
 function doLogin(){
   var pw=document.getElementById('pwInput').value;
   if(pw===CFG.adminPassword){
@@ -494,6 +990,7 @@ function doLogin(){
 document.getElementById('loginBtn').onclick=doLogin;
 document.getElementById('pwInput').onkeydown=function(e){if(e.key==='Enter')doLogin();};
 document.getElementById('pwEye').onclick=function(){var i=document.getElementById('pwInput');i.type=i.type==='password'?'text':'password';};
+document.getElementById('cartBtn').onclick=function(){haptic('light');goTo('s-cart');};
 
 // ADMIN FORM
 function resetImg(){
@@ -504,7 +1001,8 @@ function resetImg(){
   document.getElementById('fileInput').value='';
 }
 function clearForm(){
-  ['fId','fName','fDesc','fFeats','fPrice','fPer','fTrakteer'].forEach(function(id){document.getElementById(id).value='';});
+  ['fId','fName','fDesc','fFeats','fPrice','fPer','fVipLinks'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('fLinkCount').value='1';
   document.getElementById('fTier').value='tier-permanen';
   resetImg();
 }
@@ -525,7 +1023,8 @@ function openEditModal(id){
   document.getElementById('fPer').value=p.per||'';
   document.getElementById('fDesc').value=p.description;
   document.getElementById('fFeats').value=(p.features||[]).join('\n');
-  document.getElementById('fTrakteer').value=p.trakteer_url||'';
+  document.getElementById('fVipLinks').value=(p.vip_links||[]).join('\n');
+  document.getElementById('fLinkCount').value=p.link_count||1;
   if(p.img){
     uploadedImg=p.img;
     var pv=document.getElementById('imgPreview');pv.src=p.img;pv.style.display='block';
@@ -537,13 +1036,13 @@ function openEditModal(id){
   document.getElementById('saveProd').textContent='💾 Simpan Perubahan';
   openModal('prodModal');
 }
-
 document.getElementById('saveProd').addEventListener('click',async function(){
   var name=document.getElementById('fName').value.trim();
   var desc=document.getElementById('fDesc').value.trim();
-  var trakteer=document.getElementById('fTrakteer').value.trim();
-  if(!name||!desc){toast('❌ Nama & deskripsi wajib diisi!','err');return;}
-  if(!trakteer){toast('❌ Link Trakteer wajib diisi!','err');return;}
+  var vipLinksRaw=document.getElementById('fVipLinks').value.trim();
+  var linkCount=parseInt(document.getElementById('fLinkCount').value)||1;
+  if(!name||!desc){toast('❌ Nama & deskripsi wajib!','err');return;}
+  if(!vipLinksRaw){toast('❌ Link VIP wajib diisi!','err');return;}
   var btn=document.getElementById('saveProd');btn.disabled=true;btn.textContent='⏳...';
   var fr=document.getElementById('fFeats').value.trim();
   var data={
@@ -552,7 +1051,8 @@ document.getElementById('saveProd').addEventListener('click',async function(){
     per:document.getElementById('fPer').value.trim()||'',
     description:desc,
     features:fr?fr.split('\n').map(function(f){return f.trim();}).filter(Boolean):[],
-    trakteer_url:trakteer,
+    vip_links:vipLinksRaw?vipLinksRaw.split('\n').map(function(l){return l.trim();}).filter(Boolean):[],
+    link_count:linkCount,
     img:uploadedImg
   };
   try{
@@ -562,7 +1062,6 @@ document.getElementById('saveProd').addEventListener('click',async function(){
   }catch(e){toast('❌ Gagal: '+e.message,'err');}
   btn.disabled=false;btn.textContent=isEdit?'💾 Simpan Perubahan':'💾 Simpan Paket';
 });
-
 document.getElementById('confirmDel').addEventListener('click',async function(){
   if(!pendingDelId)return;
   var btn=document.getElementById('confirmDel');btn.disabled=true;btn.textContent='⏳...';
@@ -589,18 +1088,14 @@ document.getElementById('fileInput').addEventListener('change',function(e){
       var pv=document.getElementById('imgPreview');pv.src=uploadedImg;pv.style.display='block';
       document.getElementById('imgUpload').querySelector('.up-ico').style.display='none';
       document.getElementById('imgUpload').querySelector('.up-hint').style.display='none';
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(file);
+    };img.src=ev.target.result;
+  };reader.readAsDataURL(file);
 });
 
-// CLOSE ON BACKDROP
 ['loginModal','prodModal','delModal'].forEach(function(id){
   document.getElementById(id).addEventListener('click',function(e){if(e.target.id===id)closeModal(id);});
 });
 
-// BOOT
 loadVIP();
 </script>
 </body>
