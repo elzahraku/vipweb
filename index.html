@@ -427,11 +427,11 @@ CREATE POLICY "public" ON orders FOR ALL USING (true) WITH CHECK (true);</div>
       </div>
       <div class="payment-body">
         <div class="order-mini" id="payOrderMini"></div>
-        <button id="traktirBtn" class="traktir-btn">
+        <a id="traktirBtn" href="#" target="_blank" rel="noopener" class="traktir-btn">
           <span class="traktir-ico">💸</span>
           <span>Bayar via Traktir.id</span>
           <span style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:1px;margin-left:4px;" id="traktirTotal"></span>
-        </button>
+        </a>
         <div class="pay-divider"><span>setelah transfer, klik tombol di bawah</span></div>
         <div class="pay-steps">
           <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik tombol <strong>Bayar via Traktir.id</strong> di atas dan lakukan transfer sesuai nominal yang tertera</div></div>
@@ -752,14 +752,19 @@ function renderPayment(){
   var traktirUrl='https://traktir.id/'+cleanUsername+'?amount='+total+'&message='+msg;
   if(!cleanUsername||cleanUsername==='GANTI_USERNAME_TRAKTIR'){traktirUrl='https://traktir.id/';}
   var traktirBtnEl=document.getElementById('traktirBtn');
+  traktirBtnEl.href=traktirUrl;
   traktirBtnEl.dataset.href=traktirUrl;
   traktirBtnEl.onclick=function(){
     var url=traktirBtnEl.dataset.href;
-    if(window.Telegram&&window.Telegram.WebApp&&typeof Telegram.WebApp.openLink==='function'){
-      Telegram.WebApp.openLink(url);
-    }else{
-      window.open(url,'_blank');
-    }
+    try{
+      if(window.Telegram&&window.Telegram.WebApp&&typeof Telegram.WebApp.openLink==='function'){
+        Telegram.WebApp.openLink(url);return;
+      }
+    }catch(e){}
+    try{
+      var w=window.open(url,'_blank');
+      if(!w||w.closed||typeof w.closed==='undefined'){window.location.href=url;}
+    }catch(e){window.location.href=url;}
   };
   document.getElementById('traktirTotal').textContent=fmtRp(total);
   // mini order summary
