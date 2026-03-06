@@ -830,6 +830,7 @@ async function submitOrder(){
 
   // Auto-get Telegram user info if in mini app
   var tgInfo=tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null;
+  var tgDisplayName=tgInfo?(((tgInfo.first_name||'')+(tgInfo.last_name?' '+tgInfo.last_name:'')).trim()||name):name;
 
   // Build notification message
   var msg=[
@@ -837,8 +838,9 @@ async function submitOrder(){
     '━━━━━━━━━━━━━━━━━━━━━━',
     '🗓 <b>'+ds+'</b> · '+ts,
     '',
-    '👤 <b>Nama:</b> '+name,
-    '📱 <b>Telegram:</b> @'+tgUser,
+    '👤 <b>Nama Akun TG:</b> '+tgDisplayName,
+    '📋 <b>Nama Isi Form:</b> '+name,
+    '📱 <b>Username TG:</b> @'+tgUser,
     (tgInfo?'🔖 <b>TG ID:</b> '+tgInfo.id:''),
     '',
     '📦 <b>PESANAN:</b>',
@@ -866,7 +868,7 @@ async function submitOrder(){
     '📦 ORDER VIP HUNTER',
     '━━━━━━━━━━━━━━━━━━━━━━',
     '🗓  '+ds+' · '+ts,
-    '👤 '+name+' (@'+tgUser+')',
+    '👤 '+tgDisplayName+' (@'+tgUser+')',
     '',
     buildOrderLines(),
     '',
@@ -879,7 +881,7 @@ async function submitOrder(){
   try{
     // 1. Simpan order ke Supabase
     await sbPost('orders',{
-      id:orderId,customer_name:name,customer_tg:tgUser,
+      id:orderId,customer_name:name,customer_tg_display:tgDisplayName,customer_tg:tgUser,
       items:cart,total:total,note:note,status:'pending'
     });
 
