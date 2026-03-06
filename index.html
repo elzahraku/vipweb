@@ -443,11 +443,7 @@ body.admin-mode .add-card{display:flex;}
     </div>
     <div class="sfg"><label>Deskripsi *</label><textarea id="fDesc" placeholder="Deskripsi singkat paket VIP ini..."></textarea></div>
     <div class="sfg"><label>Fitur (1 baris = 1 fitur)</label><textarea id="fFeats" placeholder="Akses semua konten VIP&#10;Update setiap hari&#10;Priority support"></textarea></div>
-    <div class="sfg">
-      <label>Channel ID Telegram *</label>
-      <input type="text" id="fChannelId" placeholder="-1001234567890"/>
-      <div class="hint">⚠️ <strong>Bot harus sudah dijadikan Admin</strong> di channel ini agar bisa generate link join sekali pakai.<br/>Dapatkan ID channel dari @userinfobot. Format: <strong>-100xxxxxxxxxx</strong></div>
-    </div>
+
     <div class="btn-row">
       <button class="cancel-btn" onclick="closeModal('prodModal')">Batal</button>
       <button class="save-btn" id="saveProd">💾 Simpan Paket</button>
@@ -478,7 +474,7 @@ var CFG={
   supabaseUrl:'https://lgjcsefaqkqvidkuuomo.supabase.co',
   supabaseKey:'sb_publishable_QNgbN6O4h3mp2bmdMWeqBA_E9qQ8h7J',
   // ══ GANTI dengan username Telegram ADMIN (tanpa @) ══
-  adminTgUsername:'Cs_viphunter_xbot',
+  adminTgUsername:'ADMIN_USERNAME_TELEGRAM',
   botUsername:'Cs_viphunter_xbot',
   watermark:'@elzstore_id',
 };
@@ -815,8 +811,8 @@ document.getElementById('pwEye').onclick=function(){var i=document.getElementByI
 
 // ══ ADMIN FORM ══
 function resetImg(){uploadedImg='';var pv=document.getElementById('imgPreview');pv.src='';pv.style.display='none';document.getElementById('imgUpload').querySelector('.up-ico').style.display='block';document.getElementById('imgUpload').querySelector('.up-hint').style.display='block';document.getElementById('fileInput').value='';}
-function clearForm(){['fId','fName','fDesc','fFeats','fPrice','fPer','fChannelId'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('fTier').value='tier-permanen';resetImg();}
-function openAddModal(){isEdit=false;clearForm();document.getElementById('modalTitle').textContent='TAMBAH PAKET';document.getElementById('modalSub').textContent='Bot harus sudah dijadikan admin di channel tujuan.';document.getElementById('saveProd').textContent='💾 Simpan Paket';openModal('prodModal');}
+function clearForm(){['fId','fName','fDesc','fFeats','fPrice','fPer'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('fTier').value='tier-permanen';resetImg();}
+function openAddModal(){isEdit=false;clearForm();document.getElementById('modalTitle').textContent='TAMBAH PAKET';document.getElementById('modalSub').textContent='Isi detail paket VIP baru.';document.getElementById('saveProd').textContent='💾 Simpan Paket';openModal('prodModal');}
 function openEditModal(id){
   var p=allVIP.find(function(x){return x.id===id;});if(!p)return;
   isEdit=true;clearForm();
@@ -824,23 +820,34 @@ function openEditModal(id){
   document.getElementById('fTier').value=p.tier||'tier-permanen';document.getElementById('fPrice').value=p.price;
   document.getElementById('fPer').value=p.per||'';document.getElementById('fDesc').value=p.description;
   document.getElementById('fFeats').value=(p.features||[]).join('\n');
-  document.getElementById('fChannelId').value=p.channel_id||'';
   if(p.img){uploadedImg=p.img;var pv=document.getElementById('imgPreview');pv.src=p.img;pv.style.display='block';document.getElementById('imgUpload').querySelector('.up-ico').style.display='none';document.getElementById('imgUpload').querySelector('.up-hint').style.display='none';}
   document.getElementById('modalTitle').textContent='EDIT PAKET';document.getElementById('modalSub').textContent='Ubah data lalu simpan.';document.getElementById('saveProd').textContent='💾 Simpan Perubahan';openModal('prodModal');
 }
 document.getElementById('saveProd').addEventListener('click',async function(){
   var name=document.getElementById('fName').value.trim();
   var desc=document.getElementById('fDesc').value.trim();
-  var channelId=document.getElementById('fChannelId').value.trim();
   if(!name||!desc){toast('❌ Nama & deskripsi wajib!','err');return;}
-  if(!channelId){toast('❌ Channel ID wajib diisi!','err');return;}
-  if(!channelId.startsWith('-')){toast('❌ Channel ID harus diawali minus (-100...)','err');return;}
   var btn=document.getElementById('saveProd');btn.disabled=true;btn.textContent='⏳...';
   var fr=document.getElementById('fFeats').value.trim();
-  var data={name,tier:document.getElementById('fTier').value,price:document.getElementById('fPrice').value.trim()||'0',per:document.getElementById('fPer').value.trim()||'',description:desc,features:fr?fr.split('\n').map(function(f){return f.trim();}).filter(Boolean):[],channel_id:channelId,img:uploadedImg};
+  var data={
+    name:name,
+    tier:document.getElementById('fTier').value,
+    price:document.getElementById('fPrice').value.trim()||'0',
+    per:document.getElementById('fPer').value.trim()||'',
+    description:desc,
+    features:fr?fr.split('\n').map(function(f){return f.trim();}).filter(Boolean):[],
+    img:uploadedImg
+  };
   try{
-    if(isEdit){await sbPatch('vip_packages',document.getElementById('fId').value,data);toast('✅ Paket diperbarui!','ok');}
-    else{data.id='vip_'+Date.now();await sbPost('vip_packages',data);toast('✅ Paket ditambahkan!','ok');}
+    if(isEdit){
+      await sbPatch('vip_packages',document.getElementById('fId').value,data);
+      toast('✅ Paket diperbarui!','ok');
+    }else{
+      data.id='vip_'+Date.now();
+      var r=await fetch(SB+'/vip_packages',{method:'POST',headers:Object.assign({'Prefer':'return=representation'},SBH),body:JSON.stringify(data)});
+      if(!r.ok)throw new Error(await r.text());
+      toast('✅ Paket ditambahkan!','ok');
+    }
     closeModal('prodModal');await loadVIP();
   }catch(e){toast('❌ Gagal: '+e.message,'err');}
   btn.disabled=false;btn.textContent=isEdit?'💾 Simpan Perubahan':'💾 Simpan Paket';
