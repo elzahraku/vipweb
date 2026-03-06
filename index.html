@@ -306,6 +306,11 @@ body.admin-mode .add-card{display:flex;}
 /* ── BOTTOM SAFE AREA ── */
 .bottom-safe{height:calc(16px + var(--safe-b));flex-shrink:0;}
 
+/* ── WATERMARK ── */
+.watermark{position:fixed;bottom:calc(8px + var(--safe-b));right:12px;z-index:9990;
+  font-size:.58rem;font-weight:700;letter-spacing:1.5px;color:rgba(245,200,66,.3);
+  pointer-events:none;user-select:none;font-family:'Outfit',sans-serif;text-transform:uppercase;}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 @media(min-width:500px){
   .overlay{align-items:center;}
@@ -315,6 +320,7 @@ body.admin-mode .add-card{display:flex;}
 </head>
 <body>
 <div class="bg-grid"></div>
+<div class="watermark">@elzstore_id</div>
 
 <!-- ════════════════════════════════════
      SCREEN 1: SHOP (HOME)
@@ -429,12 +435,12 @@ CREATE POLICY "public" ON orders FOR ALL USING (true) WITH CHECK (true);</div>
         <div class="order-mini" id="payOrderMini"></div>
         <a id="traktirBtn" href="#" target="_blank" rel="noopener" class="traktir-btn">
           <span class="traktir-ico">💸</span>
-          <span>Bayar via Traktir.id</span>
+          <span>Bayar via Trakteer.id</span>
           <span style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:1px;margin-left:4px;" id="traktirTotal"></span>
         </a>
         <div class="pay-divider"><span>setelah transfer, klik tombol di bawah</span></div>
         <div class="pay-steps">
-          <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik tombol <strong>Bayar via Traktir.id</strong> di atas dan lakukan transfer sesuai nominal yang tertera</div></div>
+          <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik tombol <strong>Bayar via Trakteer.id</strong> di atas dan lakukan transfer sesuai nominal yang tertera</div></div>
           <div class="pay-step"><div class="step-num">2</div><div class="step-txt">Setelah transfer berhasil, kembali ke sini dan klik <strong>Sudah Transfer</strong></div></div>
           <div class="pay-step"><div class="step-num">3</div><div class="step-txt">Isi form konfirmasi — kami akan <strong>kirimkan notifikasi</strong> ke admin dan segera proses ordermu</div></div>
         </div>
@@ -580,7 +586,7 @@ var CFG = {
   supabaseUrl:    'https://lgjcsefaqkqvidkuuomo.supabase.co',
   supabaseKey:    'sb_publishable_QNgbN6O4h3mp2bmdMWeqBA_E9qQ8h7J',
 
-  // ★ TRAKTIR.ID — username akun Traktir kamu
+  // ★ TRAKTIR.ID — username akun Trakteer kamu
   traktirUsername:'Viphunter',
 
   // ★ BOT NOTIFIKASI — bot yang terima order masuk
@@ -745,12 +751,12 @@ function renderCart(){
 // ── PAYMENT SCREEN ──
 function renderPayment(){
   var total=cartTotal();
-  // Traktir.id URL — pre-fill nominal + pesan
+  // Trakteer.id URL — pre-fill nominal + pesan
   var orderId='VH'+Date.now().toString().slice(-6);
   var msg=encodeURIComponent('Order '+orderId+' VIP Hunter');
-  var cleanUsername=CFG.traktirUsername.replace(/^https?:\/\//,'').replace(/^traktir\.(id|com)\//i,'').replace(/^\/+/,'').trim();
-  var traktirUrl='https://traktir.id/'+cleanUsername+'?amount='+total+'&message='+msg;
-  if(!cleanUsername||cleanUsername==='GANTI_USERNAME_TRAKTIR'){traktirUrl='https://traktir.id/';}
+  var cleanUsername=CFG.traktirUsername.replace(/^https?:\/\//,'').replace(/^trakteer?\.(id|com)\//i,'').replace(/^\/+/,'').trim();
+  var traktirUrl='https://trakteer.id/'+cleanUsername+'?amount='+total+'&message='+msg;
+  if(!cleanUsername||cleanUsername==='GANTI_USERNAME_TRAKTIR'){traktirUrl='https://trakteer.id/';}
   var traktirBtnEl=document.getElementById('traktirBtn');
   traktirBtnEl.href=traktirUrl;
   traktirBtnEl.dataset.href=traktirUrl;
@@ -838,7 +844,7 @@ async function submitOrder(){
   msg.push('━━━━━━━━━━━━━━━━━━━━━━');
   if(note)msg.push('📝 <b>Catatan:</b> '+note);
   msg.push('');
-  msg.push('💸 <b>Pembayaran:</b> Traktir.id');
+  msg.push('💸 <b>Pembayaran:</b> Trakteer.id');
   msg.push('✅ Customer sudah konfirmasi transfer');
   var fullMsg=msg.join('\n');
 
@@ -852,7 +858,7 @@ async function submitOrder(){
     '',
     buildOrderLines(),
     '',
-    '💸 Traktir.id',
+    '💸 Trakteer.id',
     '✅ Konfirmasi terkirim',
   ].join('\n');
 
