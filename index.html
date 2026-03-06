@@ -25,7 +25,6 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
   background-image:linear-gradient(rgba(245,200,66,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(245,200,66,.025) 1px,transparent 1px);
   background-size:50px 50px;}
 
-/* SCREEN */
 .screen{display:none;flex:1;flex-direction:column;overflow:hidden;}
 .screen.active{display:flex;}
 
@@ -50,12 +49,10 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
   background:var(--green);border:2px solid var(--tg-bg);display:none;}
 .admin-dot.show{display:block;}
 
-/* SCROLL */
 .scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:20px;}
 .scroll::-webkit-scrollbar{width:4px;}
 .scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
 
-/* BACK HEADER */
 .back-hd{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:12px 16px;
   border-bottom:1px solid var(--border);background:rgba(14,14,20,.95);backdrop-filter:blur(20px);}
 .back-btn{width:34px;height:34px;border-radius:50%;background:var(--tg-sec);border:1px solid var(--border);
@@ -74,23 +71,23 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
 .hero h1 .l2{background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;}
 .hero-sub{color:var(--tg-hint);font-size:.82rem;line-height:1.6;max-width:300px;margin:0 auto;}
 
-/* INFO BOX */
-.info-box{margin:14px 16px 0;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);
-  border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;}
+.info-box{margin:14px 16px 0;border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;}
+.info-box.green{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);}
+.info-box.gold{background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);}
 .info-ico{font-size:1.1rem;flex-shrink:0;}
 .info-txt{font-size:.75rem;color:var(--tg-hint);line-height:1.6;}
 .info-txt strong{color:var(--green);}
+.info-txt.gold-txt strong{color:var(--gold);}
 
-/* SECTION */
 .sec{padding:20px 16px 0;}
 .sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#fff;}
 .sec-tag-sm{font-size:.62rem;color:var(--tg-hint);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;}
 
-/* VIP GRID - 2 KOLOM */
+/* VIP GRID */
 .vip-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
 .vcard{background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);
-  overflow:hidden;transition:transform .15s,border-color .2s;display:flex;flex-direction:column;}
+  overflow:hidden;transition:transform .15s;display:flex;flex-direction:column;}
 .vcard:active{transform:scale(.98);}
 .vcard-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a1a10,var(--border));
   display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative;overflow:hidden;}
@@ -122,7 +119,7 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
 .cart-add-btn.added{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);color:var(--green);}
 .cart-add-btn:active{transform:scale(.96);}
 
-/* ADMIN BTNS */
+/* ADMIN */
 .admin-acts{display:none;gap:6px;padding:0 10px 10px;}
 body.admin-mode .admin-acts{display:flex;}
 .ae-btn,.ad-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:4px;
@@ -139,7 +136,6 @@ body.admin-mode .add-card{display:flex;}
 
 /* CART */
 .cart-empty{text-align:center;padding:60px 20px;}
-.cart-empty-ico{font-size:3rem;margin-bottom:12px;}
 .cart-item{display:flex;align-items:center;gap:10px;background:var(--tg-sec);
   border:1px solid var(--border);border-radius:12px;padding:11px;margin:0 16px 10px;}
 .ci-img{width:44px;height:44px;border-radius:9px;background:var(--tg-bg);
@@ -169,7 +165,6 @@ body.admin-mode .add-card{display:flex;}
 /* PAYMENT */
 .pay-box{margin:16px;background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;}
 .pay-hd{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
-.pay-hd-ico{font-size:1.4rem;}
 .pay-hd-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#fff;}
 .pay-hd-sub{font-size:.7rem;color:var(--tg-hint);margin-top:1px;}
 .pay-body{padding:16px;}
@@ -182,44 +177,21 @@ body.admin-mode .add-card{display:flex;}
 .order-mini-total .lbl{font-size:.7rem;color:var(--tg-hint);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
 .order-mini-total .val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;
   background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.saweria-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
-  background:linear-gradient(135deg,#ff6b35,#f7931e);color:#fff;font-weight:800;font-size:.95rem;
-  padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;
-  box-shadow:0 4px 20px rgba(255,107,53,.3);font-family:'Outfit',sans-serif;}
-.saweria-btn:active{transform:scale(.97);}
-.pay-divider{display:flex;align-items:center;gap:10px;margin:14px 0;}
-.pay-divider::before,.pay-divider::after{content:'';flex:1;height:1px;background:var(--border);}
-.pay-divider span{font-size:.68rem;color:var(--tg-hint);white-space:nowrap;}
-.pay-steps{display:flex;flex-direction:column;gap:8px;}
+
+/* BOT PAY BUTTON */
+.bot-pay-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:1rem;
+  padding:16px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 24px rgba(245,200,66,.35);font-family:'Outfit',sans-serif;letter-spacing:.5px;}
+.bot-pay-btn:active{transform:scale(.97);}
+.bot-pay-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+.pay-steps{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
 .pay-step{display:flex;align-items:flex-start;gap:10px;background:var(--tg-bg);border-radius:10px;padding:10px 12px;}
 .step-num{width:22px;height:22px;border-radius:50%;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);
   color:var(--gold);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
 .step-txt{font-size:.76rem;color:var(--tg-hint);line-height:1.5;}
 .step-txt strong{color:var(--tg-text);}
-.confirm-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
-  background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;font-weight:800;font-size:.92rem;
-  padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;margin-top:14px;
-  box-shadow:0 4px 20px rgba(34,197,94,.25);font-family:'Outfit',sans-serif;}
-.confirm-btn:active{transform:scale(.97);}
-
-/* KONFIRMASI FORM */
-.form-box{margin:16px;}
-.form-section{background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);padding:16px;margin-bottom:12px;}
-.form-section-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:7px;}
-.fg{margin-bottom:12px;}
-.fg:last-child{margin-bottom:0;}
-.fg label{display:block;font-size:.68rem;font-weight:700;color:var(--tg-hint);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
-.fg input,.fg textarea{width:100%;background:var(--tg-bg);border:1px solid var(--border);
-  color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.86rem;padding:10px 12px;
-  border-radius:9px;outline:none;transition:border-color .2s;}
-.fg input:focus,.fg textarea:focus{border-color:rgba(245,200,66,.5);}
-.fg textarea{resize:none;min-height:72px;}
-.submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
-  background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.95rem;
-  padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;
-  box-shadow:0 4px 24px rgba(245,200,66,.3);font-family:'Outfit',sans-serif;margin-bottom:8px;}
-.submit-btn:active{transform:scale(.97);}
-.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 
 /* SUCCESS */
 .success-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center;}
@@ -227,9 +199,6 @@ body.admin-mode .add-card{display:flex;}
 @keyframes popIn{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
 .success-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;color:var(--green);margin-bottom:8px;}
 .success-sub{font-size:.85rem;color:var(--tg-hint);line-height:1.6;margin-bottom:24px;max-width:280px;}
-.order-receipt{background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);
-  padding:16px;width:100%;text-align:left;font-family:'Courier New',monospace;font-size:.72rem;
-  color:var(--tg-text);line-height:1.8;white-space:pre-wrap;max-height:200px;overflow-y:auto;margin-bottom:16px;}
 .back-home-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
   background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);font-weight:700;font-size:.9rem;
   padding:12px;border-radius:12px;cursor:pointer;font-family:'Outfit',sans-serif;}
@@ -242,11 +211,7 @@ body.admin-mode .add-card{display:flex;}
 @keyframes spin{to{transform:rotate(360deg);}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-/* PROOF UPLOAD */
-.proof-upload{border:2px dashed rgba(245,200,66,.3);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(245,200,66,.03);}
-.proof-upload img{max-width:100%;border-radius:8px;margin-top:8px;display:none;}
-
-/* OVERLAY */
+/* MODAL OVERLAY */
 .overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);
   display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
 .overlay.open{opacity:1;pointer-events:all;}
@@ -264,16 +229,17 @@ body.admin-mode .add-card{display:flex;}
   color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 12px;
   border-radius:9px;outline:none;transition:border-color .2s;}
 .sfg input:focus,.sfg textarea:focus{border-color:rgba(245,200,66,.5);}
-.sfg textarea{resize:none;min-height:64px;}
+.sfg textarea{resize:none;min-height:70px;}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .btn-row{display:flex;gap:8px;margin-top:16px;}
 .save-btn{flex:1;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;
   font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;}
+.save-btn:disabled{opacity:.5;cursor:not-allowed;}
 .cancel-btn{background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-hint);
   font-weight:700;font-size:.85rem;padding:12px 18px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}
 .del-btn-big{flex:1;background:rgba(230,57,70,.1);border:1px solid rgba(230,57,70,.3);color:var(--red);
   font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}
-.img-upload{border:2px dashed rgba(245,200,66,.25);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:4px;}
+.img-upload{border:2px dashed rgba(245,200,66,.25);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;}
 .img-upload:hover{border-color:rgba(245,200,66,.5);}
 .up-ico{font-size:1.8rem;margin-bottom:4px;}
 .up-hint{font-size:.72rem;color:var(--tg-hint);}
@@ -284,7 +250,13 @@ body.admin-mode .add-card{display:flex;}
 .login-err{color:var(--red);font-size:.78rem;margin-top:6px;display:none;}
 .login-err.show{display:block;}
 
-/* TOAST */
+.submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.95rem;
+  padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 24px rgba(245,200,66,.3);font-family:'Outfit',sans-serif;}
+.submit-btn:active{transform:scale(.97);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
   background:#1e1e2e;border:1px solid var(--border);color:var(--tg-text);font-size:.8rem;
   padding:10px 18px;border-radius:100px;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:999;}
@@ -307,23 +279,19 @@ body.admin-mode .add-card{display:flex;}
       <span class="tb-name">VIP HUNTER</span>
     </div>
     <div class="tb-right">
-      <button class="tb-btn" id="cartBtn">
-        🛒<span class="cart-badge" id="cartBadge">0</span>
-      </button>
-      <button class="tb-btn" id="keyBtn">
-        🔑<span class="admin-dot" id="adminDot"></span>
-      </button>
+      <button class="tb-btn" id="cartBtn">🛒<span class="cart-badge" id="cartBadge">0</span></button>
+      <button class="tb-btn" id="keyBtn">🔑<span class="admin-dot" id="adminDot"></span></button>
     </div>
   </div>
   <div class="scroll">
     <div class="hero">
       <div class="hero-tag">Layanan VIP Eksklusif</div>
       <h1><span class="l1">AKSES</span><span class="l2">VIP HUNTER</span></h1>
-      <p class="hero-sub">Pilih paket VIP, bayar via Saweria, link VIP langsung dikirim bot ke Telegram kamu!</p>
+      <p class="hero-sub">Pilih paket VIP, bayar via QRIS, link VIP otomatis dikirim bot ke Telegram kamu!</p>
     </div>
-    <div class="info-box">
+    <div class="info-box green">
       <div class="info-ico">🤖</div>
-      <div class="info-txt"><strong>Cara Order:</strong> Pilih paket → Keranjang → Bayar via Saweria → Konfirmasi → <strong>Bot kirim link VIP ke Telegram kamu!</strong></div>
+      <div class="info-txt"><strong>Cara Order:</strong> Pilih paket → Keranjang → Klik Bayar → Bot kirim QRIS ke Telegram → Scan & bayar → <strong>Link VIP otomatis dikirim!</strong></div>
     </div>
     <div class="sec">
       <div class="sec-hd">
@@ -351,7 +319,7 @@ body.admin-mode .add-card{display:flex;}
   <div class="scroll">
     <div style="height:12px;"></div>
     <div id="cartEmpty" class="cart-empty" style="display:none;">
-      <div class="cart-empty-ico">🛒</div>
+      <div style="font-size:3rem;margin-bottom:12px;">🛒</div>
       <p style="color:var(--tg-hint);font-size:.88rem;">Keranjang kosong.<br/>Tambahkan paket VIP dulu!</p>
     </div>
     <div id="cartItems"></div>
@@ -379,88 +347,47 @@ body.admin-mode .add-card{display:flex;}
   <div class="scroll">
     <div class="pay-box">
       <div class="pay-hd">
-        <div class="pay-hd-ico">📦</div>
         <div>
-          <div class="pay-hd-title">RINGKASAN ORDER</div>
+          <div class="pay-hd-title">📦 RINGKASAN ORDER</div>
           <div class="pay-hd-sub">Pastikan semua pesanan sudah benar</div>
         </div>
       </div>
       <div class="pay-body">
         <div class="order-mini" id="payOrderMini"></div>
-        <button class="saweria-btn" id="saweriaBtn">
-          <span>💸</span>
-          <span>Bayar via Saweria</span>
-          <span id="saweriaTotal" style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:1px;margin-left:4px;"></span>
+
+        <button class="bot-pay-btn" id="botPayBtn">
+          ⚡ Bayar Sekarang — Bot Kirim QRIS
         </button>
-        <div class="pay-divider"><span>setelah transfer, klik tombol di bawah</span></div>
+
         <div class="pay-steps">
-          <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik <strong>Bayar via Saweria</strong> di atas dan lakukan transfer sesuai nominal</div></div>
-          <div class="pay-step"><div class="step-num">2</div><div class="step-txt">Setelah transfer berhasil, kembali ke sini dan klik <strong>Sudah Transfer</strong></div></div>
-          <div class="pay-step"><div class="step-num">3</div><div class="step-txt">Isi username Telegram kamu, bot akan <strong>kirim link VIP langsung</strong> ke akun Telegram kamu!</div></div>
+          <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik <strong>Bayar Sekarang</strong> — bot akan langsung kirim QRIS ke Telegram kamu</div></div>
+          <div class="pay-step"><div class="step-num">2</div><div class="step-txt"><strong>Buka Telegram</strong> → scan QRIS yang dikirim bot → bayar sesuai nominal</div></div>
+          <div class="pay-step"><div class="step-num">3</div><div class="step-txt">Setelah bayar, <strong>link VIP otomatis dikirim</strong> bot ke Telegram kamu!</div></div>
         </div>
-        <button class="confirm-btn" onclick="goTo('s-confirm')">✅ Sudah Transfer</button>
+
       </div>
     </div>
+
+    <div class="info-box gold" style="margin:12px 16px;">
+      <div class="info-ico">⚠️</div>
+      <div class="info-txt gold-txt"><strong>Pastikan kamu sudah start bot VIP Hunter dulu!</strong> Kirim /start ke bot agar QRIS bisa diterima.</div>
+    </div>
+
     <div style="height:16px;"></div>
   </div>
 </div>
 
-<!-- ══ SCREEN 4: KONFIRMASI ══ -->
-<div class="screen" id="s-confirm">
-  <div class="back-hd">
-    <button class="back-btn" onclick="goTo('s-payment')">←</button>
-    <span class="back-title">KONFIRMASI ORDER</span>
-  </div>
-  <div class="scroll">
-    <div class="form-box">
-      <div class="form-section">
-        <div class="form-section-title">👤 Data Kamu</div>
-        <div class="fg"><label>Nama Lengkap *</label><input type="text" id="cfName" placeholder="Nama kamu"/></div>
-        <div class="fg"><label>Username Telegram *</label><input type="text" id="cfTg" placeholder="username tanpa @"/></div>
-        <div class="fg"><label>Nomor HP / WhatsApp *</label><input type="tel" id="cfPhone" placeholder="08123456789"/></div>
-      </div>
-      <div class="form-section">
-        <div class="form-section-title">🎮 Akun yang Diaktifkan</div>
-        <div class="fg"><label>Nomor Akun *</label><input type="text" id="cfAccNum" placeholder="Nomor akun kamu"/></div>
-        <div class="fg"><label>Nama Akun *</label><input type="text" id="cfAccName" placeholder="Nama di akun kamu"/></div>
-        <div class="fg"><label>Username Akun *</label><input type="text" id="cfAccUser" placeholder="Username akun kamu"/></div>
-      </div>
-      <div class="form-section">
-        <div class="form-section-title">📦 Ringkasan Pesanan</div>
-        <div id="cfOrderPreview" style="font-size:.75rem;color:var(--tg-hint);line-height:1.7;font-family:'Courier New',monospace;white-space:pre-wrap;"></div>
-      </div>
-      <div class="form-section">
-        <div class="form-section-title">📸 Bukti Transfer *</div>
-        <div class="fg">
-          <div class="proof-upload" id="proofUpload">
-            <div id="proofIco" style="font-size:2rem;margin-bottom:6px;">📷</div>
-            <div id="proofHint" style="font-size:.75rem;color:var(--tg-hint);">Klik upload foto bukti transfer</div>
-            <img id="proofPreview"/>
-          </div>
-          <input type="file" id="proofInput" accept="image/*" style="display:none;"/>
-        </div>
-      </div>
-      <div class="form-section">
-        <div class="form-section-title">📝 Catatan (Opsional)</div>
-        <div class="fg"><textarea id="cfNote" placeholder="Catatan tambahan..."></textarea></div>
-      </div>
-      <button class="submit-btn" id="submitBtn" onclick="submitOrder()">📨 Kirim Konfirmasi</button>
-      <p style="font-size:.7rem;color:var(--tg-hint);text-align:center;line-height:1.6;margin-bottom:16px;">
-        Setelah submit, bot akan otomatis kirim link VIP ke Telegram kamu.
-      </p>
-    </div>
-    <div style="height:16px;"></div>
-  </div>
-</div>
-
-<!-- ══ SCREEN 5: SUKSES ══ -->
+<!-- ══ SCREEN 4: SUKSES KIRIM ══ -->
 <div class="screen" id="s-success">
   <div class="scroll">
     <div class="success-wrap">
       <div class="success-ico">✅</div>
-      <div class="success-title">ORDER TERKIRIM!</div>
-      <p class="success-sub">Bot sedang mengirim link VIP ke Telegram kamu.<br/>Cek pesan dari bot sebentar lagi!</p>
-      <div class="order-receipt" id="successReceipt"></div>
+      <div class="success-title">QRIS TERKIRIM!</div>
+      <p class="success-sub">Bot sudah kirim QRIS ke Telegram kamu!<br/><br/>Buka Telegram → cek pesan dari bot → scan QRIS → bayar → link VIP langsung dikirim! 🎉</p>
+      <div style="background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);padding:16px;width:100%;margin-bottom:16px;">
+        <div style="font-size:.72rem;color:var(--tg-hint);line-height:1.9;font-family:'Courier New',monospace;white-space:pre-wrap;" id="successDetail"></div>
+      </div>
+      <button class="bot-pay-btn" onclick="openBot()" style="margin-bottom:12px;">📲 Buka Bot Telegram</button>
       <button class="back-home-btn" onclick="goHome()">🏠 Kembali ke Beranda</button>
     </div>
   </div>
@@ -494,6 +421,7 @@ body.admin-mode .add-card{display:flex;}
     <h2 id="modalTitle">TAMBAH PAKET</h2>
     <p class="sheet-sub" id="modalSub"></p>
     <input type="hidden" id="fId"/>
+
     <div class="sfg">
       <label>Gambar / Banner</label>
       <div class="img-upload" id="imgUpload">
@@ -503,6 +431,7 @@ body.admin-mode .add-card{display:flex;}
       </div>
       <input type="file" id="fileInput" accept="image/*" style="display:none;"/>
     </div>
+
     <div class="frow">
       <div class="sfg"><label>Nama Paket *</label><input type="text" id="fName" placeholder="VIP Permanen"/></div>
       <div class="sfg">
@@ -517,12 +446,15 @@ body.admin-mode .add-card{display:flex;}
         </select>
       </div>
     </div>
+
     <div class="frow">
       <div class="sfg"><label>Harga *</label><input type="text" id="fPrice" placeholder="50000"/></div>
       <div class="sfg"><label>Label Harga</label><input type="text" id="fPer" placeholder="/ bulan"/></div>
     </div>
+
     <div class="sfg"><label>Deskripsi *</label><textarea id="fDesc" placeholder="Deskripsi singkat..."></textarea></div>
     <div class="sfg"><label>Fitur (satu per baris)</label><textarea id="fFeats" placeholder="Akses premium&#10;Support 24/7&#10;Update rutin"></textarea></div>
+
     <div class="sfg">
       <label>🔢 Jumlah Link per Order *</label>
       <input type="number" id="fLinkCount" placeholder="1" min="1" value="1"/>
@@ -530,9 +462,10 @@ body.admin-mode .add-card{display:flex;}
     </div>
     <div class="sfg">
       <label>🔗 Link VIP (satu per baris) *</label>
-      <textarea id="fVipLinks" placeholder="https://t.me/joinchat/link1&#10;https://t.me/joinchat/link2&#10;https://t.me/joinchat/link3" style="min-height:100px;"></textarea>
-      <div style="font-size:.65rem;color:var(--tg-hint);margin-top:4px;">Masukkan semua link, satu per baris. Bot akan kirim sesuai jumlah link per order.</div>
+      <textarea id="fVipLinks" placeholder="https://t.me/joinchat/link1&#10;https://t.me/joinchat/link2" style="min-height:100px;"></textarea>
+      <div style="font-size:.65rem;color:var(--tg-hint);margin-top:4px;">Masukkan semua link, satu per baris</div>
     </div>
+
     <div class="btn-row">
       <button class="cancel-btn" onclick="closeModal('prodModal')">Batal</button>
       <button class="save-btn" id="saveProd">💾 Simpan</button>
@@ -559,22 +492,25 @@ body.admin-mode .add-card{display:flex;}
 
 <script>
 // ══════════════════════════════════════════
-//  CONFIG
+//  ⚙️ CONFIG — sesuaikan dengan data kamu
 // ══════════════════════════════════════════
 var CFG = {
   adminPassword:  'Malik10_',
   supabaseUrl:    'https://lgjcsefaqkqvidkuuomo.supabase.co',
   supabaseKey:    'sb_publishable_QNgbN6O4h3mp2bmdMWeqBA_E9qQ8h7J',
-  botToken:       '8050084420:AAG-yShtIRHSj5HBKkIUgzZbAWRze-7N-Ig',
-  adminChatId:    '@bukan_founder', // Ganti dengan Chat ID numerik asisten
-  saweriaUsername:'Ahmadmalik10', // Ganti dengan username Saweria kamu
+  // Bot utama yang handle payment (dari config.py BOT_TOKEN)
+  botToken:       '8300625876:AAGDsTH-mKVDCeGxuOzvC4j3zem-AenUuwg',
+  // Username bot VIP (untuk link buka bot)
+  botUsername:    'Cs_viphunter_xbot',
+  // Log seller chat id (dari config.py LOG_SELLER)
+  logSeller:      -1002577689120,
   watermark:      '@elzstore_id',
 };
 
 // WATERMARK
-(function(){var el=document.getElementById('watermarkEl');if(el){el.textContent=CFG.watermark||'';el.style.display=CFG.watermark?'block':'none';}})();
+(function(){var el=document.getElementById('watermarkEl');if(el&&CFG.watermark){el.textContent=CFG.watermark;el.style.display='block';}})();
 
-// TELEGRAM
+// TELEGRAM SDK
 var tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:{
   ready:function(){},expand:function(){},
   HapticFeedback:{impactOccurred:function(){},notificationOccurred:function(){}},
@@ -591,8 +527,17 @@ async function sbPost(tbl,d){var r=await fetch(SB+'/'+tbl,{method:'POST',headers
 async function sbPatch(tbl,id,d){var r=await fetch(SB+'/'+tbl+'?id=eq.'+id,{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());}
 async function sbDelete(tbl,id){var r=await fetch(SB+'/'+tbl+'?id=eq.'+id,{method:'DELETE',headers:SBH});if(!r.ok)throw new Error(await r.text());}
 
+// TELEGRAM BOT API
+async function botSend(chatId, text){
+  var r=await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendMessage',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({chat_id:chatId,text:text,parse_mode:'HTML',disable_web_page_preview:true})
+  });
+  return r.json();
+}
+
 // STATE
-var allVIP=[],cart=[],isAdmin=false,isEdit=false,uploadedImg='',proofImg='',pendingDelId=null;
+var allVIP=[],cart=[],isAdmin=false,isEdit=false,uploadedImg='',pendingDelId=null;
 
 // UTILS
 function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast show'+(t?' '+t:'');clearTimeout(el._t);el._t=setTimeout(function(){el.className='toast';},3200);}
@@ -601,6 +546,12 @@ function closeModal(id){document.getElementById(id).classList.remove('open');}
 function parseNum(s){return parseInt((s||'0').replace(/[^0-9]/g,''))||0;}
 function fmtRp(n){return 'Rp '+n.toLocaleString('id-ID');}
 function haptic(t){try{tg.HapticFeedback.impactOccurred(t||'light');}catch(e){}}
+
+// USER INFO
+var tgUser=tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null;
+var tgUserId=tgUser?tgUser.id:null;
+var tgDisplayName=tgUser?(((tgUser.first_name||'')+(tgUser.last_name?' '+tgUser.last_name:'')).trim()||'Pelanggan'):'Pelanggan';
+var tgUsername=tgUser&&tgUser.username?tgUser.username:'';
 
 // SCREEN ROUTING
 var currentScreen='s-shop';
@@ -612,22 +563,16 @@ function goTo(id){
   else tg.BackButton.show();
   if(id==='s-cart')renderCart();
   if(id==='s-payment')renderPayment();
-  if(id==='s-confirm')renderConfirmPreview();
 }
 tg.BackButton.onClick(function(){
-  var map={'s-cart':'s-shop','s-payment':'s-cart','s-confirm':'s-payment','s-success':'s-shop'};
+  var map={'s-cart':'s-shop','s-payment':'s-cart','s-success':'s-shop'};
   if(map[currentScreen])goTo(map[currentScreen]);else goTo('s-shop');
 });
-function goHome(){
-  cart=[];updateBadge();renderGrid();goTo('s-shop');
-  ['cfName','cfTg','cfPhone','cfAccNum','cfAccName','cfAccUser','cfNote'].forEach(function(id){document.getElementById(id).value='';});
-  proofImg='';
-  document.getElementById('proofPreview').style.display='none';
-  document.getElementById('proofPreview').src='';
-  document.getElementById('proofIco').style.display='block';
-  document.getElementById('proofHint').textContent='Klik upload foto bukti transfer';
-  document.getElementById('proofUpload').style.borderColor='rgba(245,200,66,.3)';
-  document.getElementById('proofInput').value='';
+function goHome(){cart=[];updateBadge();renderGrid();goTo('s-shop');}
+function openBot(){
+  var url='https://t.me/'+CFG.botUsername;
+  try{if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){Telegram.WebApp.openLink(url);return;}}catch(e){}
+  window.open(url,'_blank');
 }
 
 // LOAD VIP
@@ -649,8 +594,10 @@ function renderGrid(){
     var imgH=p.img?'<div class="vcard-img"><img src="'+p.img+'" loading="lazy" alt=""/></div>':'<div class="vcard-img">👑</div>';
     var tier=p.tier||'tier-gold';
     var feats=(p.features||[]).slice(0,3).map(function(f){return '<div class="feat-row">'+f+'</div>';}).join('');
-    var card=document.createElement('div');card.className='vcard';
-    card.style.animationDelay=(i*0.06)+'s';card.style.animation='fadeUp .4s ease both';
+    var card=document.createElement('div');
+    card.className='vcard';
+    card.style.animationDelay=(i*0.06)+'s';
+    card.style.animation='fadeUp .4s ease both';
     card.innerHTML=
       imgH+
       '<div class="vcard-tier '+tier+'">'+(TL[tier]||'VIP')+'</div>'+
@@ -671,7 +618,7 @@ function renderGrid(){
       '</div>';
     g.appendChild(card);
   });
-  g.querySelectorAll('.cart-add-btn').forEach(function(b){b.onclick=function(e){e.stopPropagation();haptic('light');addToCart(b.dataset.id);};});
+  g.querySelectorAll('.cart-add-btn').forEach(function(b){b.onclick=function(){haptic('light');addToCart(b.dataset.id);};});
   g.querySelectorAll('.ae-btn').forEach(function(b){b.onclick=function(e){e.stopPropagation();openEditModal(b.dataset.id);};});
   g.querySelectorAll('.ad-btn').forEach(function(b){
     b.onclick=function(e){e.stopPropagation();pendingDelId=b.dataset.id;
@@ -700,7 +647,7 @@ function updateBadge(){
   var n=cart.reduce(function(s,x){return s+x.qty;},0);
   var b=document.getElementById('cartBadge');b.textContent=n;
   n>0?b.classList.add('show'):b.classList.remove('show');
-  if(document.getElementById('cartCount'))document.getElementById('cartCount').textContent=n+' item';
+  var cc=document.getElementById('cartCount');if(cc)cc.textContent=n+' item';
 }
 function cartTotal(){return cart.reduce(function(s,x){return s+parseNum(x.price)*x.qty;},0);}
 function renderCart(){
@@ -730,229 +677,101 @@ function renderCart(){
   document.getElementById('cartTotalVal').textContent=fmtRp(cartTotal());
 }
 
-// PAYMENT
+// PAYMENT SCREEN
 function renderPayment(){
   var total=cartTotal();
   var rows=cart.map(function(item,i){
     return '<div class="order-mini-row"><span class="lbl">'+(i+1)+'. '+item.name+' ×'+item.qty+'</span><span class="val">'+fmtRp(parseNum(item.price)*item.qty)+'</span></div>';
   }).join('');
   document.getElementById('payOrderMini').innerHTML=rows+'<hr class="order-mini-divider"/><div class="order-mini-total"><span class="lbl">Total</span><span class="val">'+fmtRp(total)+'</span></div>';
-  document.getElementById('saweriaTotal').textContent=fmtRp(total);
-
-  document.getElementById('saweriaBtn').onclick=function(){
-    haptic('light');
-    var username=CFG.saweriaUsername.replace(/^@/,'');
-    var msg=encodeURIComponent('Order VIP Hunter - '+cart.map(function(x){return x.name+' x'+x.qty;}).join(', '));
-    var url='https://saweria.co/'+username+'?amount='+total+'&message='+msg;
-    try{
-      if(window.Telegram&&window.Telegram.WebApp&&typeof Telegram.WebApp.openLink==='function'){
-        Telegram.WebApp.openLink(url);return;
-      }
-    }catch(e){}
-    window.open(url,'_blank');
-  };
 }
 
-// CONFIRM PREVIEW
-function renderConfirmPreview(){
-  var lines=['📦 PESANAN:'];
-  cart.forEach(function(item,i){
-    var sub=parseNum(item.price)*item.qty;
-    lines.push('  '+(i+1)+'. '+item.name);
-    lines.push('     Qty  : '+item.qty+'x');
-    lines.push('     Harga: '+fmtRp(parseNum(item.price))+' '+(item.per||''));
-    if(item.qty>1)lines.push('     Sub  : '+fmtRp(sub));
-  });
-  lines.push('');
-  lines.push('💰 TOTAL: '+fmtRp(cartTotal()));
-  document.getElementById('cfOrderPreview').textContent=lines.join('\n');
-}
+// ══════════════════════════════════════════
+//  BAYAR — Kirim pesan ke bot untuk generate QRIS
+// ══════════════════════════════════════════
+document.getElementById('botPayBtn').addEventListener('click', async function(){
+  if(!tgUserId){
+    toast('❌ Buka Mini App dari Telegram dulu!','err');
+    return;
+  }
+  if(!cart.length){
+    toast('❌ Keranjang kosong!','err');
+    return;
+  }
 
-// PROOF UPLOAD
-document.getElementById('proofUpload').onclick=function(){document.getElementById('proofInput').click();};
-document.getElementById('proofInput').addEventListener('change',function(e){
-  var file=e.target.files[0];if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(ev){
-    var img=new Image();
-    img.onload=function(){
-      var MAX=800,w=img.width,h=img.height;
-      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}}else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}}
-      var c=document.createElement('canvas');c.width=w;c.height=h;
-      c.getContext('2d').drawImage(img,0,0,w,h);
-      proofImg=c.toDataURL('image/jpeg',.7);
-      var pv=document.getElementById('proofPreview');pv.src=proofImg;pv.style.display='block';
-      document.getElementById('proofIco').style.display='none';
-      document.getElementById('proofHint').textContent='✅ Foto bukti terpilih';
-      document.getElementById('proofUpload').style.borderColor='rgba(34,197,94,.5)';
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-// SUBMIT ORDER
-async function submitOrder(){
-  var name=document.getElementById('cfName').value.trim();
-  var tgUser=document.getElementById('cfTg').value.trim().replace('@','');
-  var phone=document.getElementById('cfPhone').value.trim();
-  var accNum=document.getElementById('cfAccNum').value.trim();
-  var accName=document.getElementById('cfAccName').value.trim();
-  var accUser=document.getElementById('cfAccUser').value.trim();
-  var note=document.getElementById('cfNote').value.trim();
-
-  if(!name||!tgUser){toast('❌ Nama dan username Telegram wajib!','err');return;}
-  if(!phone){toast('❌ Nomor HP wajib diisi!','err');return;}
-  if(!accNum||!accName||!accUser){toast('❌ Data akun wajib diisi!','err');return;}
-  if(!proofImg){toast('❌ Bukti transfer wajib diupload!','err');return;}
-
-  var btn=document.getElementById('submitBtn');
-  btn.disabled=true;btn.textContent='⏳ Mengirim...';
+  var btn=document.getElementById('botPayBtn');
+  btn.disabled=true;
+  btn.textContent='⏳ Mengirim ke bot...';
   haptic('medium');
 
   var total=cartTotal();
   var now=new Date();
+  var orderId='VH'+Date.now();
   var ds=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
   var ts=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-  var orderId='VH'+Date.now();
 
-  // Telegram display name
-  var tgInfo=tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null;
-  var tgDisplayName=tgInfo?(((tgInfo.first_name||'')+(tgInfo.last_name?' '+tgInfo.last_name:'')).trim()||name):name;
+  // Buat teks pesanan
+  var itemList=cart.map(function(item,i){
+    return (i+1)+'. '+item.name+' ×'+item.qty+' — '+fmtRp(parseNum(item.price)*item.qty);
+  }).join('\n');
 
-  // Kumpulkan link VIP dari semua produk di cart
-  var vipLinks=cart.map(function(item){
-    var prod=allVIP.find(function(p){return p.id===item.id;});
-    var links=prod&&prod.vip_links?prod.vip_links:[];
-    var count=prod&&prod.link_count?parseInt(prod.link_count):1;
-    // Ambil link sesuai jumlah per order x qty
-    var totalLinks=count*item.qty;
-    var assignedLinks=links.slice(0,totalLinks);
-    return {name:item.name,qty:item.qty,count:count,links:assignedLinks};
-  });
+  // Pesan ke pelanggan — minta bot generate QRIS
+  // Format pesan agar bot mengenali sebagai request payment
+  var msgToPelanggan=
+    '🛒 <b>ORDER BARU VIP HUNTER</b>\n'+
+    '━━━━━━━━━━━━━━━━\n'+
+    '📦 <b>Detail Pesanan:</b>\n'+
+    itemList+'\n'+
+    '━━━━━━━━━━━━━━━━\n'+
+    '💰 <b>Total: '+fmtRp(total)+'</b>\n'+
+    '🗓 '+ds+' · '+ts+'\n'+
+    '🔖 Order ID: <code>'+orderId+'</code>\n\n'+
+    '⚡ Bot sedang menyiapkan QRIS untuk kamu...\n'+
+    'Silahkan tunggu sebentar!';
 
-  // Pesan notif ke admin
-  var msgAdmin=[
-    '🛒 <b>ORDER BARU — VIP HUNTER</b>',
-    '━━━━━━━━━━━━━━━━━━━━━━',
-    '🗓 <b>'+ds+'</b> · '+ts,
-    '',
-    '👤 <b>Nama TG:</b> '+tgDisplayName,
-    '📋 <b>Nama Form:</b> '+name,
-    '📱 <b>Username TG:</b> @'+tgUser,
-    '📞 <b>No HP:</b> '+phone,
-    (tgInfo?'🔖 <b>TG ID:</b> '+tgInfo.id:''),
-    '',
-    '🎮 <b>DATA AKUN:</b>',
-    '🔢 <b>Nomor:</b> '+accNum,
-    '👤 <b>Nama:</b> '+accName,
-    '🏷 <b>Username:</b> '+accUser,
-    '',
-    '📦 <b>PESANAN:</b>',
-  ].filter(Boolean);
-  cart.forEach(function(item,i){
-    msgAdmin.push('  '+(i+1)+'. <b>'+item.name+'</b> ×'+item.qty+' — '+fmtRp(parseNum(item.price)*item.qty));
-  });
-  msgAdmin.push('');
-  msgAdmin.push('━━━━━━━━━━━━━━━━━━━━━━');
-  msgAdmin.push('💰 <b>TOTAL: '+fmtRp(total)+'</b>');
-  msgAdmin.push('━━━━━━━━━━━━━━━━━━━━━━');
-  if(note)msgAdmin.push('📝 <b>Catatan:</b> '+note);
-  msgAdmin.push('💸 <b>Pembayaran:</b> Saweria');
-  msgAdmin.push('✅ Customer sudah konfirmasi transfer');
-
-  // Pesan link VIP ke pelanggan
-  var msgVIP=[
-    '🎉 <b>ORDER KAMU DITERIMA!</b>',
-    '━━━━━━━━━━━━━━━━━━━━━━',
-    '👋 Halo <b>'+name+'</b>!',
-    '',
-    'Berikut link VIP kamu:',
-    '',
-  ];
-  var hasLink=false;
-  vipLinks.forEach(function(v){
-    if(v.links&&v.links.length>0){
-      hasLink=true;
-      msgVIP.push('📦 <b>'+v.name+'</b> ('+v.links.length+' link)');
-      v.links.forEach(function(lnk,idx){
-        msgVIP.push('🔗 '+(v.links.length>1?'['+(idx+1)+'] ':'')+lnk);
-      });
-      msgVIP.push('');
-    } else {
-      msgVIP.push('📦 <b>'+v.name+'</b>');
-      msgVIP.push('⏳ Link sedang disiapkan admin.');
-      msgVIP.push('');
-    }
-  });
-  if(!hasLink){
-    msgVIP.push('⏳ Link VIP sedang disiapkan admin, harap tunggu sebentar.');
-  }
-  msgVIP.push('━━━━━━━━━━━━━━━━━━━━━━');
-  msgVIP.push('Terima kasih sudah order! 🙏');
-
-  // Receipt
-  var receipt=[
-    '━━━━━━━━━━━━━━━━━━━━━━',
-    '📦 ORDER VIP HUNTER',
-    '━━━━━━━━━━━━━━━━━━━━━━',
-    '🗓 '+ds+' · '+ts,
-    '👤 '+tgDisplayName+' (@'+tgUser+')',
-    '📞 '+phone,
-    '',
-    '🎮 AKUN: '+accName+' ('+accNum+')',
-    '',
-  ].concat(cart.map(function(item,i){return '  '+(i+1)+'. '+item.name+' ×'+item.qty+' — '+fmtRp(parseNum(item.price)*item.qty);}));
-  receipt.push('');
-  receipt.push('💰 TOTAL: '+fmtRp(total));
-  receipt.push('✅ Konfirmasi terkirim');
+  // Pesan ke log seller
+  var msgToSeller=
+    '🛒 <b>ORDER MASUK — VIP HUNTER</b>\n'+
+    '━━━━━━━━━━━━━━━━\n'+
+    '👤 <b>Nama:</b> '+tgDisplayName+'\n'+
+    (tgUsername?'📱 <b>Username:</b> @'+tgUsername+'\n':'')+
+    '🔖 <b>TG ID:</b> <code>'+tgUserId+'</code>\n'+
+    '━━━━━━━━━━━━━━━━\n'+
+    '📦 <b>Pesanan:</b>\n'+itemList+'\n'+
+    '━━━━━━━━━━━━━━━━\n'+
+    '💰 <b>Total: '+fmtRp(total)+'</b>\n'+
+    '🔖 Order ID: <code>'+orderId+'</code>\n'+
+    '🗓 '+ds+' · '+ts;
 
   try{
-    // 1. Simpan ke Supabase
+    // Simpan order ke Supabase
     await sbPost('orders',{
       id:orderId,
-      customer_name:name,customer_tg:tgUser,customer_tg_display:tgDisplayName,
-      customer_phone:phone,acc_number:accNum,acc_name:accName,acc_username:accUser,
-      items:cart,total:total,note:note,status:'pending'
+      customer_name:tgDisplayName,
+      customer_tg:tgUsername,
+      customer_tg_id:String(tgUserId),
+      items:cart,
+      total:total,
+      status:'pending_payment',
+      created_at:now.toISOString()
     });
 
-    if(!CFG.botToken.includes('GANTI')){
-      // 2. Notif ke admin
-      await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendMessage',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({chat_id:CFG.adminChatId,text:msgAdmin.join('\n'),parse_mode:'HTML'})
-      });
+    // Kirim notif ke pelanggan via bot
+    await botSend(tgUserId, msgToPelanggan);
 
-      // 3. Kirim foto bukti ke admin
-      try{
-        var base64Data=proofImg.split(',')[1];
-        var byteChars=atob(base64Data);
-        var byteArr=new Uint8Array(byteChars.length);
-        for(var i=0;i<byteChars.length;i++){byteArr[i]=byteChars.charCodeAt(i);}
-        var blob=new Blob([byteArr],{type:'image/jpeg'});
-        var fd=new FormData();
-        fd.append('chat_id',CFG.adminChatId);
-        fd.append('photo',blob,'bukti_'+orderId+'.jpg');
-        fd.append('caption','📸 Bukti Transfer — @'+tgUser+' | '+orderId);
-        await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendPhoto',{method:'POST',body:fd});
-      }catch(e){console.warn('Foto gagal:',e);}
+    // Kirim notif ke log seller
+    try{await botSend(CFG.logSeller, msgToSeller);}catch(e){console.warn('Log seller gagal',e);}
 
-      // 4. Kirim link VIP ke pelanggan via bot
-      try{
-        // Cari chat_id pelanggan dari username
-        var tgId=tgInfo?tgInfo.id:null;
-        var targetId=tgId?tgId:('@'+tgUser);
-        await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendMessage',{
-          method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({chat_id:targetId,text:msgVIP.join('\n'),parse_mode:'HTML'})
-        });
-      }catch(e){console.warn('Kirim VIP ke pelanggan gagal:',e);}
-    }
+    // Tampilkan sukses
+    var detail=
+      '📦 ORDER ID: '+orderId+'\n'+
+      '💰 Total  : '+fmtRp(total)+'\n'+
+      '🗓 Waktu  : '+ds+' '+ts+'\n\n'+
+      'Buka Telegram → cek pesan bot\n'+
+      '→ Scan QRIS → Bayar\n'+
+      '→ Link VIP otomatis dikirim! ✅';
+    document.getElementById('successDetail').textContent=detail;
 
-    // 5. Update status
-    await sbPatch('orders',orderId,{status:'confirmed'});
-
-    document.getElementById('successReceipt').textContent=receipt.join('\n');
     haptic('heavy');
     goTo('s-success');
 
@@ -960,8 +779,10 @@ async function submitOrder(){
     toast('❌ Gagal: '+e.message,'err');
     console.error(e);
   }
-  btn.disabled=false;btn.textContent='📨 Kirim Konfirmasi';
-}
+
+  btn.disabled=false;
+  btn.textContent='⚡ Bayar Sekarang — Bot Kirim QRIS';
+});
 
 // ADMIN
 function setAdmin(on){
@@ -1002,8 +823,8 @@ function resetImg(){
 }
 function clearForm(){
   ['fId','fName','fDesc','fFeats','fPrice','fPer','fVipLinks'].forEach(function(id){document.getElementById(id).value='';});
-  document.getElementById('fLinkCount').value='1';
   document.getElementById('fTier').value='tier-permanen';
+  document.getElementById('fLinkCount').value='1';
   resetImg();
 }
 function openAddModal(){
@@ -1036,6 +857,7 @@ function openEditModal(id){
   document.getElementById('saveProd').textContent='💾 Simpan Perubahan';
   openModal('prodModal');
 }
+
 document.getElementById('saveProd').addEventListener('click',async function(){
   var name=document.getElementById('fName').value.trim();
   var desc=document.getElementById('fDesc').value.trim();
@@ -1062,6 +884,7 @@ document.getElementById('saveProd').addEventListener('click',async function(){
   }catch(e){toast('❌ Gagal: '+e.message,'err');}
   btn.disabled=false;btn.textContent=isEdit?'💾 Simpan Perubahan':'💾 Simpan Paket';
 });
+
 document.getElementById('confirmDel').addEventListener('click',async function(){
   if(!pendingDelId)return;
   var btn=document.getElementById('confirmDel');btn.disabled=true;btn.textContent='⏳...';
@@ -1096,6 +919,7 @@ document.getElementById('fileInput').addEventListener('change',function(e){
   document.getElementById(id).addEventListener('click',function(e){if(e.target.id===id)closeModal(id);});
 });
 
+// BOOT
 loadVIP();
 </script>
 </body>
