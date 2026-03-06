@@ -248,7 +248,7 @@ body.admin-mode .add-card{display:flex;}
     </div>
     <div class="info-box green">
       <div class="info-ico">🤖</div>
-      <div class="info-txt"><strong>Cara Order:</strong> Pilih paket → Keranjang → Bayar → Bot kirim QRIS → Scan & bayar → <strong>Link Join sekali pakai otomatis dikirim!</strong></div>
+      <div class="info-txt"><strong>Cara Order:</strong> Pilih paket → Keranjang → Bayar → Hubungi admin via Telegram → <strong>Konfirmasi & Link Join dikirim!</strong></div>
     </div>
     <div class="sec">
       <div class="sec-hd">
@@ -308,17 +308,17 @@ body.admin-mode .add-card{display:flex;}
       </div>
       <div class="pay-body">
         <div class="order-mini" id="payOrderMini"></div>
-        <button class="bot-pay-btn" id="botPayBtn">⚡ Bayar Sekarang — Bot Kirim QRIS</button>
+        <button class="bot-pay-btn" id="botPayBtn">📲 Konfirmasi & Hubungi Admin</button>
         <div class="pay-steps">
-          <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik <strong>Bayar Sekarang</strong> — pesanan langsung tersimpan</div></div>
-          <div class="pay-step"><div class="step-num">2</div><div class="step-txt"><strong>Buka Telegram</strong> → bot kirim QRIS → scan & bayar sesuai nominal</div></div>
-          <div class="pay-step"><div class="step-num">3</div><div class="step-txt">Setelah bayar, <strong>link join sekali pakai</strong> otomatis dikirim bot ke Telegram kamu!</div></div>
+          <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik tombol di atas — pesanan tersimpan & Telegram admin terbuka</div></div>
+          <div class="pay-step"><div class="step-num">2</div><div class="step-txt"><strong>Detail order sudah terisi otomatis</strong> di chat admin — tinggal kirim!</div></div>
+          <div class="pay-step"><div class="step-num">3</div><div class="step-txt">Admin memproses pesanan & mengirim <strong>QRIS + link join</strong> ke kamu 🎉</div></div>
         </div>
       </div>
     </div>
     <div class="info-box gold" style="margin:12px 16px;">
       <div class="info-ico">⚠️</div>
-      <div class="info-txt gold-txt"><strong>Pastikan sudah /start bot VIP Hunter!</strong> Agar QRIS bisa diterima di Telegram kamu.</div>
+      <div class="info-txt gold-txt"><strong>Pastikan sudah /start bot VIP Hunter!</strong> Agar konfirmasi & link join bisa diterima di Telegram kamu.</div>
     </div>
     <div style="height:16px;"></div>
   </div>
@@ -330,11 +330,11 @@ body.admin-mode .add-card{display:flex;}
     <div class="success-wrap">
       <div class="success-ico">✅</div>
       <div class="success-title">PESANAN MASUK!</div>
-      <p class="success-sub">Bot sedang menyiapkan QRIS!<br/><br/>Buka Telegram → tunggu pesan QRIS dari bot → scan & bayar → link join sekali pakai langsung dikirim! 🎉</p>
+      <p class="success-sub">Pesanan berhasil disimpan!<br/><br/>Chat admin sudah terbuka dengan detail pesananmu. Kirim pesan & tunggu konfirmasi dari admin! 🎉</p>
       <div style="background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);padding:16px;width:100%;margin-bottom:16px;">
         <div style="font-size:.72rem;color:var(--tg-hint);line-height:1.9;font-family:'Courier New',monospace;white-space:pre-wrap;" id="successDetail"></div>
       </div>
-      <button class="bot-pay-btn" onclick="openBot()" style="margin-bottom:12px;">📲 Buka Bot Telegram</button>
+      <button class="bot-pay-btn" onclick="openAdmin()" style="margin-bottom:12px;">📲 Buka Chat Admin</button>
       <button class="back-home-btn" onclick="goHome()">🏠 Kembali ke Beranda</button>
     </div>
   </div>
@@ -477,6 +477,8 @@ var CFG={
   adminPassword:'Malik10_',
   supabaseUrl:'https://lgjcsefaqkqvidkuuomo.supabase.co',
   supabaseKey:'sb_publishable_QNgbN6O4h3mp2bmdMWeqBA_E9qQ8h7J',
+  // ══ GANTI dengan username Telegram ADMIN (tanpa @) ══
+  adminTgUsername:'ADMIN_USERNAME_TELEGRAM',
   botUsername:'Cs_viphunter_xbot',
   watermark:'@elzstore_id',
 };
@@ -533,10 +535,56 @@ tg.BackButton.onClick(function(){
   if(map[currentScreen])goTo(map[currentScreen]);else goTo('s-shop');
 });
 function goHome(){cart=[];updateBadge();renderGrid();navTo('s-shop','nav-shop');}
+
+// ══ BUKA ADMIN / BOT ══
+function openAdmin(){
+  var url='https://t.me/'+CFG.adminTgUsername;
+  try{if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){Telegram.WebApp.openLink(url);return;}}catch(e){}
+  window.open(url,'_blank');
+}
 function openBot(){
   var url='https://t.me/'+CFG.botUsername;
   try{if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){Telegram.WebApp.openLink(url);return;}}catch(e){}
   window.open(url,'_blank');
+}
+
+// ══ BUAT PESAN ORDER UNTUK ADMIN ══
+function buildOrderMessage(orderId, now){
+  var ds=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+  var ts=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  var total=cartTotal();
+
+  var lines=[];
+  lines.push('🛒 *ORDER BARU - VIP HUNTER*');
+  lines.push('━━━━━━━━━━━━━━━━━━━━');
+  lines.push('📋 *ID Order:* `'+orderId+'`');
+  lines.push('🗓 *Waktu:* '+ds+', '+ts);
+  lines.push('');
+  lines.push('👤 *Data Pembeli*');
+  lines.push('• Nama: '+tgDisplayName);
+  if(tgUsername)lines.push('• Username: @'+tgUsername);
+  if(tgUserId)lines.push('• TG ID: `'+tgUserId+'`');
+  lines.push('');
+  lines.push('📦 *Detail Pesanan*');
+  lines.push('─────────────────────');
+
+  var no=1;
+  cart.forEach(function(item){
+    var subtotal=parseNum(item.price)*item.qty;
+    lines.push(no+'. *'+item.name+'*');
+    lines.push('   Qty: '+item.qty+' × '+fmtRp(parseNum(item.price))+(item.per?' '+item.per:''));
+    lines.push('   Subtotal: *'+fmtRp(subtotal)+'*');
+    no++;
+  });
+
+  lines.push('─────────────────────');
+  lines.push('💰 *TOTAL: '+fmtRp(total)+'*');
+  lines.push('━━━━━━━━━━━━━━━━━━━━');
+  lines.push('📌 Status: *Menunggu Pembayaran*');
+  lines.push('');
+  lines.push('Mohon kirim QRIS untuk pembayaran, terima kasih! 🙏');
+
+  return lines.join('\n');
 }
 
 // ══ LOAD VIP ══
@@ -628,33 +676,64 @@ function renderPayment(){
   }).join('');
   document.getElementById('payOrderMini').innerHTML=rows+'<hr class="order-mini-divider"/><div class="order-mini-total"><span class="lbl">Total</span><span class="val">'+fmtRp(total)+'</span></div>';
 }
+
+// ══ CHECKOUT → REDIRECT KE ADMIN TELEGRAM ══
 document.getElementById('botPayBtn').addEventListener('click',async function(){
-  if(!tgUserId){toast('❌ Buka Mini App dari Telegram dulu!','err');return;}
   if(!cart.length){toast('❌ Keranjang kosong!','err');return;}
   var btn=document.getElementById('botPayBtn');
   btn.disabled=true;btn.textContent='⏳ Menyimpan pesanan...';haptic('medium');
-  var total=cartTotal(),now=new Date(),orderId='VH'+Date.now();
-  var ds=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
-  var ts=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+
+  var total=cartTotal();
+  var now=new Date();
+  var orderId='VH'+Date.now();
+
   try{
+    // 1. Simpan order ke Supabase
     await sbPost('orders',{
-      id:orderId,customer_name:tgDisplayName,customer_tg:tgUsername,
-      customer_tg_id:String(tgUserId),items:cart,total:total,
-      status:'pending_payment',created_at:now.toISOString()
+      id:orderId,
+      customer_name:tgDisplayName,
+      customer_tg:tgUsername,
+      customer_tg_id:String(tgUserId||'guest_'+Date.now()),
+      items:cart,
+      total:total,
+      status:'pending_payment',
+      created_at:now.toISOString()
     });
+
+    // 2. Bangun pesan untuk admin
+    var orderMsg=buildOrderMessage(orderId, now);
+
+    // 3. Tampilkan sukses
+    var ds=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+    var ts=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
     document.getElementById('successDetail').textContent=
       '📦 ORDER ID: '+orderId+'\n'+
       '💰 Total  : '+fmtRp(total)+'\n'+
-      '🗓 Waktu  : '+ds+' '+ts+'\n\n'+
-      '✅ Pesanan masuk!\n'+
-      'Bot sedang menyiapkan QRIS...\n\n'+
-      'Buka Telegram → tunggu pesan QRIS\n'+
-      '→ Scan & bayar\n'+
-      '→ Link join sekali pakai dikirim! ✅';
-    haptic('heavy');goTo('s-success');
+      '🗓 Waktu  : '+ds+' '+ts+'\n'+
+      '📌 Status : Menunggu Konfirmasi Admin';
+
+    haptic('heavy');
+    goTo('s-success');
+
+    // 4. Redirect ke Telegram admin dengan pesan terisi otomatis
+    // Gunakan t.me/username?text=... agar pesan sudah terisi di kolom chat
+    var encodedMsg=encodeURIComponent(orderMsg);
+    var adminUrl='https://t.me/'+CFG.adminTgUsername+'?text='+encodedMsg;
+
+    // Delay sedikit agar screen sukses sempat tampil
+    setTimeout(function(){
+      try{
+        if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){
+          Telegram.WebApp.openLink(adminUrl);
+        }else{
+          window.open(adminUrl,'_blank');
+        }
+      }catch(e){window.open(adminUrl,'_blank');}
+    }, 800);
+
   }catch(e){
     toast('❌ Gagal: '+e.message,'err');
-    btn.disabled=false;btn.textContent='⚡ Bayar Sekarang — Bot Kirim QRIS';
+    btn.disabled=false;btn.textContent='📲 Konfirmasi & Hubungi Admin';
   }
 });
 
