@@ -581,7 +581,7 @@ var CFG = {
   supabaseKey:    'sb_publishable_QNgbN6O4h3mp2bmdMWeqBA_E9qQ8h7J',
 
   // ★ TRAKTIR.ID — username akun Traktir kamu
-  traktirUsername:'Viphunter',
+  traktirUsername:'viphunter',
 
   // ★ BOT NOTIFIKASI — bot yang terima order masuk
   botToken:       'GANTI_BOT_TOKEN',         // dari @BotFather  contoh: '123456:ABC-DEF...'
@@ -748,8 +748,9 @@ function renderPayment(){
   // Traktir.id URL — pre-fill nominal + pesan
   var orderId='VH'+Date.now().toString().slice(-6);
   var msg=encodeURIComponent('Order '+orderId+' VIP Hunter');
-  var traktirUrl='https://traktir.id/'+CFG.traktirUsername+'?amount='+total+'&message='+msg;
-  if(CFG.traktirUsername==='GANTI_USERNAME_TRAKTIR'){traktirUrl='https://traktir.id/';}
+  var cleanUsername=CFG.traktirUsername.replace(/^https?:\/\//,'').replace(/^traktir\.(id|com)\//i,'').replace(/^\/+/,'').trim();
+  var traktirUrl='https://traktir.id/'+cleanUsername+'?amount='+total+'&message='+msg;
+  if(!cleanUsername||cleanUsername==='GANTI_USERNAME_TRAKTIR'){traktirUrl='https://traktir.id/';}
   var traktirBtnEl=document.getElementById('traktirBtn');
   traktirBtnEl.dataset.href=traktirUrl;
   traktirBtnEl.onclick=function(){
