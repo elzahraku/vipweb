@@ -465,10 +465,22 @@ CREATE POLICY "public" ON orders FOR ALL USING (true) WITH CHECK (true);</div>
         <div class="form-section-title">👤 Data Pembeli</div>
         <div class="fg"><label>Nama Lengkap *</label><input type="text" id="cfName" placeholder="Nama kamu"/></div>
         <div class="fg"><label>Username Telegram *</label><input type="text" id="cfTg" placeholder="@username (tanpa @)"/></div>
+        <div class="fg"><label>Nomor HP / WhatsApp *</label><input type="tel" id="cfPhone" placeholder="Contoh: 08123456789"/></div>
       </div>
       <div class="form-section">
         <div class="form-section-title">📦 Ringkasan Pesanan</div>
         <div id="cfOrderPreview" style="font-size:.75rem;color:var(--tg-hint);line-height:1.7;font-family:'Courier New',monospace;white-space:pre-wrap;"></div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">📸 Bukti Transfer *</div>
+        <div class="fg">
+          <div id="proofUpload" style="border:2px dashed rgba(245,200,66,.3);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(245,200,66,.03);">
+            <div id="proofIco" style="font-size:2rem;margin-bottom:6px;">📷</div>
+            <div id="proofHint" style="font-size:.75rem;color:var(--tg-hint);">Klik untuk upload foto bukti transfer</div>
+            <img id="proofPreview" style="display:none;max-width:100%;border-radius:8px;margin-top:8px;"/>
+          </div>
+          <input type="file" id="proofInput" accept="image/*" style="display:none;"/>
+        </div>
       </div>
       <div class="form-section">
         <div class="form-section-title">📝 Catatan (Opsional)</div>
@@ -659,8 +671,40 @@ function goHome(){
   cart=[]; updateBadge(); renderGrid(); goTo('s-shop');
   document.getElementById('cfName').value='';
   document.getElementById('cfTg').value='';
+  document.getElementById('cfPhone').value='';
   document.getElementById('cfNote').value='';
+  proofImg='';
+  document.getElementById('proofPreview').style.display='none';
+  document.getElementById('proofPreview').src='';
+  document.getElementById('proofIco').style.display='block';
+  document.getElementById('proofHint').style.display='block';
+  document.getElementById('proofInput').value='';
 }
+
+// ── PROOF UPLOAD ──
+var proofImg='';
+document.getElementById('proofUpload').onclick=function(){document.getElementById('proofInput').click();};
+document.getElementById('proofInput').addEventListener('change',function(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    var img=new Image();
+    img.onload=function(){
+      var MAX=800,w=img.width,h=img.height;
+      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}}else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}}
+      var c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      proofImg=c.toDataURL('image/jpeg',.7);
+      var pv=document.getElementById('proofPreview');
+      pv.src=proofImg;pv.style.display='block';
+      document.getElementById('proofIco').style.display='none';
+      document.getElementById('proofHint').textContent='✅ Foto bukti transfer terpilih';
+      document.getElementById('proofUpload').style.borderColor='rgba(34,197,94,.5)';
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
 
 // ── LOAD VIP ──
 async function loadVIP(){
@@ -816,7 +860,10 @@ function buildOrderLines(){
 async function submitOrder(){
   var name=document.getElementById('cfName').value.trim();
   var tgUser=document.getElementById('cfTg').value.trim().replace('@','');
+  var phone=document.getElementById('cfPhone').value.trim();
   if(!name||!tgUser){toast('❌ Nama dan username Telegram wajib diisi!','err');return;}
+  if(!phone){toast('❌ Nomor HP wajib diisi!','err');return;}
+  if(!proofImg){toast('❌ Bukti transfer wajib diupload!','err');return;}
 
   var btn=document.getElementById('submitBtn');
   btn.disabled=true;btn.textContent='⏳ Mengirim...';
@@ -841,6 +888,7 @@ async function submitOrder(){
     '👤 <b>Nama Akun TG:</b> '+tgDisplayName,
     '📋 <b>Nama Isi Form:</b> '+name,
     '📱 <b>Username TG:</b> @'+tgUser,
+    '📞 <b>No HP:</b> '+phone,
     (tgInfo?'🔖 <b>TG ID:</b> '+tgInfo.id:''),
     '',
     '📦 <b>PESANAN:</b>',
@@ -869,6 +917,7 @@ async function submitOrder(){
     '━━━━━━━━━━━━━━━━━━━━━━',
     '🗓  '+ds+' · '+ts,
     '👤 '+tgDisplayName+' (@'+tgUser+')',
+    '📞 '+phone,
     '',
     buildOrderLines(),
     '',
@@ -882,10 +931,10 @@ async function submitOrder(){
     // 1. Simpan order ke Supabase
     await sbPost('orders',{
       id:orderId,customer_name:name,customer_tg_display:tgDisplayName,customer_tg:tgUser,
-      items:cart,total:total,note:note,status:'pending'
+      customer_phone:phone,items:cart,total:total,note:note,status:'pending'
     });
 
-    // 2. Kirim notifikasi ke Bot Telegram Admin
+    // 2. Kirim notifikasi teks ke Bot Telegram Admin
     if(!CFG.botToken.includes('GANTI')&&!CFG.adminChatId.includes('GANTI')){
       var tgRes=await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendMessage',{
         method:'POST',
@@ -894,6 +943,21 @@ async function submitOrder(){
       });
       var tgData=await tgRes.json();
       if(!tgData.ok)console.warn('TG notify warn:',tgData.description);
+
+      // 3. Kirim foto bukti transfer ke Bot
+      try{
+        var base64Data=proofImg.split(',')[1];
+        var byteChars=atob(base64Data);
+        var byteArr=new Uint8Array(byteChars.length);
+        for(var i=0;i<byteChars.length;i++){byteArr[i]=byteChars.charCodeAt(i);}
+        var blob=new Blob([byteArr],{type:'image/jpeg'});
+        var fd=new FormData();
+        fd.append('chat_id',CFG.adminChatId);
+        fd.append('photo',blob,'bukti_'+orderId+'.jpg');
+        fd.append('caption','📸 <b>Bukti Transfer</b>\n🔖 Order: '+orderId+'\n👤 @'+tgUser+' · '+name+'\n📞 '+phone);
+        fd.append('parse_mode','HTML');
+        await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendPhoto',{method:'POST',body:fd});
+      }catch(photoErr){console.warn('Foto bukti gagal kirim:',photoErr);}
     }
 
     // 3. Jika di dalam Telegram Mini App, sendData ke bot
