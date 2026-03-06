@@ -20,15 +20,11 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
 body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-serif;display:flex;flex-direction:column;overscroll-behavior:none;}
-
 .bg-grid{position:fixed;inset:0;z-index:-1;pointer-events:none;
   background-image:linear-gradient(rgba(245,200,66,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(245,200,66,.025) 1px,transparent 1px);
   background-size:50px 50px;}
-
 .screen{display:none;flex:1;flex-direction:column;overflow:hidden;}
 .screen.active{display:flex;}
-
-/* TOPBAR */
 .topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
   padding:10px 16px;background:rgba(14,14,20,.95);backdrop-filter:blur(20px);
   border-bottom:1px solid rgba(245,200,66,.1);z-index:50;min-height:54px;}
@@ -41,26 +37,18 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
   border:1px solid rgba(245,200,66,.2);color:var(--gold);font-size:.95rem;cursor:pointer;
   display:flex;align-items:center;justify-content:center;transition:all .2s;position:relative;}
 .tb-btn:active{background:var(--gold);color:#000;}
-.cart-badge{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;
-  background:var(--red);color:#fff;font-size:.58rem;font-weight:800;
-  border-radius:50px;display:none;align-items:center;justify-content:center;padding:0 3px;border:2px solid var(--tg-bg);}
-.cart-badge.show{display:flex;}
 .admin-dot{position:absolute;bottom:-2px;right:-2px;width:10px;height:10px;border-radius:50%;
   background:var(--green);border:2px solid var(--tg-bg);display:none;}
 .admin-dot.show{display:block;}
-
 .scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:20px;}
 .scroll::-webkit-scrollbar{width:4px;}
 .scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-
 .back-hd{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:12px 16px;
   border-bottom:1px solid var(--border);background:rgba(14,14,20,.95);backdrop-filter:blur(20px);}
 .back-btn{width:34px;height:34px;border-radius:50%;background:var(--tg-sec);border:1px solid var(--border);
   color:var(--tg-text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .back-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:#fff;}
 .back-sub{font-size:.7rem;color:var(--tg-hint);margin-left:auto;}
-
-/* HERO */
 .hero{padding:24px 16px 16px;text-align:center;}
 .hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(245,200,66,.08);
   border:1px solid rgba(245,200,66,.15);color:var(--gold);font-size:.65rem;font-weight:700;
@@ -70,7 +58,6 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
 .hero h1 .l1{color:#fff;display:block;}
 .hero h1 .l2{background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;}
 .hero-sub{color:var(--tg-hint);font-size:.82rem;line-height:1.6;max-width:300px;margin:0 auto;}
-
 .info-box{margin:14px 16px 0;border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;}
 .info-box.green{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);}
 .info-box.gold{background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);}
@@ -78,22 +65,16 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
 .info-txt{font-size:.75rem;color:var(--tg-hint);line-height:1.6;}
 .info-txt strong{color:var(--green);}
 .info-txt.gold-txt strong{color:var(--gold);}
-
 .sec{padding:20px 16px 0;}
 .sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#fff;}
 .sec-tag-sm{font-size:.62rem;color:var(--tg-hint);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;}
-
-/* VIP GRID */
 .vip-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-.vcard{background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);
-  overflow:hidden;transition:transform .15s;display:flex;flex-direction:column;}
+.vcard{background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;transition:transform .15s;display:flex;flex-direction:column;}
 .vcard:active{transform:scale(.98);}
-.vcard-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a1a10,var(--border));
-  display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative;overflow:hidden;}
+.vcard-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a1a10,var(--border));display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative;overflow:hidden;}
 .vcard-img img{width:100%;height:100%;object-fit:cover;}
-.vcard-tier{position:absolute;top:7px;left:7px;font-size:.52rem;font-weight:800;padding:2px 7px;
-  border-radius:100px;letter-spacing:1px;text-transform:uppercase;}
+.vcard-tier{position:absolute;top:7px;left:7px;font-size:.52rem;font-weight:800;padding:2px 7px;border-radius:100px;letter-spacing:1px;text-transform:uppercase;}
 .tier-permanen{background:linear-gradient(135deg,#f5c842,#c9973a);color:#000;}
 .tier-bulanan{background:linear-gradient(135deg,#a8edea,#9ec7ff);color:#000;}
 .tier-gold{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;}
@@ -102,69 +83,49 @@ body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-seri
 .tier-custom{background:rgba(245,200,66,.2);border:1px solid rgba(245,200,66,.4);color:var(--gold);}
 .vcard-body{padding:10px;flex:1;display:flex;flex-direction:column;}
 .vcard-name{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:1.5px;color:#fff;line-height:1;margin-bottom:4px;}
-.vcard-desc{font-size:.68rem;color:var(--tg-hint);line-height:1.4;margin-bottom:6px;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.vcard-desc{font-size:.68rem;color:var(--tg-hint);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .vcard-feats{display:flex;flex-direction:column;gap:3px;margin-bottom:8px;}
 .feat-row{font-size:.63rem;color:var(--tg-hint);padding-left:12px;position:relative;line-height:1.3;}
 .feat-row::before{content:'✦';color:var(--gold);font-size:.45rem;position:absolute;left:0;top:3px;}
 .vcard-foot{border-top:1px solid var(--border);padding:8px 10px;margin-top:auto;}
 .price-lbl{font-size:.5rem;color:var(--tg-hint);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
-.price-val{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+.price-val{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
 .price-per{font-size:.55rem;color:var(--tg-hint);margin-bottom:8px;}
-.cart-add-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;
-  background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.22);color:var(--gold);
-  font-weight:700;font-size:.7rem;padding:7px;border-radius:9px;cursor:pointer;
-  font-family:'Outfit',sans-serif;transition:all .2s;}
+.cart-add-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.22);color:var(--gold);font-weight:700;font-size:.7rem;padding:7px;border-radius:9px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
 .cart-add-btn.added{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);color:var(--green);}
 .cart-add-btn:active{transform:scale(.96);}
-
-/* ADMIN */
 .admin-acts{display:none;gap:6px;padding:0 10px 10px;}
 body.admin-mode .admin-acts{display:flex;}
-.ae-btn,.ad-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:4px;
-  font-family:'Outfit',sans-serif;font-size:.68rem;font-weight:700;padding:6px;border-radius:8px;cursor:pointer;border:1px solid;transition:all .2s;}
+.ae-btn,.ad-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:4px;font-family:'Outfit',sans-serif;font-size:.68rem;font-weight:700;padding:6px;border-radius:8px;cursor:pointer;border:1px solid;transition:all .2s;}
 .ae-btn{background:rgba(245,200,66,.07);border-color:rgba(245,200,66,.2);color:var(--gold);}
 .ae-btn:active{background:var(--gold);color:#000;}
 .ad-btn{background:rgba(230,57,70,.07);border-color:rgba(230,57,70,.2);color:var(--red);}
 .ad-btn:active{background:var(--red);color:#fff;}
-.add-card{display:none;background:transparent;border:2px dashed var(--border);border-radius:var(--card-r);
-  flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;padding:32px 16px;text-align:center;}
+.add-card{display:none;background:transparent;border:2px dashed var(--border);border-radius:var(--card-r);flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;padding:32px 16px;text-align:center;}
 body.admin-mode .add-card{display:flex;}
 .add-card-icon{font-size:2rem;opacity:.2;}
 .add-card-txt{color:var(--tg-hint);font-size:.82rem;font-weight:600;}
-
-/* CART */
 .cart-empty{text-align:center;padding:60px 20px;}
-.cart-item{display:flex;align-items:center;gap:10px;background:var(--tg-sec);
-  border:1px solid var(--border);border-radius:12px;padding:11px;margin:0 16px 10px;}
-.ci-img{width:44px;height:44px;border-radius:9px;background:var(--tg-bg);
-  display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;overflow:hidden;}
+.cart-item{display:flex;align-items:center;gap:10px;background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:11px;margin:0 16px 10px;}
+.ci-img{width:44px;height:44px;border-radius:9px;background:var(--tg-bg);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;overflow:hidden;}
 .ci-img img{width:100%;height:100%;object-fit:cover;border-radius:9px;}
 .ci-info{flex:1;min-width:0;}
-.ci-name{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1px;color:#fff;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ci-name{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ci-price{font-size:.7rem;color:var(--gold);font-weight:600;margin-top:1px;}
 .ci-sub{font-size:.64rem;color:var(--tg-hint);}
 .ci-ctrl{display:flex;align-items:center;gap:4px;flex-shrink:0;}
-.qb{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:var(--tg-bg);
-  color:var(--tg-text);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.qb{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:var(--tg-bg);color:var(--tg-text);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .qb:active{border-color:var(--gold);}
 .qv{font-weight:700;font-size:.82rem;min-width:20px;text-align:center;}
-.ci-del{width:26px;height:26px;border-radius:7px;border:1px solid rgba(230,57,70,.2);
-  background:rgba(230,57,70,.07);color:var(--red);font-size:.7rem;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;margin-left:2px;}
+.ci-del{width:26px;height:26px;border-radius:7px;border:1px solid rgba(230,57,70,.2);background:rgba(230,57,70,.07);color:var(--red);font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-left:2px;}
 .ci-del:active{background:var(--red);color:#fff;}
 .cart-summary{margin:4px 16px 16px;background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:14px;}
 .sum-row{display:flex;justify-content:space-between;font-size:.78rem;color:var(--tg-hint);margin-bottom:6px;}
 .sum-total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px;margin-top:4px;}
 .sum-total-lbl{font-size:.72rem;color:var(--tg-hint);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
-.sum-total-val{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-
-/* PAYMENT */
+.sum-total-val{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .pay-box{margin:16px;background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;}
-.pay-hd{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.pay-hd{padding:14px 16px;border-bottom:1px solid var(--border);}
 .pay-hd-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#fff;}
 .pay-hd-sub{font-size:.7rem;color:var(--tg-hint);margin-top:1px;}
 .pay-body{padding:16px;}
@@ -175,70 +136,67 @@ body.admin-mode .add-card{display:flex;}
 .order-mini-divider{border:none;border-top:1px solid var(--border);margin:8px 0;}
 .order-mini-total{display:flex;justify-content:space-between;align-items:center;padding-top:4px;}
 .order-mini-total .lbl{font-size:.7rem;color:var(--tg-hint);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
-.order-mini-total .val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-
-/* BOT PAY BUTTON */
-.bot-pay-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
-  background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:1rem;
-  padding:16px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;
-  box-shadow:0 4px 24px rgba(245,200,66,.35);font-family:'Outfit',sans-serif;letter-spacing:.5px;}
+.order-mini-total .val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.bot-pay-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:1rem;padding:16px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(245,200,66,.35);font-family:'Outfit',sans-serif;letter-spacing:.5px;}
 .bot-pay-btn:active{transform:scale(.97);}
 .bot-pay-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-
 .pay-steps{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
 .pay-step{display:flex;align-items:flex-start;gap:10px;background:var(--tg-bg);border-radius:10px;padding:10px 12px;}
-.step-num{width:22px;height:22px;border-radius:50%;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);
-  color:var(--gold);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);color:var(--gold);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
 .step-txt{font-size:.76rem;color:var(--tg-hint);line-height:1.5;}
 .step-txt strong{color:var(--tg-text);}
-
+/* CS CHAT */
+.cs-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden;}
+.cs-msgs{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
+.cs-msgs::-webkit-scrollbar{width:3px;}
+.cs-msgs::-webkit-scrollbar-thumb{background:var(--border);}
+.cs-bubble-wrap{display:flex;flex-direction:column;}
+.cs-bubble-wrap.me{align-items:flex-end;}
+.cs-bubble-wrap.them{align-items:flex-start;}
+.cs-bubble{max-width:80%;padding:9px 13px;border-radius:16px;font-size:.82rem;line-height:1.5;word-break:break-word;}
+.cs-bubble-wrap.me .cs-bubble{background:rgba(245,200,66,.12);border:1px solid rgba(245,200,66,.2);color:var(--tg-text);border-bottom-right-radius:4px;}
+.cs-bubble-wrap.them .cs-bubble{background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);border-bottom-left-radius:4px;}
+.cs-time{font-size:.58rem;color:var(--tg-hint);margin-top:3px;padding:0 2px;}
+.cs-sent-tag{font-size:.6rem;color:var(--green);text-align:right;margin-top:2px;font-style:italic;}
+.cs-input-wrap{flex-shrink:0;display:flex;align-items:flex-end;gap:8px;padding:10px 16px;border-top:1px solid var(--border);background:rgba(14,14,20,.95);backdrop-filter:blur(20px);}
+.cs-input{flex:1;background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 14px;border-radius:20px;outline:none;resize:none;max-height:100px;transition:border-color .2s;line-height:1.4;}
+.cs-input:focus{border-color:rgba(245,200,66,.4);}
+.cs-send-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;color:#000;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cs-send-btn:active{transform:scale(.92);}
+.cs-empty{text-align:center;padding:50px 20px;color:var(--tg-hint);font-size:.82rem;}
 /* SUCCESS */
 .success-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center;}
 .success-ico{font-size:4rem;margin-bottom:16px;animation:popIn .4s ease both;}
 @keyframes popIn{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
 .success-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;color:var(--green);margin-bottom:8px;}
 .success-sub{font-size:.85rem;color:var(--tg-hint);line-height:1.6;margin-bottom:24px;max-width:280px;}
-.back-home-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
-  background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);font-weight:700;font-size:.9rem;
-  padding:12px;border-radius:12px;cursor:pointer;font-family:'Outfit',sans-serif;}
+.back-home-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);font-weight:700;font-size:.9rem;padding:12px;border-radius:12px;cursor:pointer;font-family:'Outfit',sans-serif;}
 .back-home-btn:active{border-color:var(--gold);color:var(--gold);}
-
-/* SPINNER */
 .spinner-wrap{text-align:center;padding:60px 20px;}
-.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);
-  border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px;}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px;}
 @keyframes spin{to{transform:rotate(360deg);}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-
-/* MODAL OVERLAY */
-.overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);
-  display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
+.overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
 .overlay.open{opacity:1;pointer-events:all;}
-.sheet{background:var(--tg-sec);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;
-  max-width:480px;max-height:90vh;overflow-y:auto;transform:translateY(40px);transition:transform .25s;position:relative;}
+.sheet{background:var(--tg-sec);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;transform:translateY(40px);transition:transform .25s;position:relative;}
 .overlay.open .sheet{transform:translateY(0);}
 .sheet-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 16px;}
-.sheet-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;
-  background:rgba(255,255,255,.06);border:none;color:var(--tg-hint);font-size:.9rem;cursor:pointer;}
+.sheet-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:none;color:var(--tg-hint);font-size:.9rem;cursor:pointer;}
 .sheet h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:4px;}
 .sheet-sub{font-size:.75rem;color:var(--tg-hint);margin-bottom:16px;}
 .sfg{margin-bottom:12px;}
 .sfg label{display:block;font-size:.65rem;font-weight:700;color:var(--tg-hint);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
-.sfg input,.sfg textarea,.sfg select{width:100%;background:var(--tg-bg);border:1px solid var(--border);
-  color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 12px;
-  border-radius:9px;outline:none;transition:border-color .2s;}
+.sfg input,.sfg textarea,.sfg select{width:100%;background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 12px;border-radius:9px;outline:none;transition:border-color .2s;}
 .sfg input:focus,.sfg textarea:focus{border-color:rgba(245,200,66,.5);}
 .sfg textarea{resize:none;min-height:70px;}
+.sfg .hint{font-size:.65rem;color:var(--tg-hint);margin-top:5px;line-height:1.5;background:rgba(245,200,66,.04);border:1px solid rgba(245,200,66,.1);border-radius:6px;padding:6px 8px;}
+.sfg .hint strong{color:var(--gold);}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .btn-row{display:flex;gap:8px;margin-top:16px;}
-.save-btn{flex:1;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;
-  font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;}
+.save-btn{flex:1;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;}
 .save-btn:disabled{opacity:.5;cursor:not-allowed;}
-.cancel-btn{background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-hint);
-  font-weight:700;font-size:.85rem;padding:12px 18px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}
-.del-btn-big{flex:1;background:rgba(230,57,70,.1);border:1px solid rgba(230,57,70,.3);color:var(--red);
-  font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}
+.cancel-btn{background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-hint);font-weight:700;font-size:.85rem;padding:12px 18px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}
+.del-btn-big{flex:1;background:rgba(230,57,70,.1);border:1px solid rgba(230,57,70,.3);color:var(--red);font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}
 .img-upload{border:2px dashed rgba(245,200,66,.25);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;}
 .img-upload:hover{border-color:rgba(245,200,66,.5);}
 .up-ico{font-size:1.8rem;margin-bottom:4px;}
@@ -249,23 +207,23 @@ body.admin-mode .add-card{display:flex;}
 .pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;}
 .login-err{color:var(--red);font-size:.78rem;margin-top:6px;display:none;}
 .login-err.show{display:block;}
-
-.submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
-  background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.95rem;
-  padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;
-  box-shadow:0 4px 24px rgba(245,200,66,.3);font-family:'Outfit',sans-serif;}
+.submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.95rem;padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(245,200,66,.3);font-family:'Outfit',sans-serif;}
 .submit-btn:active{transform:scale(.97);}
 .submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:#1e1e2e;border:1px solid var(--border);color:var(--tg-text);font-size:.8rem;
-  padding:10px 18px;border-radius:100px;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:999;}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e2e;border:1px solid var(--border);color:var(--tg-text);font-size:.8rem;padding:10px 18px;border-radius:100px;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:999;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.ok{border-color:rgba(34,197,94,.4);color:var(--green);}
 .toast.err{border-color:rgba(230,57,70,.4);color:var(--red);}
-
-.watermark{position:fixed;bottom:calc(8px + env(safe-area-inset-bottom,0px));right:10px;
-  font-size:.58rem;color:rgba(245,200,66,.18);font-weight:700;letter-spacing:1.5px;pointer-events:none;z-index:1;}
+.watermark{position:fixed;bottom:calc(8px + env(safe-area-inset-bottom,0px));right:10px;font-size:.58rem;color:rgba(245,200,66,.18);font-weight:700;letter-spacing:1.5px;pointer-events:none;z-index:1;}
+/* BOTTOM NAV */
+.bottom-nav{flex-shrink:0;display:flex;background:rgba(14,14,20,.97);border-top:1px solid rgba(245,200,66,.08);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;cursor:pointer;transition:all .2s;position:relative;}
+.bn-icon{font-size:1.2rem;transition:all .2s;}
+.bn-label{font-size:.58rem;font-weight:700;letter-spacing:.5px;color:var(--tg-hint);transition:color .2s;}
+.bn-item.active .bn-label{color:var(--gold);}
+.bn-item.active .bn-icon{filter:drop-shadow(0 0 6px rgba(245,200,66,.5));}
+.bn-badge{position:absolute;top:2px;right:calc(50% - 18px);min-width:16px;height:16px;background:var(--red);color:#fff;font-size:.55rem;font-weight:800;border-radius:50px;display:none;align-items:center;justify-content:center;padding:0 3px;border:2px solid var(--tg-bg);}
+.bn-badge.show{display:flex;}
 </style>
 </head>
 <body>
@@ -279,7 +237,6 @@ body.admin-mode .add-card{display:flex;}
       <span class="tb-name">VIP HUNTER</span>
     </div>
     <div class="tb-right">
-      <button class="tb-btn" id="cartBtn">🛒<span class="cart-badge" id="cartBadge">0</span></button>
       <button class="tb-btn" id="keyBtn">🔑<span class="admin-dot" id="adminDot"></span></button>
     </div>
   </div>
@@ -287,11 +244,11 @@ body.admin-mode .add-card{display:flex;}
     <div class="hero">
       <div class="hero-tag">Layanan VIP Eksklusif</div>
       <h1><span class="l1">AKSES</span><span class="l2">VIP HUNTER</span></h1>
-      <p class="hero-sub">Pilih paket VIP, bayar via QRIS, link VIP otomatis dikirim bot ke Telegram kamu!</p>
+      <p class="hero-sub">Pilih paket VIP, bayar via QRIS, link join sekali pakai dikirim otomatis!</p>
     </div>
     <div class="info-box green">
       <div class="info-ico">🤖</div>
-      <div class="info-txt"><strong>Cara Order:</strong> Pilih paket → Keranjang → Klik Bayar → Bot kirim QRIS ke Telegram → Scan & bayar → <strong>Link VIP otomatis dikirim!</strong></div>
+      <div class="info-txt"><strong>Cara Order:</strong> Pilih paket → Keranjang → Bayar → Bot kirim QRIS → Scan & bayar → <strong>Link Join sekali pakai otomatis dikirim!</strong></div>
     </div>
     <div class="sec">
       <div class="sec-hd">
@@ -312,7 +269,6 @@ body.admin-mode .add-card{display:flex;}
 <!-- ══ SCREEN 2: KERANJANG ══ -->
 <div class="screen" id="s-cart">
   <div class="back-hd">
-    <button class="back-btn" onclick="goTo('s-shop')">←</button>
     <span class="back-title">KERANJANG</span>
     <span class="back-sub" id="cartCount">0 item</span>
   </div>
@@ -347,43 +303,34 @@ body.admin-mode .add-card{display:flex;}
   <div class="scroll">
     <div class="pay-box">
       <div class="pay-hd">
-        <div>
-          <div class="pay-hd-title">📦 RINGKASAN ORDER</div>
-          <div class="pay-hd-sub">Pastikan semua pesanan sudah benar</div>
-        </div>
+        <div class="pay-hd-title">📦 RINGKASAN ORDER</div>
+        <div class="pay-hd-sub">Pastikan semua pesanan sudah benar</div>
       </div>
       <div class="pay-body">
         <div class="order-mini" id="payOrderMini"></div>
-
-        <button class="bot-pay-btn" id="botPayBtn">
-          ⚡ Bayar Sekarang — Bot Kirim QRIS
-        </button>
-
+        <button class="bot-pay-btn" id="botPayBtn">⚡ Bayar Sekarang — Bot Kirim QRIS</button>
         <div class="pay-steps">
-          <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik <strong>Bayar Sekarang</strong> — bot akan langsung kirim QRIS ke Telegram kamu</div></div>
-          <div class="pay-step"><div class="step-num">2</div><div class="step-txt"><strong>Buka Telegram</strong> → scan QRIS yang dikirim bot → bayar sesuai nominal</div></div>
-          <div class="pay-step"><div class="step-num">3</div><div class="step-txt">Setelah bayar, <strong>link VIP otomatis dikirim</strong> bot ke Telegram kamu!</div></div>
+          <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik <strong>Bayar Sekarang</strong> — pesanan langsung tersimpan</div></div>
+          <div class="pay-step"><div class="step-num">2</div><div class="step-txt"><strong>Buka Telegram</strong> → bot kirim QRIS → scan & bayar sesuai nominal</div></div>
+          <div class="pay-step"><div class="step-num">3</div><div class="step-txt">Setelah bayar, <strong>link join sekali pakai</strong> otomatis dikirim bot ke Telegram kamu!</div></div>
         </div>
-
       </div>
     </div>
-
     <div class="info-box gold" style="margin:12px 16px;">
       <div class="info-ico">⚠️</div>
-      <div class="info-txt gold-txt"><strong>Pastikan kamu sudah start bot VIP Hunter dulu!</strong> Kirim /start ke bot agar QRIS bisa diterima.</div>
+      <div class="info-txt gold-txt"><strong>Pastikan sudah /start bot VIP Hunter!</strong> Agar QRIS bisa diterima di Telegram kamu.</div>
     </div>
-
     <div style="height:16px;"></div>
   </div>
 </div>
 
-<!-- ══ SCREEN 4: SUKSES KIRIM ══ -->
+<!-- ══ SCREEN 4: SUKSES ══ -->
 <div class="screen" id="s-success">
   <div class="scroll">
     <div class="success-wrap">
       <div class="success-ico">✅</div>
-      <div class="success-title">QRIS TERKIRIM!</div>
-      <p class="success-sub">Bot sudah kirim QRIS ke Telegram kamu!<br/><br/>Buka Telegram → cek pesan dari bot → scan QRIS → bayar → link VIP langsung dikirim! 🎉</p>
+      <div class="success-title">PESANAN MASUK!</div>
+      <p class="success-sub">Bot sedang menyiapkan QRIS!<br/><br/>Buka Telegram → tunggu pesan QRIS dari bot → scan & bayar → link join sekali pakai langsung dikirim! 🎉</p>
       <div style="background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);padding:16px;width:100%;margin-bottom:16px;">
         <div style="font-size:.72rem;color:var(--tg-hint);line-height:1.9;font-family:'Courier New',monospace;white-space:pre-wrap;" id="successDetail"></div>
       </div>
@@ -393,7 +340,53 @@ body.admin-mode .add-card{display:flex;}
   </div>
 </div>
 
-<!-- MODAL: LOGIN -->
+<!-- ══ SCREEN 5: CS CHAT ══ -->
+<div class="screen" id="s-cs">
+  <div class="back-hd">
+    <span class="back-title">💬 HUBUNGI ADMIN</span>
+    <span class="back-sub" style="color:var(--green);font-weight:600;">● Siap membantu</span>
+  </div>
+  <div class="cs-wrap">
+    <div class="cs-msgs" id="csMsgs">
+      <div class="cs-empty" id="csEmpty">
+        <div style="font-size:2.5rem;margin-bottom:10px;">💬</div>
+        <p>Belum ada pesan.<br/>Kirim pesan untuk menghubungi admin!</p>
+        <div style="margin-top:14px;background:var(--tg-sec);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:left;">
+          <div style="font-size:.7rem;color:var(--gold);font-weight:700;margin-bottom:6px;">💡 Contoh pertanyaan:</div>
+          <div style="font-size:.72rem;color:var(--tg-hint);line-height:1.8;">
+            • Saya sudah bayar tapi link belum masuk<br/>
+            • Apakah bisa beli lebih dari 1 paket?<br/>
+            • Channel VIP berisi konten apa?
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cs-input-wrap">
+      <textarea class="cs-input" id="csInput" placeholder="Tulis pesan untuk admin..." rows="1"></textarea>
+      <button class="cs-send-btn" id="csSendBtn">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BOTTOM NAV ══ -->
+<div class="bottom-nav" id="bottomNav">
+  <div class="bn-item active" id="nav-shop" onclick="navTo('s-shop','nav-shop')">
+    <span class="bn-icon">👑</span>
+    <span class="bn-label">PAKET</span>
+  </div>
+  <div class="bn-item" id="nav-cart" onclick="navTo('s-cart','nav-cart')">
+    <span class="bn-icon">🛒</span>
+    <span class="bn-label">KERANJANG</span>
+    <span class="bn-badge" id="cartBadge">0</span>
+  </div>
+  <div class="bn-item" id="nav-cs" onclick="navTo('s-cs','nav-cs');clearCsBadge();">
+    <span class="bn-icon">💬</span>
+    <span class="bn-label">ADMIN</span>
+    <span class="bn-badge" id="csBadge"></span>
+  </div>
+</div>
+
+<!-- MODAL: LOGIN ADMIN -->
 <div class="overlay" id="loginModal">
   <div class="sheet" style="max-width:400px;">
     <div class="sheet-handle"></div>
@@ -421,7 +414,6 @@ body.admin-mode .add-card{display:flex;}
     <h2 id="modalTitle">TAMBAH PAKET</h2>
     <p class="sheet-sub" id="modalSub"></p>
     <input type="hidden" id="fId"/>
-
     <div class="sfg">
       <label>Gambar / Banner</label>
       <div class="img-upload" id="imgUpload">
@@ -431,7 +423,6 @@ body.admin-mode .add-card{display:flex;}
       </div>
       <input type="file" id="fileInput" accept="image/*" style="display:none;"/>
     </div>
-
     <div class="frow">
       <div class="sfg"><label>Nama Paket *</label><input type="text" id="fName" placeholder="VIP Permanen"/></div>
       <div class="sfg">
@@ -446,29 +437,20 @@ body.admin-mode .add-card{display:flex;}
         </select>
       </div>
     </div>
-
     <div class="frow">
       <div class="sfg"><label>Harga *</label><input type="text" id="fPrice" placeholder="50000"/></div>
       <div class="sfg"><label>Label Harga</label><input type="text" id="fPer" placeholder="/ bulan"/></div>
     </div>
-
-    <div class="sfg"><label>Deskripsi *</label><textarea id="fDesc" placeholder="Deskripsi singkat..."></textarea></div>
-    <div class="sfg"><label>Fitur (satu per baris)</label><textarea id="fFeats" placeholder="Akses premium&#10;Support 24/7&#10;Update rutin"></textarea></div>
-
+    <div class="sfg"><label>Deskripsi *</label><textarea id="fDesc" placeholder="Deskripsi singkat paket VIP ini..."></textarea></div>
+    <div class="sfg"><label>Fitur (1 baris = 1 fitur)</label><textarea id="fFeats" placeholder="Akses semua konten VIP&#10;Update setiap hari&#10;Priority support"></textarea></div>
     <div class="sfg">
-      <label>🔢 Jumlah Link per Order *</label>
-      <input type="number" id="fLinkCount" placeholder="1" min="1" value="1"/>
-      <div style="font-size:.65rem;color:var(--tg-hint);margin-top:4px;">Berapa link yang dikirim ke pelanggan per 1 order (contoh: 1 atau 17)</div>
+      <label>Channel ID Telegram *</label>
+      <input type="text" id="fChannelId" placeholder="-1001234567890"/>
+      <div class="hint">⚠️ <strong>Bot harus sudah dijadikan Admin</strong> di channel ini agar bisa generate link join sekali pakai.<br/>Dapatkan ID channel dari @userinfobot. Format: <strong>-100xxxxxxxxxx</strong></div>
     </div>
-    <div class="sfg">
-      <label>🔗 Link VIP (satu per baris) *</label>
-      <textarea id="fVipLinks" placeholder="https://t.me/joinchat/link1&#10;https://t.me/joinchat/link2" style="min-height:100px;"></textarea>
-      <div style="font-size:.65rem;color:var(--tg-hint);margin-top:4px;">Masukkan semua link, satu per baris</div>
-    </div>
-
     <div class="btn-row">
       <button class="cancel-btn" onclick="closeModal('prodModal')">Batal</button>
-      <button class="save-btn" id="saveProd">💾 Simpan</button>
+      <button class="save-btn" id="saveProd">💾 Simpan Paket</button>
     </div>
   </div>
 </div>
@@ -491,35 +473,18 @@ body.admin-mode .add-card{display:flex;}
 <div class="watermark" id="watermarkEl"></div>
 
 <script>
-// ══════════════════════════════════════════
-//  ⚙️ CONFIG — sesuaikan dengan data kamu
-// ══════════════════════════════════════════
-var CFG = {
-  adminPassword:  'Malik10_',
-  supabaseUrl:    'https://lgjcsefaqkqvidkuuomo.supabase.co',
-  supabaseKey:    'sb_publishable_QNgbN6O4h3mp2bmdMWeqBA_E9qQ8h7J',
-  // Bot utama yang handle payment (dari config.py BOT_TOKEN)
-  botToken:       '8300625876:AAGDsTH-mKVDCeGxuOzvC4j3zem-AenUuwg',
-  // Username bot VIP (untuk link buka bot)
-  botUsername:    'Cs_viphunter_xbot',
-  // Log seller chat id (dari config.py LOG_SELLER)
-  logSeller:      -1002577689120,
-  watermark:      '@elzstore_id',
+var CFG={
+  adminPassword:'Malik10_',
+  supabaseUrl:'https://lgjcsefaqkqvidkuuomo.supabase.co',
+  supabaseKey:'sb_publishable_QNgbN6O4h3mp2bmdMWeqBA_E9qQ8h7J',
+  botUsername:'Cs_viphunter_xbot',
+  watermark:'@elzstore_id',
 };
+(function(){var el=document.getElementById('watermarkEl');if(el&&CFG.watermark)el.textContent=CFG.watermark;})();
 
-// WATERMARK
-(function(){var el=document.getElementById('watermarkEl');if(el&&CFG.watermark){el.textContent=CFG.watermark;el.style.display='block';}})();
-
-// TELEGRAM SDK
-var tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:{
-  ready:function(){},expand:function(){},
-  HapticFeedback:{impactOccurred:function(){},notificationOccurred:function(){}},
-  BackButton:{show:function(){},hide:function(){},onClick:function(){},offClick:function(){}},
-  initDataUnsafe:{user:null},
-};
+var tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:{ready:function(){},expand:function(){},HapticFeedback:{impactOccurred:function(){},notificationOccurred:function(){}},BackButton:{show:function(){},hide:function(){},onClick:function(){},offClick:function(){}},initDataUnsafe:{user:null}};
 tg.ready();tg.expand();
 
-// SUPABASE
 var SB=CFG.supabaseUrl.replace(/\/$/,'')+'/rest/v1';
 var SBH={'apikey':CFG.supabaseKey,'Authorization':'Bearer '+CFG.supabaseKey,'Content-Type':'application/json'};
 async function sbGet(tbl,q){var r=await fetch(SB+'/'+tbl+(q||'?select=*&order=created_at.asc'),{headers:SBH});if(!r.ok)throw new Error(await r.text());return r.json();}
@@ -527,61 +492,58 @@ async function sbPost(tbl,d){var r=await fetch(SB+'/'+tbl,{method:'POST',headers
 async function sbPatch(tbl,id,d){var r=await fetch(SB+'/'+tbl+'?id=eq.'+id,{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());}
 async function sbDelete(tbl,id){var r=await fetch(SB+'/'+tbl+'?id=eq.'+id,{method:'DELETE',headers:SBH});if(!r.ok)throw new Error(await r.text());}
 
-// TELEGRAM BOT API
-async function botSend(chatId, text){
-  var r=await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendMessage',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({chat_id:chatId,text:text,parse_mode:'HTML',disable_web_page_preview:true})
-  });
-  return r.json();
-}
-
-// STATE
 var allVIP=[],cart=[],isAdmin=false,isEdit=false,uploadedImg='',pendingDelId=null;
+var csMessages=[],csLastCount=0;
+var tgUser=tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null;
+var tgUserId=tgUser?tgUser.id:null;
+var tgDisplayName=tgUser?(((tgUser.first_name||'')+(tgUser.last_name?' '+tgUser.last_name:'')).trim()||'Pelanggan'):'Pelanggan';
+var tgUsername=tgUser&&tgUser.username?tgUser.username:'';
 
-// UTILS
 function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast show'+(t?' '+t:'');clearTimeout(el._t);el._t=setTimeout(function(){el.className='toast';},3200);}
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function parseNum(s){return parseInt((s||'0').replace(/[^0-9]/g,''))||0;}
 function fmtRp(n){return 'Rp '+n.toLocaleString('id-ID');}
 function haptic(t){try{tg.HapticFeedback.impactOccurred(t||'light');}catch(e){}}
+function fmtTime(d){return new Date(d).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});}
+function escHtml(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br/>');}
 
-// USER INFO
-var tgUser=tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null;
-var tgUserId=tgUser?tgUser.id:null;
-var tgDisplayName=tgUser?(((tgUser.first_name||'')+(tgUser.last_name?' '+tgUser.last_name:'')).trim()||'Pelanggan'):'Pelanggan';
-var tgUsername=tgUser&&tgUser.username?tgUser.username:'';
-
-// SCREEN ROUTING
+// ══ ROUTING ══
 var currentScreen='s-shop';
+var noNavScreens=['s-payment','s-success'];
+
 function goTo(id){
   document.getElementById(currentScreen).classList.remove('active');
   document.getElementById(id).classList.add('active');
   currentScreen=id;
-  if(id==='s-shop')tg.BackButton.hide();
-  else tg.BackButton.show();
+  var nav=document.getElementById('bottomNav');
+  if(noNavScreens.includes(id)){nav.style.display='none';tg.BackButton.show();}
+  else{nav.style.display='flex';tg.BackButton.hide();}
   if(id==='s-cart')renderCart();
   if(id==='s-payment')renderPayment();
+  if(id==='s-cs'){renderCS();clearCsBadge();}
+}
+function navTo(sid,nid){
+  document.querySelectorAll('.bn-item').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(nid).classList.add('active');
+  goTo(sid);haptic('light');
 }
 tg.BackButton.onClick(function(){
-  var map={'s-cart':'s-shop','s-payment':'s-cart','s-success':'s-shop'};
+  var map={'s-payment':'s-cart','s-success':'s-shop'};
   if(map[currentScreen])goTo(map[currentScreen]);else goTo('s-shop');
 });
-function goHome(){cart=[];updateBadge();renderGrid();goTo('s-shop');}
+function goHome(){cart=[];updateBadge();renderGrid();navTo('s-shop','nav-shop');}
 function openBot(){
   var url='https://t.me/'+CFG.botUsername;
   try{if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){Telegram.WebApp.openLink(url);return;}}catch(e){}
   window.open(url,'_blank');
 }
 
-// LOAD VIP
+// ══ LOAD VIP ══
 async function loadVIP(){
   try{allVIP=await sbGet('vip_packages');renderAll();}
   catch(e){document.getElementById('grid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--red);font-size:.8rem;">❌ '+e.message+'</div>';}
 }
-
-// RENDER
 var TL={'tier-permanen':'♾️ Permanen','tier-bulanan':'📅 Bulanan','tier-gold':'⭐ Gold','tier-silver':'🥈 Silver','tier-diamond':'💎 Diamond','tier-custom':'✦ Custom'};
 function renderAll(){document.getElementById('tProduk').textContent=allVIP.length+' paket';renderGrid();}
 function renderGrid(){
@@ -595,26 +557,18 @@ function renderGrid(){
     var tier=p.tier||'tier-gold';
     var feats=(p.features||[]).slice(0,3).map(function(f){return '<div class="feat-row">'+f+'</div>';}).join('');
     var card=document.createElement('div');
-    card.className='vcard';
-    card.style.animationDelay=(i*0.06)+'s';
-    card.style.animation='fadeUp .4s ease both';
-    card.innerHTML=
-      imgH+
-      '<div class="vcard-tier '+tier+'">'+(TL[tier]||'VIP')+'</div>'+
-      '<div class="vcard-body">'+
-        '<div class="vcard-name">'+p.name+'</div>'+
-        (p.description?'<div class="vcard-desc">'+p.description+'</div>':'')+
-        (feats?'<div class="vcard-feats">'+feats+'</div>':'')+
-      '</div>'+
-      '<div class="vcard-foot">'+
-        '<div class="price-lbl">Harga</div>'+
-        '<div class="price-val">'+fmtRp(parseNum(p.price||0))+'</div>'+
-        (p.per?'<div class="price-per">'+p.per+'</div>':'')+
-        '<button class="cart-add-btn'+(inCart?' added':'')+'" data-id="'+p.id+'">'+(inCart?'✅ Ditambahkan':'🛒 Tambah')+'</button>'+
-      '</div>'+
-      '<div class="admin-acts">'+
-        '<button class="ae-btn" data-id="'+p.id+'">✏️ Edit</button>'+
-        '<button class="ad-btn" data-id="'+p.id+'" data-name="'+p.name+'">🗑️ Hapus</button>'+
+    card.className='vcard';card.style.animationDelay=(i*0.06)+'s';card.style.animation='fadeUp .4s ease both';
+    card.innerHTML=imgH+'<div class="vcard-tier '+tier+'">'+(TL[tier]||'VIP')+'</div>'+
+      '<div class="vcard-body"><div class="vcard-name">'+p.name+'</div>'+
+      (p.description?'<div class="vcard-desc">'+p.description+'</div>':'')+
+      (feats?'<div class="vcard-feats">'+feats+'</div>':'')+
+      '</div><div class="vcard-foot"><div class="price-lbl">Harga</div>'+
+      '<div class="price-val">'+fmtRp(parseNum(p.price||0))+'</div>'+
+      (p.per?'<div class="price-per">'+p.per+'</div>':'')+
+      '<button class="cart-add-btn'+(inCart?' added':'')+'" data-id="'+p.id+'">'+(inCart?'✅ Ditambahkan':'🛒 Tambah')+'</button>'+
+      '</div><div class="admin-acts">'+
+      '<button class="ae-btn" data-id="'+p.id+'">✏️ Edit</button>'+
+      '<button class="ad-btn" data-id="'+p.id+'" data-name="'+p.name+'">🗑️ Hapus</button>'+
       '</div>';
     g.appendChild(card);
   });
@@ -625,14 +579,10 @@ function renderGrid(){
       document.getElementById('delSub').innerHTML='Paket <strong style="color:var(--gold)">'+b.dataset.name+'</strong> akan dihapus permanen.';
       openModal('delModal');};
   });
-  if(isAdmin){
-    var ac=document.createElement('div');ac.className='add-card';
-    ac.innerHTML='<div class="add-card-icon">➕</div><div class="add-card-txt">Tambah Paket VIP</div>';
-    ac.onclick=openAddModal;g.appendChild(ac);
-  }
+  if(isAdmin){var ac=document.createElement('div');ac.className='add-card';ac.innerHTML='<div class="add-card-icon">➕</div><div class="add-card-txt">Tambah Paket VIP</div>';ac.onclick=openAddModal;g.appendChild(ac);}
 }
 
-// CART
+// ══ CART ══
 function addToCart(id){
   var p=allVIP.find(function(x){return x.id===id;});if(!p)return;
   var ex=cart.find(function(x){return x.id===id;});
@@ -651,25 +601,18 @@ function updateBadge(){
 }
 function cartTotal(){return cart.reduce(function(s,x){return s+parseNum(x.price)*x.qty;},0);}
 function renderCart(){
-  var items=document.getElementById('cartItems');
-  var empty=document.getElementById('cartEmpty');
-  var summary=document.getElementById('cartSummary');
-  var foot=document.getElementById('cartFootBtns');
+  var items=document.getElementById('cartItems'),empty=document.getElementById('cartEmpty'),summary=document.getElementById('cartSummary'),foot=document.getElementById('cartFootBtns');
   if(!cart.length){items.innerHTML='';empty.style.display='block';summary.style.display='none';foot.style.display='none';return;}
   empty.style.display='none';summary.style.display='block';foot.style.display='flex';
   items.innerHTML=cart.map(function(item){
     var sub=parseNum(item.price)*item.qty;
     var imgH=item.img?'<div class="ci-img"><img src="'+item.img+'"/></div>':'<div class="ci-img">👑</div>';
-    return '<div class="cart-item">'+imgH+
-      '<div class="ci-info"><div class="ci-name">'+item.name+'</div>'+
+    return '<div class="cart-item">'+imgH+'<div class="ci-info"><div class="ci-name">'+item.name+'</div>'+
       '<div class="ci-price">'+fmtRp(parseNum(item.price))+' '+(item.per||'')+'</div>'+
       (item.qty>1?'<div class="ci-sub">Sub: '+fmtRp(sub)+'</div>':'')+
-      '</div><div class="ci-ctrl">'+
-      '<button class="qb" onclick="setQty(\''+item.id+'\','+(item.qty-1)+')">−</button>'+
-      '<span class="qv">'+item.qty+'</span>'+
-      '<button class="qb" onclick="setQty(\''+item.id+'\','+(item.qty+1)+')">+</button>'+
-      '<button class="ci-del" onclick="removeFromCart(\''+item.id+'\')">✕</button>'+
-      '</div></div>';
+      '</div><div class="ci-ctrl"><button class="qb" onclick="setQty(\''+item.id+'\','+(item.qty-1)+')">−</button>'+
+      '<span class="qv">'+item.qty+'</span><button class="qb" onclick="setQty(\''+item.id+'\','+(item.qty+1)+')">+</button>'+
+      '<button class="ci-del" onclick="removeFromCart(\''+item.id+'\')">✕</button></div></div>';
   }).join('');
   document.getElementById('cartSumItems').innerHTML=cart.map(function(x){
     return '<div class="sum-row"><span class="lbl">'+x.name+' ×'+x.qty+'</span><span class="val">'+fmtRp(parseNum(x.price)*x.qty)+'</span></div>';
@@ -677,7 +620,7 @@ function renderCart(){
   document.getElementById('cartTotalVal').textContent=fmtRp(cartTotal());
 }
 
-// PAYMENT SCREEN
+// ══ PAYMENT ══
 function renderPayment(){
   var total=cartTotal();
   var rows=cart.map(function(item,i){
@@ -685,112 +628,95 @@ function renderPayment(){
   }).join('');
   document.getElementById('payOrderMini').innerHTML=rows+'<hr class="order-mini-divider"/><div class="order-mini-total"><span class="lbl">Total</span><span class="val">'+fmtRp(total)+'</span></div>';
 }
-
-// ══════════════════════════════════════════
-//  BAYAR — Kirim pesan ke bot untuk generate QRIS
-// ══════════════════════════════════════════
-document.getElementById('botPayBtn').addEventListener('click', async function(){
-  if(!tgUserId){
-    toast('❌ Buka Mini App dari Telegram dulu!','err');
-    return;
-  }
-  if(!cart.length){
-    toast('❌ Keranjang kosong!','err');
-    return;
-  }
-
+document.getElementById('botPayBtn').addEventListener('click',async function(){
+  if(!tgUserId){toast('❌ Buka Mini App dari Telegram dulu!','err');return;}
+  if(!cart.length){toast('❌ Keranjang kosong!','err');return;}
   var btn=document.getElementById('botPayBtn');
-  btn.disabled=true;
-  btn.textContent='⏳ Mengirim ke bot...';
-  haptic('medium');
-
-  var total=cartTotal();
-  var now=new Date();
-  var orderId='VH'+Date.now();
+  btn.disabled=true;btn.textContent='⏳ Menyimpan pesanan...';haptic('medium');
+  var total=cartTotal(),now=new Date(),orderId='VH'+Date.now();
   var ds=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
   var ts=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-
-  // Buat teks pesanan
-  var itemList=cart.map(function(item,i){
-    return (i+1)+'. '+item.name+' ×'+item.qty+' — '+fmtRp(parseNum(item.price)*item.qty);
-  }).join('\n');
-
-  // Pesan ke pelanggan — minta bot generate QRIS
-  // Format pesan agar bot mengenali sebagai request payment
-  var msgToPelanggan=
-    '🛒 <b>ORDER BARU VIP HUNTER</b>\n'+
-    '━━━━━━━━━━━━━━━━\n'+
-    '📦 <b>Detail Pesanan:</b>\n'+
-    itemList+'\n'+
-    '━━━━━━━━━━━━━━━━\n'+
-    '💰 <b>Total: '+fmtRp(total)+'</b>\n'+
-    '🗓 '+ds+' · '+ts+'\n'+
-    '🔖 Order ID: <code>'+orderId+'</code>\n\n'+
-    '⚡ Bot sedang menyiapkan QRIS untuk kamu...\n'+
-    'Silahkan tunggu sebentar!';
-
-  // Pesan ke log seller
-  var msgToSeller=
-    '🛒 <b>ORDER MASUK — VIP HUNTER</b>\n'+
-    '━━━━━━━━━━━━━━━━\n'+
-    '👤 <b>Nama:</b> '+tgDisplayName+'\n'+
-    (tgUsername?'📱 <b>Username:</b> @'+tgUsername+'\n':'')+
-    '🔖 <b>TG ID:</b> <code>'+tgUserId+'</code>\n'+
-    '━━━━━━━━━━━━━━━━\n'+
-    '📦 <b>Pesanan:</b>\n'+itemList+'\n'+
-    '━━━━━━━━━━━━━━━━\n'+
-    '💰 <b>Total: '+fmtRp(total)+'</b>\n'+
-    '🔖 Order ID: <code>'+orderId+'</code>\n'+
-    '🗓 '+ds+' · '+ts;
-
   try{
-    // Simpan order ke Supabase
     await sbPost('orders',{
-      id:orderId,
-      customer_name:tgDisplayName,
-      customer_tg:tgUsername,
-      customer_tg_id:String(tgUserId),
-      items:cart,
-      total:total,
-      status:'pending_payment',
-      created_at:now.toISOString()
+      id:orderId,customer_name:tgDisplayName,customer_tg:tgUsername,
+      customer_tg_id:String(tgUserId),items:cart,total:total,
+      status:'pending_payment',created_at:now.toISOString()
     });
-
-    // Kirim notif ke pelanggan via bot
-    await botSend(tgUserId, msgToPelanggan);
-
-    // Kirim notif ke log seller
-    try{await botSend(CFG.logSeller, msgToSeller);}catch(e){console.warn('Log seller gagal',e);}
-
-    // Tampilkan sukses
-    var detail=
+    document.getElementById('successDetail').textContent=
       '📦 ORDER ID: '+orderId+'\n'+
       '💰 Total  : '+fmtRp(total)+'\n'+
       '🗓 Waktu  : '+ds+' '+ts+'\n\n'+
-      'Buka Telegram → cek pesan bot\n'+
-      '→ Scan QRIS → Bayar\n'+
-      '→ Link VIP otomatis dikirim! ✅';
-    document.getElementById('successDetail').textContent=detail;
-
-    haptic('heavy');
-    goTo('s-success');
-
+      '✅ Pesanan masuk!\n'+
+      'Bot sedang menyiapkan QRIS...\n\n'+
+      'Buka Telegram → tunggu pesan QRIS\n'+
+      '→ Scan & bayar\n'+
+      '→ Link join sekali pakai dikirim! ✅';
+    haptic('heavy');goTo('s-success');
   }catch(e){
     toast('❌ Gagal: '+e.message,'err');
-    console.error(e);
+    btn.disabled=false;btn.textContent='⚡ Bayar Sekarang — Bot Kirim QRIS';
   }
-
-  btn.disabled=false;
-  btn.textContent='⚡ Bayar Sekarang — Bot Kirim QRIS';
 });
 
-// ADMIN
-function setAdmin(on){
-  isAdmin=on;
-  document.body.classList.toggle('admin-mode',on);
-  document.getElementById('adminDot').classList.toggle('show',on);
-  renderGrid();
+// ══ CS CHAT ══
+function renderCS(){
+  var container=document.getElementById('csMsgs');
+  container.querySelectorAll('.cs-bubble-wrap').forEach(function(el){el.remove();});
+  if(!csMessages.length){document.getElementById('csEmpty').style.display='block';return;}
+  document.getElementById('csEmpty').style.display='none';
+  csMessages.forEach(function(msg){appendBubble(msg,false);});
+  container.scrollTop=container.scrollHeight;
 }
+function appendBubble(msg,doScroll){
+  var container=document.getElementById('csMsgs');
+  document.getElementById('csEmpty').style.display='none';
+  var wrap=document.createElement('div');
+  wrap.className='cs-bubble-wrap '+(msg.from_admin?'them':'me');
+  wrap.dataset.msgId=msg.id;
+  wrap.innerHTML='<div class="cs-bubble">'+escHtml(msg.text)+'</div>'+
+    '<div class="cs-time">'+(msg.from_admin?'👨‍💼 Admin':'Kamu')+' · '+fmtTime(msg.created_at)+'</div>'+
+    (msg.from_admin?'':'<div class="cs-sent-tag">✅ Pesan terkirim ke admin</div>');
+  container.appendChild(wrap);
+  if(doScroll!==false)container.scrollTop=container.scrollHeight;
+}
+async function sendCSMessage(){
+  var input=document.getElementById('csInput');
+  var text=input.value.trim();
+  if(!text)return;
+  if(!tgUserId){toast('❌ Buka dari Telegram dulu!','err');return;}
+  input.value='';input.style.height='auto';
+  var now=new Date().toISOString();
+  var msg={id:'cs_'+Date.now(),customer_tg_id:String(tgUserId),customer_name:tgDisplayName,customer_tg:tgUsername,text:text,from_admin:false,created_at:now};
+  csMessages.push(msg);appendBubble(msg,true);haptic('light');
+  try{await sbPost('cs_messages',msg);}
+  catch(e){toast('❌ Gagal kirim: '+e.message,'err');}
+}
+async function pollCS(){
+  if(!tgUserId)return;
+  try{
+    var msgs=await sbGet('cs_messages','?customer_tg_id=eq.'+tgUserId+'&order=created_at.asc');
+    if(!msgs||!msgs.length)return;
+    var newMsgs=msgs.filter(function(m){return !csMessages.find(function(x){return x.id===m.id;});});
+    newMsgs.forEach(function(m){
+      csMessages.push(m);
+      if(currentScreen==='s-cs'){appendBubble(m,true);}
+      else if(m.from_admin){
+        var b=document.getElementById('csBadge');
+        var cur=parseInt(b.textContent||'0');
+        b.textContent=cur+1;b.classList.add('show');
+        haptic('medium');
+      }
+    });
+  }catch(e){console.warn('CS poll error',e);}
+}
+function clearCsBadge(){var b=document.getElementById('csBadge');b.textContent='';b.classList.remove('show');}
+setInterval(pollCS,8000);
+document.getElementById('csSendBtn').onclick=sendCSMessage;
+document.getElementById('csInput').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCSMessage();}});
+document.getElementById('csInput').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';});
+
+// ══ ADMIN ══
+function setAdmin(on){isAdmin=on;document.body.classList.toggle('admin-mode',on);document.getElementById('adminDot').classList.toggle('show',on);renderGrid();}
 document.getElementById('keyBtn').onclick=function(){
   if(isAdmin)openAddModal();
   else{openModal('loginModal');setTimeout(function(){document.getElementById('pwInput').focus();},200);}
@@ -798,85 +724,41 @@ document.getElementById('keyBtn').onclick=function(){
 function doLogin(){
   var pw=document.getElementById('pwInput').value;
   if(pw===CFG.adminPassword){
-    document.getElementById('loginErr').classList.remove('show');
-    document.getElementById('pwInput').value='';
-    closeModal('loginModal');setAdmin(true);
-    toast('👑 Selamat datang, Admin!','ok');
+    document.getElementById('loginErr').classList.remove('show');document.getElementById('pwInput').value='';
+    closeModal('loginModal');setAdmin(true);toast('👑 Selamat datang, Admin!','ok');
   }else{
-    document.getElementById('loginErr').classList.add('show');
-    document.getElementById('pwInput').value='';
-    document.getElementById('pwInput').focus();
+    document.getElementById('loginErr').classList.add('show');document.getElementById('pwInput').value='';document.getElementById('pwInput').focus();
   }
 }
 document.getElementById('loginBtn').onclick=doLogin;
 document.getElementById('pwInput').onkeydown=function(e){if(e.key==='Enter')doLogin();};
 document.getElementById('pwEye').onclick=function(){var i=document.getElementById('pwInput');i.type=i.type==='password'?'text':'password';};
-document.getElementById('cartBtn').onclick=function(){haptic('light');goTo('s-cart');};
 
-// ADMIN FORM
-function resetImg(){
-  uploadedImg='';
-  var pv=document.getElementById('imgPreview');pv.src='';pv.style.display='none';
-  document.getElementById('imgUpload').querySelector('.up-ico').style.display='block';
-  document.getElementById('imgUpload').querySelector('.up-hint').style.display='block';
-  document.getElementById('fileInput').value='';
-}
-function clearForm(){
-  ['fId','fName','fDesc','fFeats','fPrice','fPer','fVipLinks'].forEach(function(id){document.getElementById(id).value='';});
-  document.getElementById('fTier').value='tier-permanen';
-  document.getElementById('fLinkCount').value='1';
-  resetImg();
-}
-function openAddModal(){
-  isEdit=false;clearForm();
-  document.getElementById('modalTitle').textContent='TAMBAH PAKET';
-  document.getElementById('modalSub').textContent='Paket baru langsung tampil ke semua pelanggan.';
-  document.getElementById('saveProd').textContent='💾 Simpan Paket';
-  openModal('prodModal');
-}
+// ══ ADMIN FORM ══
+function resetImg(){uploadedImg='';var pv=document.getElementById('imgPreview');pv.src='';pv.style.display='none';document.getElementById('imgUpload').querySelector('.up-ico').style.display='block';document.getElementById('imgUpload').querySelector('.up-hint').style.display='block';document.getElementById('fileInput').value='';}
+function clearForm(){['fId','fName','fDesc','fFeats','fPrice','fPer','fChannelId'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('fTier').value='tier-permanen';resetImg();}
+function openAddModal(){isEdit=false;clearForm();document.getElementById('modalTitle').textContent='TAMBAH PAKET';document.getElementById('modalSub').textContent='Bot harus sudah dijadikan admin di channel tujuan.';document.getElementById('saveProd').textContent='💾 Simpan Paket';openModal('prodModal');}
 function openEditModal(id){
   var p=allVIP.find(function(x){return x.id===id;});if(!p)return;
   isEdit=true;clearForm();
-  document.getElementById('fId').value=p.id;
-  document.getElementById('fName').value=p.name;
-  document.getElementById('fTier').value=p.tier||'tier-permanen';
-  document.getElementById('fPrice').value=p.price;
-  document.getElementById('fPer').value=p.per||'';
-  document.getElementById('fDesc').value=p.description;
+  document.getElementById('fId').value=p.id;document.getElementById('fName').value=p.name;
+  document.getElementById('fTier').value=p.tier||'tier-permanen';document.getElementById('fPrice').value=p.price;
+  document.getElementById('fPer').value=p.per||'';document.getElementById('fDesc').value=p.description;
   document.getElementById('fFeats').value=(p.features||[]).join('\n');
-  document.getElementById('fVipLinks').value=(p.vip_links||[]).join('\n');
-  document.getElementById('fLinkCount').value=p.link_count||1;
-  if(p.img){
-    uploadedImg=p.img;
-    var pv=document.getElementById('imgPreview');pv.src=p.img;pv.style.display='block';
-    document.getElementById('imgUpload').querySelector('.up-ico').style.display='none';
-    document.getElementById('imgUpload').querySelector('.up-hint').style.display='none';
-  }
-  document.getElementById('modalTitle').textContent='EDIT PAKET';
-  document.getElementById('modalSub').textContent='Ubah data lalu simpan.';
-  document.getElementById('saveProd').textContent='💾 Simpan Perubahan';
-  openModal('prodModal');
+  document.getElementById('fChannelId').value=p.channel_id||'';
+  if(p.img){uploadedImg=p.img;var pv=document.getElementById('imgPreview');pv.src=p.img;pv.style.display='block';document.getElementById('imgUpload').querySelector('.up-ico').style.display='none';document.getElementById('imgUpload').querySelector('.up-hint').style.display='none';}
+  document.getElementById('modalTitle').textContent='EDIT PAKET';document.getElementById('modalSub').textContent='Ubah data lalu simpan.';document.getElementById('saveProd').textContent='💾 Simpan Perubahan';openModal('prodModal');
 }
-
 document.getElementById('saveProd').addEventListener('click',async function(){
   var name=document.getElementById('fName').value.trim();
   var desc=document.getElementById('fDesc').value.trim();
-  var vipLinksRaw=document.getElementById('fVipLinks').value.trim();
-  var linkCount=parseInt(document.getElementById('fLinkCount').value)||1;
+  var channelId=document.getElementById('fChannelId').value.trim();
   if(!name||!desc){toast('❌ Nama & deskripsi wajib!','err');return;}
-  if(!vipLinksRaw){toast('❌ Link VIP wajib diisi!','err');return;}
+  if(!channelId){toast('❌ Channel ID wajib diisi!','err');return;}
+  if(!channelId.startsWith('-')){toast('❌ Channel ID harus diawali minus (-100...)','err');return;}
   var btn=document.getElementById('saveProd');btn.disabled=true;btn.textContent='⏳...';
   var fr=document.getElementById('fFeats').value.trim();
-  var data={
-    name,tier:document.getElementById('fTier').value,
-    price:document.getElementById('fPrice').value.trim()||'0',
-    per:document.getElementById('fPer').value.trim()||'',
-    description:desc,
-    features:fr?fr.split('\n').map(function(f){return f.trim();}).filter(Boolean):[],
-    vip_links:vipLinksRaw?vipLinksRaw.split('\n').map(function(l){return l.trim();}).filter(Boolean):[],
-    link_count:linkCount,
-    img:uploadedImg
-  };
+  var data={name,tier:document.getElementById('fTier').value,price:document.getElementById('fPrice').value.trim()||'0',per:document.getElementById('fPer').value.trim()||'',description:desc,features:fr?fr.split('\n').map(function(f){return f.trim();}).filter(Boolean):[],channel_id:channelId,img:uploadedImg};
   try{
     if(isEdit){await sbPatch('vip_packages',document.getElementById('fId').value,data);toast('✅ Paket diperbarui!','ok');}
     else{data.id='vip_'+Date.now();await sbPost('vip_packages',data);toast('✅ Paket ditambahkan!','ok');}
@@ -884,18 +766,13 @@ document.getElementById('saveProd').addEventListener('click',async function(){
   }catch(e){toast('❌ Gagal: '+e.message,'err');}
   btn.disabled=false;btn.textContent=isEdit?'💾 Simpan Perubahan':'💾 Simpan Paket';
 });
-
 document.getElementById('confirmDel').addEventListener('click',async function(){
   if(!pendingDelId)return;
   var btn=document.getElementById('confirmDel');btn.disabled=true;btn.textContent='⏳...';
-  try{
-    await sbDelete('vip_packages',pendingDelId);
-    toast('🗑️ Paket dihapus');pendingDelId=null;closeModal('delModal');await loadVIP();
-  }catch(e){toast('❌ Gagal: '+e.message,'err');}
+  try{await sbDelete('vip_packages',pendingDelId);toast('🗑️ Paket dihapus');pendingDelId=null;closeModal('delModal');await loadVIP();}
+  catch(e){toast('❌ Gagal: '+e.message,'err');}
   btn.disabled=false;btn.textContent='🗑️ Hapus';
 });
-
-// IMAGE UPLOAD
 document.getElementById('imgUpload').onclick=function(){document.getElementById('fileInput').click();};
 document.getElementById('fileInput').addEventListener('change',function(e){
   var file=e.target.files[0];if(!file)return;
@@ -905,8 +782,7 @@ document.getElementById('fileInput').addEventListener('change',function(e){
     img.onload=function(){
       var MAX=600,w=img.width,h=img.height;
       if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}}else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}}
-      var c=document.createElement('canvas');c.width=w;c.height=h;
-      c.getContext('2d').drawImage(img,0,0,w,h);
+      var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
       uploadedImg=c.toDataURL('image/jpeg',.65);
       var pv=document.getElementById('imgPreview');pv.src=uploadedImg;pv.style.display='block';
       document.getElementById('imgUpload').querySelector('.up-ico').style.display='none';
@@ -914,13 +790,10 @@ document.getElementById('fileInput').addEventListener('change',function(e){
     };img.src=ev.target.result;
   };reader.readAsDataURL(file);
 });
+['loginModal','prodModal','delModal'].forEach(function(id){document.getElementById(id).addEventListener('click',function(e){if(e.target.id===id)closeModal(id);});});
 
-['loginModal','prodModal','delModal'].forEach(function(id){
-  document.getElementById(id).addEventListener('click',function(e){if(e.target.id===id)closeModal(id);});
-});
-
-// BOOT
 loadVIP();
+pollCS();
 </script>
 </body>
 </html>
