@@ -314,7 +314,7 @@ footer a{color:var(--gold);text-decoration:none;}
     <span class="line1">BERGABUNG DENGAN</span>
     <span class="line2">VIP HUNTER</span>
   </h1>
-  <p class="hero-sub">Dapatkan akses eksklusif ke semua fitur premium. Pilih paket VIP terbaikmu dan mulai berburu sekarang. Promo membership 10k untuk all Vip</p>
+  <p class="hero-sub">Dapatkan akses eksklusif ke semua fitur premium. Pilih paket VIP terbaikmu dan mulai berburu sekarang.</p>
   <a href="#paket" class="hero-cta">
     Lihat Paket VIP
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -397,10 +397,10 @@ footer a{color:var(--gold);text-decoration:none;}
       <textarea id="fFeats" placeholder="Akses semua channel premium&#10;Bot hunter 24/7&#10;Support prioritas&#10;Update setiap hari" style="min-height:110px;"></textarea>
     </div>
     <div class="fg"><label>Username Bot Telegram *</label>
-      <input type="text" id="fBot" placeholder="VIPHunterBot (tanpa @)"/>
+      <input type="text" id="fBot" placeholder="viphunter_xbot (tanpa @)" value="viphunter_xbot"/>
     </div>
-    <div class="fg"><label>Start Parameter (opsional)</label>
-      <input type="text" id="fStart" placeholder="vip_gold (parameter setelah ?start=)"/>
+    <div class="fg"><label>Start Parameter (untuk bedakan paket)</label>
+      <input type="text" id="fStart" placeholder="vip_gold / vip_silver / vip_diamond"/>
     </div>
     <div class="btn-row">
       <button class="cancel-btn" id="cancelProd">Batal</button>
@@ -554,7 +554,9 @@ function renderGrid(){
       return '<div class="feat-row">'+f+'</div>';
     }).join('');
 
-    var botLink='https://t.me/'+p.bot+(p.start?'?start='+p.start:'');
+    var botName=p.bot||'viphunter_xbot';
+    var startParam=p.start||'vip';
+    var botLink='https://t.me/'+botName+'?start='+startParam;
 
     card.innerHTML=
       imgHtml+
@@ -633,7 +635,8 @@ function resetImg(){
 
 // ── FORM ──
 function clearForm(){
-  ['fId','fName','fDesc','fFeats','fPrice','fPer','fBot','fStart'].forEach(function(id){document.getElementById(id).value='';});
+  ['fId','fName','fDesc','fFeats','fPrice','fPer','fStart'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('fBot').value='viphunter_xbot';
   document.getElementById('fTier').value='tier-gold';
   resetImg();
 }
