@@ -468,6 +468,12 @@ CREATE POLICY "public" ON orders FOR ALL USING (true) WITH CHECK (true);</div>
         <div class="fg"><label>Nomor HP / WhatsApp *</label><input type="tel" id="cfPhone" placeholder="Contoh: 08123456789"/></div>
       </div>
       <div class="form-section">
+        <div class="form-section-title">🎮 Data Akun yang Diaktifkan</div>
+        <div class="fg"><label>Nomor Akun *</label><input type="text" id="cfAccNum" placeholder="Nomor akun kamu"/></div>
+        <div class="fg"><label>Nama Akun *</label><input type="text" id="cfAccName" placeholder="Nama di akun kamu"/></div>
+        <div class="fg"><label>Username Akun *</label><input type="text" id="cfAccUser" placeholder="Username akun kamu"/></div>
+      </div>
+      <div class="form-section">
         <div class="form-section-title">📦 Ringkasan Pesanan</div>
         <div id="cfOrderPreview" style="font-size:.75rem;color:var(--tg-hint);line-height:1.7;font-family:'Courier New',monospace;white-space:pre-wrap;"></div>
       </div>
@@ -672,6 +678,9 @@ function goHome(){
   document.getElementById('cfName').value='';
   document.getElementById('cfTg').value='';
   document.getElementById('cfPhone').value='';
+  document.getElementById('cfAccNum').value='';
+  document.getElementById('cfAccName').value='';
+  document.getElementById('cfAccUser').value='';
   document.getElementById('cfNote').value='';
   proofImg='';
   document.getElementById('proofPreview').style.display='none';
@@ -863,6 +872,10 @@ async function submitOrder(){
   var phone=document.getElementById('cfPhone').value.trim();
   if(!name||!tgUser){toast('❌ Nama dan username Telegram wajib diisi!','err');return;}
   if(!phone){toast('❌ Nomor HP wajib diisi!','err');return;}
+  var accNum=document.getElementById('cfAccNum').value.trim();
+  var accName=document.getElementById('cfAccName').value.trim();
+  var accUser=document.getElementById('cfAccUser').value.trim();
+  if(!accNum||!accName||!accUser){toast('❌ Data akun (nomor, nama, username) wajib diisi!','err');return;}
   if(!proofImg){toast('❌ Bukti transfer wajib diupload!','err');return;}
 
   var btn=document.getElementById('submitBtn');
@@ -890,6 +903,11 @@ async function submitOrder(){
     '📱 <b>Username TG:</b> @'+tgUser,
     '📞 <b>No HP:</b> '+phone,
     (tgInfo?'🔖 <b>TG ID:</b> '+tgInfo.id:''),
+    '',
+    '🎮 <b>DATA AKUN:</b>',
+    '🔢 <b>Nomor Akun:</b> '+accNum,
+    '👤 <b>Nama Akun:</b> '+accName,
+    '🏷 <b>Username Akun:</b> '+accUser,
     '',
     '📦 <b>PESANAN:</b>',
   ].filter(Boolean);
@@ -919,6 +937,11 @@ async function submitOrder(){
     '👤 '+tgDisplayName+' (@'+tgUser+')',
     '📞 '+phone,
     '',
+    '🎮 DATA AKUN:',
+    '🔢 No Akun : '+accNum,
+    '👤 Nama    : '+accName,
+    '🏷 Username: '+accUser,
+    '',
     buildOrderLines(),
     '',
     '💸 Trakteer.id',
@@ -931,7 +954,8 @@ async function submitOrder(){
     // 1. Simpan order ke Supabase
     await sbPost('orders',{
       id:orderId,customer_name:name,customer_tg_display:tgDisplayName,customer_tg:tgUser,
-      customer_phone:phone,items:cart,total:total,note:note,status:'pending'
+      customer_phone:phone,acc_number:accNum,acc_name:accName,acc_username:accUser,
+      items:cart,total:total,note:note,status:'pending'
     });
 
     // 2. Kirim notifikasi teks ke Bot Telegram Admin
