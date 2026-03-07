@@ -216,6 +216,14 @@ body.admin-mode .add-card{display:flex;}
 .pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;}
 .login-err{color:var(--red);font-size:.78rem;margin-top:6px;display:none;}
 .login-err.show{display:block;}
+.admin-cfg-row{display:flex;align-items:center;gap:10px;background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;}
+.admin-cfg-ico{font-size:1.3rem;flex-shrink:0;}
+.admin-cfg-info{flex:1;min-width:0;}
+.admin-cfg-lbl{font-size:.62rem;color:var(--tg-hint);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
+.admin-cfg-val{font-size:.82rem;color:var(--gold);font-weight:600;word-break:break-all;}
+.at-prefix{color:var(--tg-hint);font-size:.84rem;position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;}
+.at-input-wrap{position:relative;}
+.at-input-wrap input{padding-left:24px;}
 .submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.95rem;padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(245,200,66,.3);font-family:'Outfit',sans-serif;}
 .submit-btn:active{transform:scale(.97);}
 .submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
@@ -377,6 +385,68 @@ body.admin-mode .add-card{display:flex;}
   </div>
 </div>
 
+<!-- ══ SCREEN 6: SETTINGS ══ -->
+<div class="screen" id="s-settings">
+  <div class="back-hd">
+    <span class="back-title">⚙️ PENGATURAN</span>
+    <span class="back-sub" id="settingsAdminBadge" style="color:var(--red);display:none;">🔒 Perlu Login Admin</span>
+  </div>
+  <div class="scroll">
+    <div class="sec" style="padding-top:16px;">
+
+      <!-- Info username aktif -->
+      <div class="sec-hd"><span class="sec-title">📌 TUJUAN CHAT</span></div>
+      <div style="font-size:.73rem;color:var(--tg-hint);margin-bottom:12px;line-height:1.6;">
+        Username Telegram admin / bot yang akan <strong style="color:var(--gold)">menerima pesan CS</strong> dan <strong style="color:var(--gold)">checkout produk</strong> secara default (jika produk tidak punya admin tersendiri).
+      </div>
+      <div class="admin-cfg-row" id="cfgCurrentBot">
+        <div class="admin-cfg-ico">🤖</div>
+        <div class="admin-cfg-info">
+          <div class="admin-cfg-lbl">Bot / Admin Aktif</div>
+          <div class="admin-cfg-val" id="cfgBotVal">@loading...</div>
+        </div>
+      </div>
+      <div class="admin-cfg-row" id="cfgCurrentAdmin" style="margin-bottom:16px;">
+        <div class="admin-cfg-ico">👤</div>
+        <div class="admin-cfg-info">
+          <div class="admin-cfg-lbl">Admin TG Username</div>
+          <div class="admin-cfg-val" id="cfgAdminVal">@loading...</div>
+        </div>
+      </div>
+
+      <!-- Form ubah (hanya admin) -->
+      <div id="settingsForm" style="display:none;">
+        <div class="sec-hd" style="margin-top:8px;"><span class="sec-title">✏️ UBAH USERNAME</span></div>
+        <div class="sfg">
+          <label>Username Bot CS / Asisten</label>
+          <div class="hint" style="margin-bottom:8px;">Bot yang menjawab chat dari halaman <strong>💬 Admin</strong>.</div>
+          <div class="at-input-wrap">
+            <span class="at-prefix">@</span>
+            <input type="text" id="setCfgBot" placeholder="namabot"/>
+          </div>
+        </div>
+        <div class="sfg">
+          <label>Username Admin TG (untuk checkout)</label>
+          <div class="hint" style="margin-bottom:8px;">Admin yang menerima detail order saat pelanggan checkout (bisa sama dengan bot).</div>
+          <div class="at-input-wrap">
+            <span class="at-prefix">@</span>
+            <input type="text" id="setCfgAdmin" placeholder="namaadmin"/>
+          </div>
+        </div>
+        <button class="save-btn" id="saveCfgBtn" style="width:100%;margin-top:4px;">💾 Simpan Pengaturan</button>
+      </div>
+
+      <!-- Tombol login jika belum admin -->
+      <div id="settingsLoginHint" style="text-align:center;padding:16px 0;">
+        <p style="font-size:.78rem;color:var(--tg-hint);margin-bottom:12px;">Login sebagai admin untuk mengubah pengaturan ini.</p>
+        <button class="save-btn" style="width:auto;padding:10px 28px;" onclick="openModal('loginModal')">🔑 Login Admin</button>
+      </div>
+
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+</div>
+
 <!-- ══ BOTTOM NAV ══ -->
 <div class="bottom-nav" id="bottomNav">
   <div class="bn-item active" id="nav-shop" onclick="navTo('s-shop','nav-shop')">
@@ -392,6 +462,10 @@ body.admin-mode .add-card{display:flex;}
     <span class="bn-icon">💬</span>
     <span class="bn-label">ADMIN</span>
     <span class="bn-badge" id="csBadge"></span>
+  </div>
+  <div class="bn-item" id="nav-settings" onclick="navTo('s-settings','nav-settings')">
+    <span class="bn-icon">⚙️</span>
+    <span class="bn-label">SETTING</span>
   </div>
 </div>
 
@@ -452,6 +526,14 @@ body.admin-mode .add-card{display:flex;}
     </div>
     <div class="sfg"><label>Deskripsi *</label><textarea id="fDesc" placeholder="Deskripsi singkat paket VIP ini..."></textarea></div>
     <div class="sfg"><label>Fitur (1 baris = 1 fitur)</label><textarea id="fFeats" placeholder="Akses semua konten VIP&#10;Update setiap hari&#10;Priority support"></textarea></div>
+    <div class="sfg">
+      <label>Admin / Bot Checkout <span style="color:var(--tg-hint);font-weight:400;">(opsional)</span></label>
+      <div class="hint" style="margin-bottom:8px;">Username TG yang akan menerima order produk ini. Kosongkan = pakai admin default.</div>
+      <div class="at-input-wrap">
+        <span class="at-prefix">@</span>
+        <input type="text" id="fAdmin" placeholder="username_admin_atau_bot"/>
+      </div>
+    </div>
 
     <div class="btn-row">
       <button class="cancel-btn" onclick="closeModal('prodModal')">Batal</button>
@@ -488,6 +570,62 @@ var CFG={
   botToken:'8050084420:AAG-yShtIRHSj5HBKkIUgzZbAWRze-7N-Ig',
   adminIds:[5918905984, 5734902794],
 };
+
+// Load dynamic config (admin username & bot username) from localStorage / Supabase
+async function loadAppCfg(){
+  try{
+    var rows=await sbGet('app_config','?select=*');
+    if(rows&&rows.length){
+      rows.forEach(function(row){
+        if(row.key==='adminTgUsername'&&row.value)CFG.adminTgUsername=row.value;
+        if(row.key==='botUsername'&&row.value)CFG.botUsername=row.value;
+      });
+    }
+  }catch(e){
+    // fallback: localStorage
+    try{
+      var a=localStorage.getItem('cfg_adminTgUsername');
+      var b=localStorage.getItem('cfg_botUsername');
+      if(a)CFG.adminTgUsername=a;
+      if(b)CFG.botUsername=b;
+    }catch(ex){}
+  }
+  renderCfgDisplay();
+}
+
+function renderCfgDisplay(){
+  var bv=document.getElementById('cfgBotVal');
+  var av=document.getElementById('cfgAdminVal');
+  if(bv)bv.textContent='@'+CFG.botUsername;
+  if(av)av.textContent='@'+CFG.adminTgUsername;
+}
+
+async function saveAppCfg(botU,adminU){
+  // Save to localStorage as fallback
+  try{localStorage.setItem('cfg_botUsername',botU);localStorage.setItem('cfg_adminTgUsername',adminU);}catch(e){}
+  // Try saving to Supabase app_config table
+  try{
+    // Upsert bot username
+    var r1=await fetch(SB+'/app_config?key=eq.botUsername',{method:'GET',headers:SBH});
+    var d1=await r1.json();
+    if(d1&&d1.length){
+      await fetch(SB+'/app_config?key=eq.botUsername',{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({value:botU})});
+    }else{
+      await fetch(SB+'/app_config',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({key:'botUsername',value:botU})});
+    }
+    // Upsert admin username
+    var r2=await fetch(SB+'/app_config?key=eq.adminTgUsername',{method:'GET',headers:SBH});
+    var d2=await r2.json();
+    if(d2&&d2.length){
+      await fetch(SB+'/app_config?key=eq.adminTgUsername',{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({value:adminU})});
+    }else{
+      await fetch(SB+'/app_config',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({key:'adminTgUsername',value:adminU})});
+    }
+  }catch(e){console.warn('cfg save supabase err',e);}
+  CFG.botUsername=botU;
+  CFG.adminTgUsername=adminU;
+  renderCfgDisplay();
+}
 (function(){var el=document.getElementById('watermarkEl');if(el&&CFG.watermark)el.textContent=CFG.watermark;})();
 
 var tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:{ready:function(){},expand:function(){},HapticFeedback:{impactOccurred:function(){},notificationOccurred:function(){}},BackButton:{show:function(){},hide:function(){},onClick:function(){},offClick:function(){}},initDataUnsafe:{user:null}};
@@ -599,6 +737,11 @@ function buildOrderMessage(orderId, now){
   lines.push('━━━━━━━━━━━━━━━━━━━━');
   lines.push('📌 Status: *Menunggu Pembayaran*');
   lines.push('');
+  // Tunjukkan admin tujuan jika ada per-produk
+  var pa='';if(cart.length===1&&cart[0].adminUsername){pa=cart[0].adminUsername;}
+  else{var ads=cart.map(function(x){return x.adminUsername||'';}).filter(Boolean);var ua=[...new Set(ads)];if(ua.length===1)pa=ua[0];}
+  if(pa)lines.push('🎯 Admin Tujuan: @'+pa);
+  lines.push('');
   lines.push('Mohon kirim QRIS untuk pembayaran, terima kasih! 🙏');
 
   return lines.join('\n');
@@ -630,6 +773,7 @@ function renderGrid(){
       '</div><div class="vcard-foot"><div class="price-lbl">Harga</div>'+
       '<div class="price-val">'+fmtRp(parseNum(p.price||0))+'</div>'+
       (p.per?'<div class="price-per">'+p.per+'</div>':'')+
+      (p.adminUsername?'<div style="font-size:.58rem;color:var(--tg-hint);margin-bottom:5px;">📲 Admin: <span style="color:var(--gold);">@'+p.adminUsername+'</span></div>':'')+
       '<button class="cart-add-btn'+(inCart?' added':'')+'" data-id="'+p.id+'">'+(inCart?'✅ Ditambahkan':'🛒 Tambah')+'</button>'+
       '</div><div class="admin-acts">'+
       '<button class="ae-btn" data-id="'+p.id+'">✏️ Edit</button>'+
@@ -735,7 +879,17 @@ document.getElementById('botPayBtn').addEventListener('click',async function(){
     // 4. Redirect ke Telegram admin dengan pesan terisi otomatis
     // Gunakan t.me/username?text=... agar pesan sudah terisi di kolom chat
     var encodedMsg=encodeURIComponent(orderMsg);
-    var adminUrl='https://t.me/'+CFG.adminTgUsername+'?text='+encodedMsg;
+    // Cek apakah ada produk dengan adminUsername tersendiri
+    var productAdmin='';
+    if(cart.length===1&&cart[0].adminUsername){productAdmin=cart[0].adminUsername;}
+    else{
+      // Jika semua produk punya admin yang sama, pakai itu
+      var admins=cart.map(function(x){return x.adminUsername||'';}).filter(Boolean);
+      var uniqueAdmins=[...new Set(admins)];
+      if(uniqueAdmins.length===1)productAdmin=uniqueAdmins[0];
+    }
+    var targetAdmin=(productAdmin||CFG.adminTgUsername).replace(/^@/,'');
+    var adminUrl='https://t.me/'+targetAdmin+'?text='+encodedMsg;
 
     // Delay sedikit agar screen sukses sempat tampil
     setTimeout(function(){
@@ -897,7 +1051,26 @@ document.getElementById('csInput').addEventListener('keydown',function(e){if(e.k
 document.getElementById('csInput').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';});
 
 // ══ ADMIN ══
-function setAdmin(on){isAdmin=on;document.body.classList.toggle('admin-mode',on);document.getElementById('adminDot').classList.toggle('show',on);renderGrid();}
+function setAdmin(on){
+  isAdmin=on;
+  document.body.classList.toggle('admin-mode',on);
+  document.getElementById('adminDot').classList.toggle('show',on);
+  renderGrid();
+  // Settings screen
+  var sf=document.getElementById('settingsForm');
+  var sh=document.getElementById('settingsLoginHint');
+  var sb=document.getElementById('settingsAdminBadge');
+  if(sf)sf.style.display=on?'block':'none';
+  if(sh)sh.style.display=on?'none':'block';
+  if(sb)sb.style.display=on?'none':'block';
+  if(on){
+    // Populate settings inputs with current CFG
+    var bi=document.getElementById('setCfgBot');
+    var ai=document.getElementById('setCfgAdmin');
+    if(bi)bi.value=CFG.botUsername.replace(/^@/,'');
+    if(ai)ai.value=CFG.adminTgUsername.replace(/^@/,'');
+  }
+}
 document.getElementById('keyBtn').onclick=function(){
   if(isAdmin)openAddModal();
   else{openModal('loginModal');setTimeout(function(){document.getElementById('pwInput').focus();},200);}
@@ -917,7 +1090,7 @@ document.getElementById('pwEye').onclick=function(){var i=document.getElementByI
 
 // ══ ADMIN FORM ══
 function resetImg(){uploadedImg='';var pv=document.getElementById('imgPreview');pv.src='';pv.style.display='none';document.getElementById('imgUpload').querySelector('.up-ico').style.display='block';document.getElementById('imgUpload').querySelector('.up-hint').style.display='block';document.getElementById('fileInput').value='';}
-function clearForm(){['fId','fName','fDesc','fFeats','fPrice','fPer'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('fTier').value='tier-permanen';resetImg();}
+function clearForm(){['fId','fName','fDesc','fFeats','fPrice','fPer','fAdmin'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('fTier').value='tier-permanen';resetImg();}
 function openAddModal(){isEdit=false;clearForm();document.getElementById('modalTitle').textContent='TAMBAH PAKET';document.getElementById('modalSub').textContent='Isi detail paket VIP baru.';document.getElementById('saveProd').textContent='💾 Simpan Paket';openModal('prodModal');}
 function openEditModal(id){
   var p=allVIP.find(function(x){return x.id===id;});if(!p)return;
@@ -926,6 +1099,7 @@ function openEditModal(id){
   document.getElementById('fTier').value=p.tier||'tier-permanen';document.getElementById('fPrice').value=p.price;
   document.getElementById('fPer').value=p.per||'';document.getElementById('fDesc').value=p.description;
   document.getElementById('fFeats').value=(p.features||[]).join('\n');
+  document.getElementById('fAdmin').value=(p.adminUsername||'').replace(/^@/,'');
   if(p.img){uploadedImg=p.img;var pv=document.getElementById('imgPreview');pv.src=p.img;pv.style.display='block';document.getElementById('imgUpload').querySelector('.up-ico').style.display='none';document.getElementById('imgUpload').querySelector('.up-hint').style.display='none';}
   document.getElementById('modalTitle').textContent='EDIT PAKET';document.getElementById('modalSub').textContent='Ubah data lalu simpan.';document.getElementById('saveProd').textContent='💾 Simpan Perubahan';openModal('prodModal');
 }
@@ -942,7 +1116,8 @@ document.getElementById('saveProd').addEventListener('click',async function(){
     per:document.getElementById('fPer').value.trim()||'',
     description:desc,
     features:fr?fr.split('\n').map(function(f){return f.trim();}).filter(Boolean):[],
-    img:uploadedImg
+    img:uploadedImg,
+    adminUsername:document.getElementById('fAdmin').value.trim().replace(/^@/,'')||''
   };
   try{
     if(isEdit){
@@ -985,7 +1160,23 @@ document.getElementById('fileInput').addEventListener('change',function(e){
 ['loginModal','prodModal','delModal'].forEach(function(id){document.getElementById(id).addEventListener('click',function(e){if(e.target.id===id)closeModal(id);});});
 
 loadVIP();
+loadAppCfg();
 pollCS();
+
+// ══ SETTINGS ══
+document.getElementById('saveCfgBtn').addEventListener('click', async function(){
+  if(!isAdmin){toast('❌ Harus login admin dulu!','err');return;}
+  var botU=(document.getElementById('setCfgBot').value||'').trim().replace(/^@/,'');
+  var adminU=(document.getElementById('setCfgAdmin').value||'').trim().replace(/^@/,'');
+  if(!botU||!adminU){toast('❌ Kedua username wajib diisi!','err');return;}
+  var btn=this;btn.disabled=true;btn.textContent='⏳ Menyimpan...';
+  try{
+    await saveAppCfg(botU,adminU);
+    toast('✅ Pengaturan disimpan!','ok');
+    renderCfgDisplay();
+  }catch(e){toast('❌ Gagal: '+e.message,'err');}
+  btn.disabled=false;btn.textContent='💾 Simpan Pengaturan';
+});
 </script>
 </body>
 </html>
