@@ -261,7 +261,7 @@ body.admin-mode .add-card{display:flex;}
     <div class="hero">
       <div class="hero-tag">Layanan VIP Eksklusif</div>
       <h1><span class="l1">AKSES</span><span class="l2">VIP HUNTER</span></h1>
-      <p class="hero-sub">Pilih paket VIP, bayar via QRIS, link join sekali pakai dikirim otomatis!</p>
+      <p class="hero-sub">Pilih paket VIP anda!</p>
     </div>
     <div class="info-box green">
       <div class="info-ico">🤖</div>
@@ -573,24 +573,29 @@ var CFG={
 
 // Load dynamic config (admin username & bot username) from localStorage / Supabase
 async function loadAppCfg(){
+  // Load dari localStorage dulu (cepat, tidak perlu tunggu network)
+  try{
+    var a=localStorage.getItem('cfg_adminTgUsername');
+    var b=localStorage.getItem('cfg_botUsername');
+    if(a)CFG.adminTgUsername=a;
+    if(b)CFG.botUsername=b;
+  }catch(ex){}
+  renderCfgDisplay();
+
+  // Coba update dari Supabase (background, tidak blocking)
   try{
     var rows=await sbGet('app_config','?select=*');
     if(rows&&rows.length){
       rows.forEach(function(row){
-        if(row.key==='adminTgUsername'&&row.value)CFG.adminTgUsername=row.value;
-        if(row.key==='botUsername'&&row.value)CFG.botUsername=row.value;
+        if(row.key==='adminTgUsername'&&row.value){CFG.adminTgUsername=row.value;try{localStorage.setItem('cfg_adminTgUsername',row.value);}catch(e){}}
+        if(row.key==='botUsername'&&row.value){CFG.botUsername=row.value;try{localStorage.setItem('cfg_botUsername',row.value);}catch(e){}}
       });
+      renderCfgDisplay();
     }
   }catch(e){
-    // fallback: localStorage
-    try{
-      var a=localStorage.getItem('cfg_adminTgUsername');
-      var b=localStorage.getItem('cfg_botUsername');
-      if(a)CFG.adminTgUsername=a;
-      if(b)CFG.botUsername=b;
-    }catch(ex){}
+    // Tidak masalah, sudah pakai localStorage / default
+    console.warn('loadAppCfg fallback:',e.message);
   }
-  renderCfgDisplay();
 }
 
 function renderCfgDisplay(){
@@ -633,10 +638,25 @@ tg.ready();tg.expand();
 
 var SB=CFG.supabaseUrl.replace(/\/$/,'')+'/rest/v1';
 var SBH={'apikey':CFG.supabaseKey,'Authorization':'Bearer '+CFG.supabaseKey,'Content-Type':'application/json'};
-async function sbGet(tbl,q){var r=await fetch(SB+'/'+tbl+(q||'?select=*&order=created_at.asc'),{headers:SBH});if(!r.ok)throw new Error(await r.text());return r.json();}
-async function sbPost(tbl,d){var r=await fetch(SB+'/'+tbl,{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());}
-async function sbPatch(tbl,id,d){var r=await fetch(SB+'/'+tbl+'?id=eq.'+id,{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());}
-async function sbDelete(tbl,id){var r=await fetch(SB+'/'+tbl+'?id=eq.'+id,{method:'DELETE',headers:SBH});if(!r.ok)throw new Error(await r.text());}
+
+// Fetch dengan timeout 8 detik
+async function sbFetchTimeout(url,opts,ms){
+  ms=ms||8000;
+  var ctrl=new AbortController();
+  var tid=setTimeout(function(){ctrl.abort();},ms);
+  try{
+    var r=await fetch(url,Object.assign({},opts,{signal:ctrl.signal}));
+    clearTimeout(tid);return r;
+  }catch(e){clearTimeout(tid);throw e;}
+}
+async function sbGet(tbl,q){
+  var r=await sbFetchTimeout(SB+'/'+tbl+(q||'?select=*&order=created_at.asc'),{headers:SBH});
+  if(!r.ok)throw new Error(await r.text());
+  return r.json();
+}
+async function sbPost(tbl,d){var r=await sbFetchTimeout(SB+'/'+tbl,{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());}
+async function sbPatch(tbl,id,d){var r=await sbFetchTimeout(SB+'/'+tbl+'?id=eq.'+id,{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());}
+async function sbDelete(tbl,id){var r=await sbFetchTimeout(SB+'/'+tbl+'?id=eq.'+id,{method:'DELETE',headers:SBH});if(!r.ok)throw new Error(await r.text());}
 
 var allVIP=[],cart=[],isAdmin=false,isEdit=false,uploadedImg='',pendingDelId=null;
 var csMessages=[],csLastCount=0;
@@ -749,8 +769,28 @@ function buildOrderMessage(orderId, now){
 
 // ══ LOAD VIP ══
 async function loadVIP(){
-  try{allVIP=await sbGet('vip_packages');renderAll();}
-  catch(e){document.getElementById('grid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--red);font-size:.8rem;">❌ '+e.message+'</div>';}
+  var g=document.getElementById('grid');
+  // Tampilkan cache dulu jika ada agar tidak kelihatan loading lama
+  try{
+    var cached=localStorage.getItem('vip_cache');
+    if(cached){allVIP=JSON.parse(cached);renderAll();}
+  }catch(e){}
+
+  try{
+    var fresh=await sbGet('vip_packages');
+    allVIP=fresh;
+    try{localStorage.setItem('vip_cache',JSON.stringify(fresh));}catch(e){}
+    renderAll();
+  }catch(e){
+    if(!allVIP.length){
+      g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;">'
+        +'<div style="font-size:2rem;margin-bottom:10px;">⚠️</div>'
+        +'<p style="color:var(--red);font-size:.78rem;margin-bottom:12px;">Gagal memuat paket.<br/>Periksa koneksi internet.</p>'
+        +'<button onclick="loadVIP()" style="background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.3);color:var(--gold);font-family:\'Outfit\',sans-serif;font-size:.8rem;font-weight:700;padding:8px 20px;border-radius:20px;cursor:pointer;">🔄 Coba Lagi</button>'
+        +'</div>';
+    }
+    console.warn('loadVIP error:',e.message);
+  }
 }
 var TL={'tier-permanen':'♾️ Permanen','tier-bulanan':'📅 Bulanan','tier-gold':'⭐ Gold','tier-silver':'🥈 Silver','tier-diamond':'💎 Diamond','tier-custom':'✦ Custom'};
 function renderAll(){document.getElementById('tProduk').textContent=allVIP.length+' paket';renderGrid();}
