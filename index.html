@@ -763,19 +763,20 @@ async function loadVIP(){
   try{
     var cached=localStorage.getItem('vip_cache');
     if(cached){
-      allVIP=JSON.parse(cached);
-      renderAll();
+      var arr=JSON.parse(cached);
+      if(arr&&arr.length){allVIP=arr;renderAll();}
     }
   }catch(e){}
 
   // 2. Fetch dari Supabase (dengan timeout 8 detik)
   try{
     var fresh=await sbGet('vip_packages');
-    allVIP=fresh;
-    try{localStorage.setItem('vip_cache',JSON.stringify(fresh));}catch(e){}
-    renderAll();
+    allVIP=fresh||[];
+    try{localStorage.setItem('vip_cache',JSON.stringify(allVIP));}catch(e){}
+    renderAll(); // selalu panggil renderAll, kosong atau tidak
   }catch(e){
-    // Jika tidak ada cache → tampilkan pesan error + tombol retry
+    console.warn('loadVIP error:',e.message);
+    // Jika tidak ada cache → stop spinner dan tampilkan error
     if(!allVIP.length){
       g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;">'
         +'<div style="font-size:2rem;margin-bottom:10px;">⚠️</div>'
@@ -783,16 +784,28 @@ async function loadVIP(){
         +'<p style="color:var(--tg-hint);font-size:.72rem;margin-bottom:14px;">'+e.message+'</p>'
         +'<button onclick="loadVIP()" style="background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.3);color:var(--gold);font-family:\'Outfit\',sans-serif;font-size:.8rem;font-weight:700;padding:8px 20px;border-radius:20px;cursor:pointer;">🔄 Coba Lagi</button>'
         +'</div>';
+      document.getElementById('tProduk').textContent='error';
     }
-    console.warn('loadVIP error:',e.message);
   }
 }
 var TL={'tier-permanen':'♾️ Permanen','tier-bulanan':'📅 Bulanan','tier-gold':'⭐ Gold','tier-silver':'🥈 Silver','tier-diamond':'💎 Diamond','tier-custom':'✦ Custom'};
 function renderAll(){document.getElementById('tProduk').textContent=allVIP.length+' paket';renderGrid();}
 function renderGrid(){
-  var g=document.getElementById('grid');g.innerHTML='';
+  var g=document.getElementById('grid');
+  g.innerHTML=''; // selalu clear spinner dulu
   if(!allVIP.length){
-    g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--tg-hint);font-size:.85rem;"><div style="font-size:2.5rem;margin-bottom:10px;">👑</div><p>'+(isAdmin?'Belum ada paket. Tambah sekarang!':'Paket VIP segera hadir.')+'</p></div>';
+    g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--tg-hint);font-size:.85rem;">'
+      +'<div style="font-size:2.5rem;margin-bottom:10px;">👑</div>'
+      +'<p>'+(isAdmin?'Belum ada paket. Tambah sekarang!':'Paket VIP segera hadir.')+'</p>'
+      +'</div>';
+    if(isAdmin){
+      var ac=document.createElement('div');
+      ac.className='add-card';
+      ac.innerHTML='<div class="add-card-icon">➕</div><div class="add-card-txt">Tambah Paket VIP</div>';
+      ac.onclick=openAddModal;
+      g.appendChild(ac);
+    }
+    return;
   }
   allVIP.forEach(function(p,i){
     var inCart=cart.some(function(x){return x.id===p.id;});
