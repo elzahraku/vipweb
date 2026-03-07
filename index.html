@@ -364,23 +364,31 @@ body.admin-mode .add-card{display:flex;}
     <span class="back-sub" style="color:var(--green);font-weight:600;">● Siap membantu</span>
   </div>
   <div class="cs-wrap">
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px;text-align:center;gap:16px;">
-      <div style="font-size:3.5rem;filter:drop-shadow(0 0 16px rgba(245,200,66,.4));">💬</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;color:#fff;">HUBUNGI ADMIN</div>
-      <p style="font-size:.82rem;color:var(--tg-hint);line-height:1.7;max-width:280px;">
-        Klik tombol di bawah untuk chat langsung dengan admin via bot CS kami di Telegram.
-      </p>
-      <div style="background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:14px 16px;width:100%;text-align:left;">
-        <div style="font-size:.65rem;color:var(--gold);font-weight:700;letter-spacing:1.5px;margin-bottom:8px;">💡 CONTOH PERTANYAAN</div>
-        <div style="font-size:.75rem;color:var(--tg-hint);line-height:1.9;">
-          • Saya sudah bayar tapi link belum masuk<br/>
-          • Apakah bisa beli lebih dari 1 paket?<br/>
-          • Channel VIP berisi konten apa?
-        </div>
+    <!-- Banner guest (buka dari browser) -->
+    <div id="guestBanner" style="display:none;background:rgba(245,200,66,.07);border-bottom:1px solid rgba(245,200,66,.15);padding:8px 16px;font-size:.72rem;color:var(--gold);">
+      🌐 Mode Web — pesan dikirim via bot Telegram
+    </div>
+    <!-- Form identitas guest -->
+    <div id="guestFormWrap" class="guest-form-wrap" style="display:none;">
+      <div class="guest-form-box">
+        <h3>👤 SIAPA KAMU?</h3>
+        <p>Sebelum chat, isi data berikut agar admin bisa membalas kamu di Telegram.</p>
+        <input type="text" id="guestName" class="guest-input" placeholder="Nama kamu"/>
+        <input type="text" id="guestContact" class="guest-input" placeholder="Username Telegram (tanpa @)"/>
+        <button class="guest-submit-btn" id="guestStartBtn">💬 Mulai Chat</button>
       </div>
-      <button onclick="openCSBot()" class="bot-pay-btn" style="margin-top:8px;">
-        📲 Chat Admin via Telegram
-      </button>
+    </div>
+    <!-- Area pesan -->
+    <div class="cs-msgs" id="csMsgs" style="display:none;">
+      <div class="cs-empty" id="csEmpty">
+        <div style="font-size:2.5rem;margin-bottom:10px;">💬</div>
+        <p>Belum ada pesan.<br/>Kirim pertanyaan ke admin!</p>
+      </div>
+    </div>
+    <!-- Input chat -->
+    <div class="cs-input-wrap" style="display:none;">
+      <textarea class="cs-input" id="csInput" placeholder="Tulis pesan..." rows="1"></textarea>
+      <button class="cs-send-btn" id="csSendBtn">➤</button>
     </div>
   </div>
 </div>
@@ -759,7 +767,6 @@ function buildOrderMessage(orderId, now){
 async function loadVIP(){
   var g=document.getElementById('grid');
 
-  // 1. Tampilkan cache localStorage dulu agar tidak blank
   try{
     var cached=localStorage.getItem('vip_cache');
     if(cached){
@@ -768,15 +775,13 @@ async function loadVIP(){
     }
   }catch(e){}
 
-  // 2. Fetch dari Supabase (dengan timeout 8 detik)
   try{
     var fresh=await sbGet('vip_packages');
     allVIP=fresh||[];
     try{localStorage.setItem('vip_cache',JSON.stringify(allVIP));}catch(e){}
-    renderAll(); // selalu panggil renderAll, kosong atau tidak
+    renderAll();
   }catch(e){
     console.warn('loadVIP error:',e.message);
-    // Jika tidak ada cache → stop spinner dan tampilkan error
     if(!allVIP.length){
       g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;">'
         +'<div style="font-size:2rem;margin-bottom:10px;">⚠️</div>'
@@ -792,7 +797,7 @@ var TL={'tier-permanen':'♾️ Permanen','tier-bulanan':'📅 Bulanan','tier-go
 function renderAll(){document.getElementById('tProduk').textContent=allVIP.length+' paket';renderGrid();}
 function renderGrid(){
   var g=document.getElementById('grid');
-  g.innerHTML=''; // selalu clear spinner dulu
+  g.innerHTML='';
   if(!allVIP.length){
     g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--tg-hint);font-size:.85rem;">'
       +'<div style="font-size:2.5rem;margin-bottom:10px;">👑</div>'
