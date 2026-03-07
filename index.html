@@ -560,6 +560,7 @@ body.admin-mode .add-card{display:flex;}
 <div class="watermark" id="watermarkEl"></div>
 
 <script>
+// ══ CONFIG ══
 var CFG={
   adminPassword:'Malik10_',
   supabaseUrl:'https://lgjcsefaqkqvidkuuomo.supabase.co',
@@ -570,76 +571,16 @@ var CFG={
   botToken:'8050084420:AAG-yShtIRHSj5HBKkIUgzZbAWRze-7N-Ig',
   adminIds:[5918905984, 5734902794],
 };
-
-// Load dynamic config (admin username & bot username) from localStorage / Supabase
-async function loadAppCfg(){
-  // Load dari localStorage dulu (cepat, tidak perlu tunggu network)
-  try{
-    var a=localStorage.getItem('cfg_adminTgUsername');
-    var b=localStorage.getItem('cfg_botUsername');
-    if(a)CFG.adminTgUsername=a;
-    if(b)CFG.botUsername=b;
-  }catch(ex){}
-  renderCfgDisplay();
-
-  // Coba update dari Supabase (background, tidak blocking)
-  try{
-    var rows=await sbGet('app_config','?select=*');
-    if(rows&&rows.length){
-      rows.forEach(function(row){
-        if(row.key==='adminTgUsername'&&row.value){CFG.adminTgUsername=row.value;try{localStorage.setItem('cfg_adminTgUsername',row.value);}catch(e){}}
-        if(row.key==='botUsername'&&row.value){CFG.botUsername=row.value;try{localStorage.setItem('cfg_botUsername',row.value);}catch(e){}}
-      });
-      renderCfgDisplay();
-    }
-  }catch(e){
-    // Tidak masalah, sudah pakai localStorage / default
-    console.warn('loadAppCfg fallback:',e.message);
-  }
-}
-
-function renderCfgDisplay(){
-  var bv=document.getElementById('cfgBotVal');
-  var av=document.getElementById('cfgAdminVal');
-  if(bv)bv.textContent='@'+CFG.botUsername;
-  if(av)av.textContent='@'+CFG.adminTgUsername;
-}
-
-async function saveAppCfg(botU,adminU){
-  // Save to localStorage as fallback
-  try{localStorage.setItem('cfg_botUsername',botU);localStorage.setItem('cfg_adminTgUsername',adminU);}catch(e){}
-  // Try saving to Supabase app_config table
-  try{
-    // Upsert bot username
-    var r1=await fetch(SB+'/app_config?key=eq.botUsername',{method:'GET',headers:SBH});
-    var d1=await r1.json();
-    if(d1&&d1.length){
-      await fetch(SB+'/app_config?key=eq.botUsername',{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({value:botU})});
-    }else{
-      await fetch(SB+'/app_config',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({key:'botUsername',value:botU})});
-    }
-    // Upsert admin username
-    var r2=await fetch(SB+'/app_config?key=eq.adminTgUsername',{method:'GET',headers:SBH});
-    var d2=await r2.json();
-    if(d2&&d2.length){
-      await fetch(SB+'/app_config?key=eq.adminTgUsername',{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({value:adminU})});
-    }else{
-      await fetch(SB+'/app_config',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({key:'adminTgUsername',value:adminU})});
-    }
-  }catch(e){console.warn('cfg save supabase err',e);}
-  CFG.botUsername=botU;
-  CFG.adminTgUsername=adminU;
-  renderCfgDisplay();
-}
 (function(){var el=document.getElementById('watermarkEl');if(el&&CFG.watermark)el.textContent=CFG.watermark;})();
 
+// ══ TELEGRAM ══
 var tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:{ready:function(){},expand:function(){},HapticFeedback:{impactOccurred:function(){},notificationOccurred:function(){}},BackButton:{show:function(){},hide:function(){},onClick:function(){},offClick:function(){}},initDataUnsafe:{user:null}};
 tg.ready();tg.expand();
 
+// ══ SUPABASE — harus didefinisikan SEBELUM semua fungsi yang memakainya ══
 var SB=CFG.supabaseUrl.replace(/\/$/,'')+'/rest/v1';
 var SBH={'apikey':CFG.supabaseKey,'Authorization':'Bearer '+CFG.supabaseKey,'Content-Type':'application/json'};
 
-// Fetch dengan timeout 8 detik
 async function sbFetchTimeout(url,opts,ms){
   ms=ms||8000;
   var ctrl=new AbortController();
@@ -657,6 +598,53 @@ async function sbGet(tbl,q){
 async function sbPost(tbl,d){var r=await sbFetchTimeout(SB+'/'+tbl,{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());}
 async function sbPatch(tbl,id,d){var r=await sbFetchTimeout(SB+'/'+tbl+'?id=eq.'+id,{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());}
 async function sbDelete(tbl,id){var r=await sbFetchTimeout(SB+'/'+tbl+'?id=eq.'+id,{method:'DELETE',headers:SBH});if(!r.ok)throw new Error(await r.text());}
+
+// ══ APP CONFIG (username admin/bot dinamis) ══
+function renderCfgDisplay(){
+  var bv=document.getElementById('cfgBotVal');
+  var av=document.getElementById('cfgAdminVal');
+  if(bv)bv.textContent='@'+CFG.botUsername;
+  if(av)av.textContent='@'+CFG.adminTgUsername;
+}
+
+async function loadAppCfg(){
+  // Load dari localStorage dulu (instan, tidak blocking)
+  try{
+    var a=localStorage.getItem('cfg_adminTgUsername');
+    var b=localStorage.getItem('cfg_botUsername');
+    if(a)CFG.adminTgUsername=a;
+    if(b)CFG.botUsername=b;
+  }catch(ex){}
+  renderCfgDisplay();
+  // Update dari Supabase di background (tidak blocking loadVIP)
+  try{
+    var rows=await sbGet('app_config','?select=*');
+    if(rows&&rows.length){
+      rows.forEach(function(row){
+        if(row.key==='adminTgUsername'&&row.value){CFG.adminTgUsername=row.value;try{localStorage.setItem('cfg_adminTgUsername',row.value);}catch(e){}}
+        if(row.key==='botUsername'&&row.value){CFG.botUsername=row.value;try{localStorage.setItem('cfg_botUsername',row.value);}catch(e){}}
+      });
+      renderCfgDisplay();
+    }
+  }catch(e){console.warn('loadAppCfg:',e.message);}
+}
+
+async function saveAppCfg(botU,adminU){
+  try{localStorage.setItem('cfg_botUsername',botU);localStorage.setItem('cfg_adminTgUsername',adminU);}catch(e){}
+  try{
+    var r1=await sbFetchTimeout(SB+'/app_config?key=eq.botUsername',{method:'GET',headers:SBH});
+    var d1=await r1.json();
+    if(d1&&d1.length){await sbFetchTimeout(SB+'/app_config?key=eq.botUsername',{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({value:botU})});}
+    else{await sbFetchTimeout(SB+'/app_config',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({key:'botUsername',value:botU})});}
+    var r2=await sbFetchTimeout(SB+'/app_config?key=eq.adminTgUsername',{method:'GET',headers:SBH});
+    var d2=await r2.json();
+    if(d2&&d2.length){await sbFetchTimeout(SB+'/app_config?key=eq.adminTgUsername',{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({value:adminU})});}
+    else{await sbFetchTimeout(SB+'/app_config',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({key:'adminTgUsername',value:adminU})});}
+  }catch(e){console.warn('saveAppCfg:',e.message);}
+  CFG.botUsername=botU;
+  CFG.adminTgUsername=adminU;
+  renderCfgDisplay();
+}
 
 var allVIP=[],cart=[],isAdmin=false,isEdit=false,uploadedImg='',pendingDelId=null;
 var csMessages=[],csLastCount=0;
@@ -770,22 +758,29 @@ function buildOrderMessage(orderId, now){
 // ══ LOAD VIP ══
 async function loadVIP(){
   var g=document.getElementById('grid');
-  // Tampilkan cache dulu jika ada agar tidak kelihatan loading lama
+
+  // 1. Tampilkan cache localStorage dulu agar tidak blank
   try{
     var cached=localStorage.getItem('vip_cache');
-    if(cached){allVIP=JSON.parse(cached);renderAll();}
+    if(cached){
+      allVIP=JSON.parse(cached);
+      renderAll();
+    }
   }catch(e){}
 
+  // 2. Fetch dari Supabase (dengan timeout 8 detik)
   try{
     var fresh=await sbGet('vip_packages');
     allVIP=fresh;
     try{localStorage.setItem('vip_cache',JSON.stringify(fresh));}catch(e){}
     renderAll();
   }catch(e){
+    // Jika tidak ada cache → tampilkan pesan error + tombol retry
     if(!allVIP.length){
       g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;">'
         +'<div style="font-size:2rem;margin-bottom:10px;">⚠️</div>'
-        +'<p style="color:var(--red);font-size:.78rem;margin-bottom:12px;">Gagal memuat paket.<br/>Periksa koneksi internet.</p>'
+        +'<p style="color:var(--red);font-size:.78rem;margin-bottom:4px;">Gagal memuat paket.</p>'
+        +'<p style="color:var(--tg-hint);font-size:.72rem;margin-bottom:14px;">'+e.message+'</p>'
         +'<button onclick="loadVIP()" style="background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.3);color:var(--gold);font-family:\'Outfit\',sans-serif;font-size:.8rem;font-weight:700;padding:8px 20px;border-radius:20px;cursor:pointer;">🔄 Coba Lagi</button>'
         +'</div>';
     }
