@@ -7,674 +7,140 @@
 <title>VIP Hunter</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<style>
-:root{
-  --tg-bg:var(--tg-theme-bg-color,#0e0e14);
-  --tg-sec:var(--tg-theme-secondary-bg-color,#16161f);
-  --tg-text:var(--tg-theme-text-color,#f0eeff);
-  --tg-hint:var(--tg-theme-hint-color,#7a7a9a);
-  --gold:#f5c842;--gold2:#ffd96a;--gold3:#c9973a;
-  --red:#e63946;--green:#22c55e;--border:#1e1e2e;
-  --card-r:16px;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;}
-body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-serif;display:flex;flex-direction:column;overscroll-behavior:none;}
-.bg-grid{position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background-image:linear-gradient(rgba(245,200,66,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(245,200,66,.025) 1px,transparent 1px);
-  background-size:50px 50px;}
-.screen{display:none;flex:1;flex-direction:column;overflow:hidden;}
-.screen.active{display:flex;}
-.topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
-  padding:10px 16px;background:rgba(14,14,20,.95);backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(245,200,66,.1);z-index:50;min-height:54px;}
-.tb-logo{display:flex;align-items:center;gap:8px;}
-.tb-crown{font-size:1.3rem;filter:drop-shadow(0 0 8px rgba(245,200,66,.6));}
-.tb-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.tb-right{display:flex;align-items:center;gap:6px;}
-.tb-btn{width:36px;height:36px;border-radius:50%;background:rgba(245,200,66,.08);
-  border:1px solid rgba(245,200,66,.2);color:var(--gold);font-size:.95rem;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:all .2s;position:relative;}
-.tb-btn:active{background:var(--gold);color:#000;}
-.admin-dot{position:absolute;bottom:-2px;right:-2px;width:10px;height:10px;border-radius:50%;
-  background:var(--green);border:2px solid var(--tg-bg);display:none;}
-.admin-dot.show{display:block;}
-.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:20px;}
-.scroll::-webkit-scrollbar{width:4px;}
-.scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-.back-hd{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:12px 16px;
-  border-bottom:1px solid var(--border);background:rgba(14,14,20,.95);backdrop-filter:blur(20px);}
-.back-btn{width:34px;height:34px;border-radius:50%;background:var(--tg-sec);border:1px solid var(--border);
-  color:var(--tg-text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.back-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:#fff;}
-.back-sub{font-size:.7rem;color:var(--tg-hint);margin-left:auto;}
-.hero{padding:24px 16px 16px;text-align:center;}
-.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(245,200,66,.08);
-  border:1px solid rgba(245,200,66,.15);color:var(--gold);font-size:.65rem;font-weight:700;
-  letter-spacing:2.5px;padding:5px 14px;border-radius:100px;margin-bottom:14px;text-transform:uppercase;}
-.hero-tag::before,.hero-tag::after{content:'✦';font-size:.55rem;}
-.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.6rem,9vw,4rem);letter-spacing:3px;line-height:.92;margin-bottom:8px;}
-.hero h1 .l1{color:#fff;display:block;}
-.hero h1 .l2{background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;}
-.hero-sub{color:var(--tg-hint);font-size:.82rem;line-height:1.6;max-width:300px;margin:0 auto;}
-.info-box{margin:14px 16px 0;border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;}
-.info-box.green{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);}
-.info-box.gold{background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);}
-.info-ico{font-size:1.1rem;flex-shrink:0;}
-.info-txt{font-size:.75rem;color:var(--tg-hint);line-height:1.6;}
-.info-txt strong{color:var(--green);}
-.info-txt.gold-txt strong{color:var(--gold);}
-.sec{padding:20px 16px 0;}
-.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#fff;}
-.sec-tag-sm{font-size:.62rem;color:var(--tg-hint);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;}
-.vip-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-.vcard{background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;transition:transform .15s;display:flex;flex-direction:column;}
-.vcard:active{transform:scale(.98);}
-.vcard-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a1a10,var(--border));display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative;overflow:hidden;}
-.vcard-img img{width:100%;height:100%;object-fit:cover;}
-.vcard-tier{position:absolute;top:7px;left:7px;font-size:.52rem;font-weight:800;padding:2px 7px;border-radius:100px;letter-spacing:1px;text-transform:uppercase;}
-.tier-permanen{background:linear-gradient(135deg,#f5c842,#c9973a);color:#000;}
-.tier-bulanan{background:linear-gradient(135deg,#a8edea,#9ec7ff);color:#000;}
-.tier-gold{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;}
-.tier-silver{background:linear-gradient(135deg,#c0c0c0,#888);color:#000;}
-.tier-diamond{background:linear-gradient(135deg,#a8edea,#9ec7ff);color:#000;}
-.tier-custom{background:rgba(245,200,66,.2);border:1px solid rgba(245,200,66,.4);color:var(--gold);}
-.vcard-body{padding:10px;flex:1;display:flex;flex-direction:column;}
-.vcard-name{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:1.5px;color:#fff;line-height:1;margin-bottom:4px;}
-.vcard-desc{font-size:.68rem;color:var(--tg-hint);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.vcard-feats{display:flex;flex-direction:column;gap:3px;margin-bottom:8px;}
-.feat-row{font-size:.63rem;color:var(--tg-hint);padding-left:12px;position:relative;line-height:1.3;}
-.feat-row::before{content:'✦';color:var(--gold);font-size:.45rem;position:absolute;left:0;top:3px;}
-.vcard-foot{border-top:1px solid var(--border);padding:8px 10px;margin-top:auto;}
-.price-lbl{font-size:.5rem;color:var(--tg-hint);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
-.price-val{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
-.price-per{font-size:.55rem;color:var(--tg-hint);margin-bottom:8px;}
-.cart-add-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.22);color:var(--gold);font-weight:700;font-size:.7rem;padding:7px;border-radius:9px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
-.cart-add-btn.added{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);color:var(--green);}
-.cart-add-btn:active{transform:scale(.96);}
-.admin-acts{display:none;gap:6px;padding:0 10px 10px;}
-body.admin-mode .admin-acts{display:flex;}
-.ae-btn,.ad-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:4px;font-family:'Outfit',sans-serif;font-size:.68rem;font-weight:700;padding:6px;border-radius:8px;cursor:pointer;border:1px solid;transition:all .2s;}
-.ae-btn{background:rgba(245,200,66,.07);border-color:rgba(245,200,66,.2);color:var(--gold);}
-.ae-btn:active{background:var(--gold);color:#000;}
-.ad-btn{background:rgba(230,57,70,.07);border-color:rgba(230,57,70,.2);color:var(--red);}
-.ad-btn:active{background:var(--red);color:#fff;}
-.add-card{display:none;background:transparent;border:2px dashed var(--border);border-radius:var(--card-r);flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;padding:32px 16px;text-align:center;}
-body.admin-mode .add-card{display:flex;}
-.add-card-icon{font-size:2rem;opacity:.2;}
-.add-card-txt{color:var(--tg-hint);font-size:.82rem;font-weight:600;}
-.cart-empty{text-align:center;padding:60px 20px;}
-.cart-item{display:flex;align-items:center;gap:10px;background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:11px;margin:0 16px 10px;}
-.ci-img{width:44px;height:44px;border-radius:9px;background:var(--tg-bg);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;overflow:hidden;}
-.ci-img img{width:100%;height:100%;object-fit:cover;border-radius:9px;}
-.ci-info{flex:1;min-width:0;}
-.ci-name{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ci-price{font-size:.7rem;color:var(--gold);font-weight:600;margin-top:1px;}
-.ci-sub{font-size:.64rem;color:var(--tg-hint);}
-.ci-ctrl{display:flex;align-items:center;gap:4px;flex-shrink:0;}
-.qb{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:var(--tg-bg);color:var(--tg-text);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.qb:active{border-color:var(--gold);}
-.qv{font-weight:700;font-size:.82rem;min-width:20px;text-align:center;}
-.ci-del{width:26px;height:26px;border-radius:7px;border:1px solid rgba(230,57,70,.2);background:rgba(230,57,70,.07);color:var(--red);font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-left:2px;}
-.ci-del:active{background:var(--red);color:#fff;}
-.cart-summary{margin:4px 16px 16px;background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:14px;}
-.sum-row{display:flex;justify-content:space-between;font-size:.78rem;color:var(--tg-hint);margin-bottom:6px;}
-.sum-total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px;margin-top:4px;}
-.sum-total-lbl{font-size:.72rem;color:var(--tg-hint);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
-.sum-total-val{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.pay-box{margin:16px;background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;}
-.pay-hd{padding:14px 16px;border-bottom:1px solid var(--border);}
-.pay-hd-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#fff;}
-.pay-hd-sub{font-size:.7rem;color:var(--tg-hint);margin-top:1px;}
-.pay-body{padding:16px;}
-.order-mini{background:var(--tg-bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:14px;}
-.order-mini-row{display:flex;justify-content:space-between;font-size:.76rem;padding:3px 0;}
-.order-mini-row .lbl{color:var(--tg-hint);}
-.order-mini-row .val{color:var(--tg-text);font-weight:600;}
-.order-mini-divider{border:none;border-top:1px solid var(--border);margin:8px 0;}
-.order-mini-total{display:flex;justify-content:space-between;align-items:center;padding-top:4px;}
-.order-mini-total .lbl{font-size:.7rem;color:var(--tg-hint);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
-.order-mini-total .val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.bot-pay-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:1rem;padding:16px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(245,200,66,.35);font-family:'Outfit',sans-serif;letter-spacing:.5px;}
-.bot-pay-btn:active{transform:scale(.97);}
-.bot-pay-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-.pay-steps{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
-.pay-step{display:flex;align-items:flex-start;gap:10px;background:var(--tg-bg);border-radius:10px;padding:10px 12px;}
-.step-num{width:22px;height:22px;border-radius:50%;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);color:var(--gold);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-.step-txt{font-size:.76rem;color:var(--tg-hint);line-height:1.5;}
-.step-txt strong{color:var(--tg-text);}
-/* CS CHAT */
-.cs-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden;}
-.cs-msgs{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
-.cs-msgs::-webkit-scrollbar{width:3px;}
-.cs-msgs::-webkit-scrollbar-thumb{background:var(--border);}
-.cs-bubble-wrap{display:flex;flex-direction:column;}
-.cs-bubble-wrap.me{align-items:flex-end;}
-.cs-bubble-wrap.them{align-items:flex-start;}
-.cs-bubble{max-width:80%;padding:9px 13px;border-radius:16px;font-size:.82rem;line-height:1.5;word-break:break-word;}
-.cs-bubble-wrap.me .cs-bubble{background:rgba(245,200,66,.12);border:1px solid rgba(245,200,66,.2);color:var(--tg-text);border-bottom-right-radius:4px;}
-.cs-bubble-wrap.them .cs-bubble{background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);border-bottom-left-radius:4px;}
-.cs-time{font-size:.58rem;color:var(--tg-hint);margin-top:3px;padding:0 2px;}
-.cs-sent-tag{font-size:.6rem;color:var(--green);text-align:right;margin-top:2px;font-style:italic;}
-.cs-input-wrap{flex-shrink:0;display:flex;align-items:flex-end;gap:8px;padding:10px 16px;border-top:1px solid var(--border);background:rgba(14,14,20,.95);backdrop-filter:blur(20px);}
-.cs-input{flex:1;background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 14px;border-radius:20px;outline:none;resize:none;max-height:100px;transition:border-color .2s;line-height:1.4;}
-.cs-input:focus{border-color:rgba(245,200,66,.4);}
-.cs-send-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;color:#000;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.cs-send-btn:active{transform:scale(.92);}
-.cs-empty{text-align:center;padding:50px 20px;color:var(--tg-hint);font-size:.82rem;}
-/* GUEST FORM */
-.guest-form-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;gap:14px;}
-.guest-form-box{width:100%;max-width:360px;background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);padding:20px;}
-.guest-form-box h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:#fff;margin-bottom:4px;}
-.guest-form-box p{font-size:.75rem;color:var(--tg-hint);margin-bottom:16px;line-height:1.6;}
-.guest-input{width:100%;background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 13px;border-radius:9px;outline:none;transition:border-color .2s;margin-bottom:10px;}
-.guest-input:focus{border-color:rgba(245,200,66,.5);}
-.guest-submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
-.guest-submit-btn:active{transform:scale(.97);}
-/* SUCCESS */
-.success-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center;}
-.success-ico{font-size:4rem;margin-bottom:16px;animation:popIn .4s ease both;}
-@keyframes popIn{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
-.success-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;color:var(--green);margin-bottom:8px;}
-.success-sub{font-size:.85rem;color:var(--tg-hint);line-height:1.6;margin-bottom:24px;max-width:280px;}
-.back-home-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);font-weight:700;font-size:.9rem;padding:12px;border-radius:12px;cursor:pointer;font-family:'Outfit',sans-serif;}
-.back-home-btn:active{border-color:var(--gold);color:var(--gold);}
-.spinner-wrap{text-align:center;padding:60px 20px;}
-.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-.overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
-.overlay.open{opacity:1;pointer-events:all;}
-.sheet{background:var(--tg-sec);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;transform:translateY(40px);transition:transform .25s;position:relative;}
-.overlay.open .sheet{transform:translateY(0);}
-.sheet-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 16px;}
-.sheet-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:none;color:var(--tg-hint);font-size:.9rem;cursor:pointer;}
-.sheet h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:4px;}
-.sheet-sub{font-size:.75rem;color:var(--tg-hint);margin-bottom:16px;}
-.sfg{margin-bottom:12px;}
-.sfg label{display:block;font-size:.65rem;font-weight:700;color:var(--tg-hint);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
-.sfg input,.sfg textarea,.sfg select{width:100%;background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 12px;border-radius:9px;outline:none;transition:border-color .2s;}
-.sfg input:focus,.sfg textarea:focus{border-color:rgba(245,200,66,.5);}
-.sfg textarea{resize:none;min-height:70px;}
-.sfg .hint{font-size:.65rem;color:var(--tg-hint);margin-top:5px;line-height:1.5;background:rgba(245,200,66,.04);border:1px solid rgba(245,200,66,.1);border-radius:6px;padding:6px 8px;}
-.sfg .hint strong{color:var(--gold);}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.btn-row{display:flex;gap:8px;margin-top:16px;}
-.save-btn{flex:1;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;}
-.save-btn:disabled{opacity:.5;cursor:not-allowed;}
-.cancel-btn{background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-hint);font-weight:700;font-size:.85rem;padding:12px 18px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}
-.del-btn-big{flex:1;background:rgba(230,57,70,.1);border:1px solid rgba(230,57,70,.3);color:var(--red);font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}
-.img-upload{border:2px dashed rgba(245,200,66,.25);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;}
-.img-upload:hover{border-color:rgba(245,200,66,.5);}
-.up-ico{font-size:1.8rem;margin-bottom:4px;}
-.up-hint{font-size:.72rem;color:var(--tg-hint);}
-.img-upload img{max-width:100%;border-radius:8px;margin-top:8px;}
-.pw-wrap{position:relative;}
-.pw-wrap input{padding-right:44px;}
-.pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;}
-.login-err{color:var(--red);font-size:.78rem;margin-top:6px;display:none;}
-.login-err.show{display:block;}
-.admin-cfg-row{display:flex;align-items:center;gap:10px;background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;}
-.admin-cfg-ico{font-size:1.3rem;flex-shrink:0;}
-.admin-cfg-info{flex:1;min-width:0;}
-.admin-cfg-lbl{font-size:.62rem;color:var(--tg-hint);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
-.admin-cfg-val{font-size:.82rem;color:var(--gold);font-weight:600;word-break:break-all;}
-.at-prefix{color:var(--tg-hint);font-size:.84rem;position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;}
-.at-input-wrap{position:relative;}
-.at-input-wrap input{padding-left:24px;}
-.submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.95rem;padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(245,200,66,.3);font-family:'Outfit',sans-serif;}
-.submit-btn:active{transform:scale(.97);}
-.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e2e;border:1px solid var(--border);color:var(--tg-text);font-size:.8rem;padding:10px 18px;border-radius:100px;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:999;}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.toast.ok{border-color:rgba(34,197,94,.4);color:var(--green);}
-.toast.err{border-color:rgba(230,57,70,.4);color:var(--red);}
-.watermark{position:fixed;bottom:calc(8px + env(safe-area-inset-bottom,0px));right:10px;font-size:.58rem;color:rgba(245,200,66,.18);font-weight:700;letter-spacing:1.5px;pointer-events:none;z-index:1;}
-/* BOTTOM NAV */
-.bottom-nav{flex-shrink:0;display:flex;background:rgba(14,14,20,.97);border-top:1px solid rgba(245,200,66,.08);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));}
-.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;cursor:pointer;transition:all .2s;position:relative;}
-.bn-icon{font-size:1.2rem;transition:all .2s;}
-.bn-label{font-size:.58rem;font-weight:700;letter-spacing:.5px;color:var(--tg-hint);transition:color .2s;}
-.bn-item.active .bn-label{color:var(--gold);}
-.bn-item.active .bn-icon{filter:drop-shadow(0 0 6px rgba(245,200,66,.5));}
-.bn-badge{position:absolute;top:2px;right:calc(50% - 18px);min-width:16px;height:16px;background:var(--red);color:#fff;font-size:.55rem;font-weight:800;border-radius:50px;display:none;align-items:center;justify-content:center;padding:0 3px;border:2px solid var(--tg-bg);}
-.bn-badge.show{display:flex;}
-</style>
+<style>:root{--tg-bg:var(--tg-theme-bg-color,#0e0e14);--tg-sec:var(--tg-theme-secondary-bg-color,#16161f);--tg-text:var(--tg-theme-text-color,#f0eeff);--tg-hint:var(--tg-theme-hint-color,#7a7a9a);--gold:#f5c842;--gold2:#ffd96a;--gold3:#c9973a;--red:#e63946;--green:#22c55e;--border:#1e1e2e;--card-r:16px;}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}html,body{height:100%;overflow:hidden;}body{background:var(--tg-bg);color:var(--tg-text);font-family:'Outfit',sans-serif;display:flex;flex-direction:column;overscroll-behavior:none;}.bg-grid{position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(245,200,66,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(245,200,66,.025) 1px,transparent 1px);background-size:50px 50px;}.screen{display:none;flex:1;flex-direction:column;overflow:hidden;}.screen.active{display:flex;}.topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(14,14,20,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(245,200,66,.1);z-index:50;min-height:54px;}.tb-logo{display:flex;align-items:center;gap:8px;}.tb-crown{font-size:1.3rem;filter:drop-shadow(0 0 8px rgba(245,200,66,.6));}.tb-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}.tb-right{display:flex;align-items:center;gap:6px;}.tb-btn{width:36px;height:36px;border-radius:50%;background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.2);color:var(--gold);font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;position:relative;}.tb-btn:active{background:var(--gold);color:#000;}.admin-dot{position:absolute;bottom:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--tg-bg);display:none;}.admin-dot.show{display:block;}.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:20px;}.scroll::-webkit-scrollbar{width:4px;}.scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}.back-hd{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);background:rgba(14,14,20,.95);backdrop-filter:blur(20px);}.back-btn{width:34px;height:34px;border-radius:50%;background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}.back-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:#fff;}.back-sub{font-size:.7rem;color:var(--tg-hint);margin-left:auto;}.hero{padding:24px 16px 16px;text-align:center;}.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.15);color:var(--gold);font-size:.65rem;font-weight:700;letter-spacing:2.5px;padding:5px 14px;border-radius:100px;margin-bottom:14px;text-transform:uppercase;}.hero-tag::before,.hero-tag::after{content:'✦';font-size:.55rem;}.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.6rem,9vw,4rem);letter-spacing:3px;line-height:.92;margin-bottom:8px;}.hero h1 .l1{color:#fff;display:block;}.hero h1 .l2{background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;}.hero-sub{color:var(--tg-hint);font-size:.82rem;line-height:1.6;max-width:300px;margin:0 auto;}.info-box{margin:14px 16px 0;border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;}.info-box.green{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);}.info-box.gold{background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);}.info-ico{font-size:1.1rem;flex-shrink:0;}.info-txt{font-size:.75rem;color:var(--tg-hint);line-height:1.6;}.info-txt strong{color:var(--green);}.info-txt.gold-txt strong{color:var(--gold);}.sec{padding:20px 16px 0;}.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}.sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#fff;}.sec-tag-sm{font-size:.62rem;color:var(--tg-hint);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;}.vip-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}.vcard{background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;transition:transform .15s;display:flex;flex-direction:column;}.vcard:active{transform:scale(.98);}.vcard-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a1a10,var(--border));display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative;overflow:hidden;}.vcard-img img{width:100%;height:100%;object-fit:cover;}.vcard-tier{position:absolute;top:7px;left:7px;font-size:.52rem;font-weight:800;padding:2px 7px;border-radius:100px;letter-spacing:1px;text-transform:uppercase;}.tier-permanen{background:linear-gradient(135deg,#f5c842,#c9973a);color:#000;}.tier-bulanan{background:linear-gradient(135deg,#a8edea,#9ec7ff);color:#000;}.tier-gold{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;}.tier-silver{background:linear-gradient(135deg,#c0c0c0,#888);color:#000;}.tier-diamond{background:linear-gradient(135deg,#a8edea,#9ec7ff);color:#000;}.tier-custom{background:rgba(245,200,66,.2);border:1px solid rgba(245,200,66,.4);color:var(--gold);}.vcard-body{padding:10px;flex:1;display:flex;flex-direction:column;}.vcard-name{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:1.5px;color:#fff;line-height:1;margin-bottom:4px;}.vcard-desc{font-size:.68rem;color:var(--tg-hint);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}.vcard-feats{display:flex;flex-direction:column;gap:3px;margin-bottom:8px;}.feat-row{font-size:.63rem;color:var(--tg-hint);padding-left:12px;position:relative;line-height:1.3;}.feat-row::before{content:'✦';color:var(--gold);font-size:.45rem;position:absolute;left:0;top:3px;}.vcard-foot{border-top:1px solid var(--border);padding:8px 10px;margin-top:auto;}.price-lbl{font-size:.5rem;color:var(--tg-hint);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}.price-val{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}.price-per{font-size:.55rem;color:var(--tg-hint);margin-bottom:8px;}.cart-add-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.22);color:var(--gold);font-weight:700;font-size:.7rem;padding:7px;border-radius:9px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}.cart-add-btn.added{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);color:var(--green);}.cart-add-btn:active{transform:scale(.96);}.admin-acts{display:none;gap:6px;padding:0 10px 10px;}body.admin-mode .admin-acts{display:flex;}.ae-btn,.ad-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:4px;font-family:'Outfit',sans-serif;font-size:.68rem;font-weight:700;padding:6px;border-radius:8px;cursor:pointer;border:1px solid;transition:all .2s;}.ae-btn{background:rgba(245,200,66,.07);border-color:rgba(245,200,66,.2);color:var(--gold);}.ae-btn:active{background:var(--gold);color:#000;}.ad-btn{background:rgba(230,57,70,.07);border-color:rgba(230,57,70,.2);color:var(--red);}.ad-btn:active{background:var(--red);color:#fff;}.add-card{display:none;background:transparent;border:2px dashed var(--border);border-radius:var(--card-r);flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;padding:32px 16px;text-align:center;}body.admin-mode .add-card{display:flex;}.add-card-icon{font-size:2rem;opacity:.2;}.add-card-txt{color:var(--tg-hint);font-size:.82rem;font-weight:600;}.cart-empty{text-align:center;padding:60px 20px;}.cart-item{display:flex;align-items:center;gap:10px;background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:11px;margin:0 16px 10px;}.ci-img{width:44px;height:44px;border-radius:9px;background:var(--tg-bg);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;overflow:hidden;}.ci-img img{width:100%;height:100%;object-fit:cover;border-radius:9px;}.ci-info{flex:1;min-width:0;}.ci-name{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.ci-price{font-size:.7rem;color:var(--gold);font-weight:600;margin-top:1px;}.ci-sub{font-size:.64rem;color:var(--tg-hint);}.ci-ctrl{display:flex;align-items:center;gap:4px;flex-shrink:0;}.qb{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:var(--tg-bg);color:var(--tg-text);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}.qb:active{border-color:var(--gold);}.qv{font-weight:700;font-size:.82rem;min-width:20px;text-align:center;}.ci-del{width:26px;height:26px;border-radius:7px;border:1px solid rgba(230,57,70,.2);background:rgba(230,57,70,.07);color:var(--red);font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-left:2px;}.ci-del:active{background:var(--red);color:#fff;}.cart-summary{margin:4px 16px 16px;background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:14px;}.sum-row{display:flex;justify-content:space-between;font-size:.78rem;color:var(--tg-hint);margin-bottom:6px;}.sum-total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px;margin-top:4px;}.sum-total-lbl{font-size:.72rem;color:var(--tg-hint);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}.sum-total-val{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}.pay-box{margin:16px;background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;}.pay-hd{padding:14px 16px;border-bottom:1px solid var(--border);}.pay-hd-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#fff;}.pay-hd-sub{font-size:.7rem;color:var(--tg-hint);margin-top:1px;}.pay-body{padding:16px;}.order-mini{background:var(--tg-bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:14px;}.order-mini-row{display:flex;justify-content:space-between;font-size:.76rem;padding:3px 0;}.order-mini-row .lbl{color:var(--tg-hint);}.order-mini-row .val{color:var(--tg-text);font-weight:600;}.order-mini-divider{border:none;border-top:1px solid var(--border);margin:8px 0;}.order-mini-total{display:flex;justify-content:space-between;align-items:center;padding-top:4px;}.order-mini-total .lbl{font-size:.7rem;color:var(--tg-hint);font-weight:700;text-transform:uppercase;letter-spacing:1px;}.order-mini-total .val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}.bot-pay-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:1rem;padding:16px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(245,200,66,.35);font-family:'Outfit',sans-serif;letter-spacing:.5px;}.bot-pay-btn:active{transform:scale(.97);}.bot-pay-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}.pay-steps{display:flex;flex-direction:column;gap:8px;margin-top:14px;}.pay-step{display:flex;align-items:flex-start;gap:10px;background:var(--tg-bg);border-radius:10px;padding:10px 12px;}.step-num{width:22px;height:22px;border-radius:50%;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);color:var(--gold);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}.step-txt{font-size:.76rem;color:var(--tg-hint);line-height:1.5;}.step-txt strong{color:var(--tg-text);}.cs-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden;}.cs-msgs{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;}.cs-msgs::-webkit-scrollbar{width:3px;}.cs-msgs::-webkit-scrollbar-thumb{background:var(--border);}.cs-bubble-wrap{display:flex;flex-direction:column;}.cs-bubble-wrap.me{align-items:flex-end;}.cs-bubble-wrap.them{align-items:flex-start;}.cs-bubble{max-width:80%;padding:9px 13px;border-radius:16px;font-size:.82rem;line-height:1.5;word-break:break-word;}.cs-bubble-wrap.me .cs-bubble{background:rgba(245,200,66,.12);border:1px solid rgba(245,200,66,.2);color:var(--tg-text);border-bottom-right-radius:4px;}.cs-bubble-wrap.them .cs-bubble{background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);border-bottom-left-radius:4px;}.cs-time{font-size:.58rem;color:var(--tg-hint);margin-top:3px;padding:0 2px;}.cs-sent-tag{font-size:.6rem;color:var(--green);text-align:right;margin-top:2px;font-style:italic;}.cs-input-wrap{flex-shrink:0;display:flex;align-items:flex-end;gap:8px;padding:10px 16px;border-top:1px solid var(--border);background:rgba(14,14,20,.95);backdrop-filter:blur(20px);}.cs-input{flex:1;background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 14px;border-radius:20px;outline:none;resize:none;max-height:100px;transition:border-color .2s;line-height:1.4;}.cs-input:focus{border-color:rgba(245,200,66,.4);}.cs-send-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;color:#000;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}.cs-send-btn:active{transform:scale(.92);}.cs-empty{text-align:center;padding:50px 20px;color:var(--tg-hint);font-size:.82rem;}.guest-form-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;gap:14px;}.guest-form-box{width:100%;max-width:360px;background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);padding:20px;}.guest-form-box h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:#fff;margin-bottom:4px;}.guest-form-box p{font-size:.75rem;color:var(--tg-hint);margin-bottom:16px;line-height:1.6;}.guest-input{width:100%;background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 13px;border-radius:9px;outline:none;transition:border-color .2s;margin-bottom:10px;}.guest-input:focus{border-color:rgba(245,200,66,.5);}.guest-submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}.guest-submit-btn:active{transform:scale(.97);}.success-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center;}.success-ico{font-size:4rem;margin-bottom:16px;animation:popIn .4s ease both;}@keyframes popIn{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}.success-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;color:var(--green);margin-bottom:8px;}.success-sub{font-size:.85rem;color:var(--tg-hint);line-height:1.6;margin-bottom:24px;max-width:280px;}.back-home-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-text);font-weight:700;font-size:.9rem;padding:12px;border-radius:12px;cursor:pointer;font-family:'Outfit',sans-serif;}.back-home-btn:active{border-color:var(--gold);color:var(--gold);}.spinner-wrap{text-align:center;padding:60px 20px;}.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px;}@keyframes spin{to{transform:rotate(360deg);}}@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}.overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}.overlay.open{opacity:1;pointer-events:all;}.sheet{background:var(--tg-sec);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;transform:translateY(40px);transition:transform .25s;position:relative;}.overlay.open .sheet{transform:translateY(0);}.sheet-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 16px;}.sheet-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:none;color:var(--tg-hint);font-size:.9rem;cursor:pointer;}.sheet h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:4px;}.sheet-sub{font-size:.75rem;color:var(--tg-hint);margin-bottom:16px;}.sfg{margin-bottom:12px;}.sfg label{display:block;font-size:.65rem;font-weight:700;color:var(--tg-hint);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}.sfg input,.sfg textarea,.sfg select{width:100%;background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-text);font-family:'Outfit',sans-serif;font-size:.84rem;padding:10px 12px;border-radius:9px;outline:none;transition:border-color .2s;}.sfg input:focus,.sfg textarea:focus{border-color:rgba(245,200,66,.5);}.sfg textarea{resize:none;min-height:70px;}.sfg .hint{font-size:.65rem;color:var(--tg-hint);margin-top:5px;line-height:1.5;background:rgba(245,200,66,.04);border:1px solid rgba(245,200,66,.1);border-radius:6px;padding:6px 8px;}.sfg .hint strong{color:var(--gold);}.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}.btn-row{display:flex;gap:8px;margin-top:16px;}.save-btn{flex:1;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;}.save-btn:disabled{opacity:.5;cursor:not-allowed;}.cancel-btn{background:var(--tg-bg);border:1px solid var(--border);color:var(--tg-hint);font-weight:700;font-size:.85rem;padding:12px 18px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}.del-btn-big{flex:1;background:rgba(230,57,70,.1);border:1px solid rgba(230,57,70,.3);color:var(--red);font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;}.img-upload{border:2px dashed rgba(245,200,66,.25);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;}.img-upload:hover{border-color:rgba(245,200,66,.5);}.up-ico{font-size:1.8rem;margin-bottom:4px;}.up-hint{font-size:.72rem;color:var(--tg-hint);}.img-upload img{max-width:100%;border-radius:8px;margin-top:8px;}.pw-wrap{position:relative;}.pw-wrap input{padding-right:44px;}.pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;}.login-err{color:var(--red);font-size:.78rem;margin-top:6px;display:none;}.login-err.show{display:block;}.admin-cfg-row{display:flex;align-items:center;gap:10px;background:var(--tg-sec);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;}.admin-cfg-ico{font-size:1.3rem;flex-shrink:0;}.admin-cfg-info{flex:1;min-width:0;}.admin-cfg-lbl{font-size:.62rem;color:var(--tg-hint);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}.admin-cfg-val{font-size:.82rem;color:var(--gold);font-weight:600;word-break:break-all;}.at-prefix{color:var(--tg-hint);font-size:.84rem;position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;}.at-input-wrap{position:relative;}.at-input-wrap input{padding-left:24px;}.submit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:800;font-size:.95rem;padding:14px;border-radius:12px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(245,200,66,.3);font-family:'Outfit',sans-serif;}.submit-btn:active{transform:scale(.97);}.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e2e;border:1px solid var(--border);color:var(--tg-text);font-size:.8rem;padding:10px 18px;border-radius:100px;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:999;}.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}.toast.ok{border-color:rgba(34,197,94,.4);color:var(--green);}.toast.err{border-color:rgba(230,57,70,.4);color:var(--red);}.watermark{position:fixed;bottom:calc(8px + env(safe-area-inset-bottom,0px));right:10px;font-size:.58rem;color:rgba(245,200,66,.18);font-weight:700;letter-spacing:1.5px;pointer-events:none;z-index:1;}
+/* BAGSOUND BUTTON */
+.bg-music-btn{position:fixed;bottom:calc(68px + env(safe-area-inset-bottom,0px));right:12px;width:32px;height:32px;border-radius:50%;background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);color:var(--gold);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:100;transition:all .2s;box-shadow:0 2px 10px rgba(0,0,0,.4);}.bg-music-btn:active{background:var(--gold);color:#000;}.bg-music-btn.muted{opacity:.35;}
+.bottom-nav{flex-shrink:0;display:flex;background:rgba(14,14,20,.97);border-top:1px solid rgba(245,200,66,.08);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));}.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;cursor:pointer;transition:all .2s;position:relative;}.bn-icon{font-size:1.2rem;transition:all .2s;}.bn-label{font-size:.58rem;font-weight:700;letter-spacing:.5px;color:var(--tg-hint);transition:color .2s;}.bn-item.active .bn-label{color:var(--gold);}.bn-item.active .bn-icon{filter:drop-shadow(0 0 6px rgba(245,200,66,.5));}.bn-badge{position:absolute;top:2px;right:calc(50% - 18px);min-width:16px;height:16px;background:var(--red);color:#fff;font-size:.55rem;font-weight:800;border-radius:50px;display:none;align-items:center;justify-content:center;padding:0 3px;border:2px solid var(--tg-bg);}.bn-badge.show{display:flex;}</style>
 </head>
 <body>
 <div class="bg-grid"></div>
-
-<!-- ══ SCREEN 1: SHOP ══ -->
 <div class="screen active" id="s-shop">
-  <div class="topbar">
-    <div class="tb-logo">
-      <span class="tb-crown">👑</span>
-      <span class="tb-name">VIP HUNTER</span>
-    </div>
-    <div class="tb-right">
-      <button class="tb-btn" id="keyBtn">🔑<span class="admin-dot" id="adminDot"></span></button>
-    </div>
-  </div>
+  <div class="topbar"><div class="tb-logo"><span class="tb-crown">👑</span><span class="tb-name">VIP HUNTER</span></div><div class="tb-right"><button class="tb-btn" id="keyBtn">🔑<span class="admin-dot" id="adminDot"></span></button></div></div>
   <div class="scroll">
-    <div class="hero">
-      <div class="hero-tag">Layanan VIP Eksklusif</div>
-      <h1><span class="l1">AKSES</span><span class="l2">VIP HUNTER</span></h1>
-      <p class="hero-sub">Pilih paket VIP anda!</p>
-    </div>
-    <div class="info-box green">
-      <div class="info-ico">🤖</div>
-      <div class="info-txt"><strong>Cara Order:</strong> Pilih paket → Keranjang → Bayar → Hubungi admin via Telegram → <strong>Konfirmasi & Link Join dikirim!</strong></div>
-    </div>
-    <div class="sec">
-      <div class="sec-hd">
-        <span class="sec-title">PAKET VIP</span>
-        <span class="sec-tag-sm" id="tProduk">0 paket</span>
-      </div>
-      <div class="vip-list" id="grid">
-        <div class="spinner-wrap" style="grid-column:1/-1;">
-          <div class="spinner"></div>
-          <p style="color:var(--tg-hint);font-size:.8rem;">Memuat paket...</p>
-        </div>
-      </div>
-    </div>
+    <div class="hero"><div class="hero-tag">Layanan VIP Eksklusif</div><h1><span class="l1">AKSES</span><span class="l2">VIP HUNTER</span></h1><p class="hero-sub">Pilih paket VIP anda!</p></div>
+    <div class="info-box green"><div class="info-ico">🤖</div><div class="info-txt"><strong>Cara Order:</strong> Pilih paket → Keranjang → Bayar → Hubungi admin via Telegram → <strong>Konfirmasi & Link Join dikirim!</strong></div></div>
+    <div class="sec"><div class="sec-hd"><span class="sec-title">PAKET VIP</span><span class="sec-tag-sm" id="tProduk">0 paket</span></div><div class="vip-list" id="grid"><div class="spinner-wrap" style="grid-column:1/-1;"><div class="spinner"></div><p style="color:var(--tg-hint);font-size:.8rem;">Memuat paket...</p></div></div></div>
     <div style="height:16px;"></div>
   </div>
 </div>
-
-<!-- ══ SCREEN 2: KERANJANG ══ -->
 <div class="screen" id="s-cart">
-  <div class="back-hd">
-    <span class="back-title">KERANJANG</span>
-    <span class="back-sub" id="cartCount">0 item</span>
-  </div>
+  <div class="back-hd"><span class="back-title">KERANJANG</span><span class="back-sub" id="cartCount">0 item</span></div>
   <div class="scroll">
     <div style="height:12px;"></div>
-    <div id="cartEmpty" class="cart-empty" style="display:none;">
-      <div style="font-size:3rem;margin-bottom:12px;">🛒</div>
-      <p style="color:var(--tg-hint);font-size:.88rem;">Keranjang kosong.<br/>Tambahkan paket VIP dulu!</p>
-    </div>
+    <div id="cartEmpty" class="cart-empty" style="display:none;"><div style="font-size:3rem;margin-bottom:12px;">🛒</div><p style="color:var(--tg-hint);font-size:.88rem;">Keranjang kosong.<br/>Tambahkan paket VIP dulu!</p></div>
     <div id="cartItems"></div>
-    <div id="cartSummary" class="cart-summary" style="display:none;">
-      <div id="cartSumItems"></div>
-      <div class="sum-total">
-        <span class="sum-total-lbl">Total</span>
-        <span class="sum-total-val" id="cartTotalVal">—</span>
-      </div>
-    </div>
-    <div id="cartFootBtns" style="display:none;padding:0 16px 16px;flex-direction:column;gap:8px;">
-      <button class="submit-btn" onclick="goTo('s-payment')" style="margin-bottom:0;">💳 Lanjut ke Pembayaran</button>
-      <button onclick="clearCart()" style="background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-hint);font-family:'Outfit',sans-serif;font-weight:700;font-size:.82rem;padding:10px;border-radius:10px;cursor:pointer;">🗑️ Kosongkan Keranjang</button>
-    </div>
+    <div id="cartSummary" class="cart-summary" style="display:none;"><div id="cartSumItems"></div><div class="sum-total"><span class="sum-total-lbl">Total</span><span class="sum-total-val" id="cartTotalVal">—</span></div></div>
+    <div id="cartFootBtns" style="display:none;padding:0 16px 16px;flex-direction:column;gap:8px;"><button class="submit-btn" onclick="goTo('s-payment')" style="margin-bottom:0;">💳 Lanjut ke Pembayaran</button><button onclick="clearCart()" style="background:var(--tg-sec);border:1px solid var(--border);color:var(--tg-hint);font-family:'Outfit',sans-serif;font-weight:700;font-size:.82rem;padding:10px;border-radius:10px;cursor:pointer;">🗑️ Kosongkan Keranjang</button></div>
     <div style="height:16px;"></div>
   </div>
 </div>
-
-<!-- ══ SCREEN 3: PEMBAYARAN ══ -->
 <div class="screen" id="s-payment">
-  <div class="back-hd">
-    <button class="back-btn" onclick="goTo('s-cart')">←</button>
-    <span class="back-title">PEMBAYARAN</span>
-  </div>
+  <div class="back-hd"><button class="back-btn" onclick="goTo('s-cart')">←</button><span class="back-title">PEMBAYARAN</span></div>
   <div class="scroll">
-    <div class="pay-box">
-      <div class="pay-hd">
-        <div class="pay-hd-title">📦 RINGKASAN ORDER</div>
-        <div class="pay-hd-sub">Pastikan semua pesanan sudah benar</div>
-      </div>
-      <div class="pay-body">
-        <div class="order-mini" id="payOrderMini"></div>
-        <button class="bot-pay-btn" id="botPayBtn">📲 Konfirmasi & Hubungi Admin</button>
-        <div class="pay-steps">
-          <div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik tombol di atas — pesanan tersimpan & Telegram admin terbuka</div></div>
-          <div class="pay-step"><div class="step-num">2</div><div class="step-txt"><strong>Detail order sudah terisi otomatis</strong> di chat admin — tinggal kirim!</div></div>
-          <div class="pay-step"><div class="step-num">3</div><div class="step-txt">Admin memproses pesanan & mengirim <strong>QRIS + link join</strong> ke kamu 🎉</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="info-box gold" style="margin:12px 16px;">
-      <div class="info-ico">⚠️</div>
-      <div class="info-txt gold-txt"><strong>Pastikan sudah /start bot VIP Hunter!</strong> Agar konfirmasi & link join bisa diterima di Telegram kamu.</div>
-    </div>
+    <div class="pay-box"><div class="pay-hd"><div class="pay-hd-title">📦 RINGKASAN ORDER</div><div class="pay-hd-sub">Pastikan semua pesanan sudah benar</div></div><div class="pay-body"><div class="order-mini" id="payOrderMini"></div><button class="bot-pay-btn" id="botPayBtn">📲 Konfirmasi & Hubungi Admin</button><div class="pay-steps"><div class="pay-step"><div class="step-num">1</div><div class="step-txt">Klik tombol di atas — pesanan tersimpan & Telegram admin terbuka</div></div><div class="pay-step"><div class="step-num">2</div><div class="step-txt"><strong>Detail order sudah terisi otomatis</strong> di chat admin — tinggal kirim!</div></div><div class="pay-step"><div class="step-num">3</div><div class="step-txt">Admin memproses pesanan & mengirim <strong>QRIS + link join</strong> ke kamu 🎉</div></div></div></div></div>
+    <div class="info-box gold" style="margin:12px 16px;"><div class="info-ico">⚠️</div><div class="info-txt gold-txt"><strong>Pastikan sudah /start bot VIP Hunter!</strong> Agar konfirmasi & link join bisa diterima di Telegram kamu.</div></div>
     <div style="height:16px;"></div>
   </div>
 </div>
-
-<!-- ══ SCREEN 4: SUKSES ══ -->
 <div class="screen" id="s-success">
-  <div class="scroll">
-    <div class="success-wrap">
-      <div class="success-ico">✅</div>
-      <div class="success-title">PESANAN MASUK!</div>
-      <p class="success-sub">Pesanan berhasil disimpan!<br/><br/>Chat admin sudah terbuka dengan detail pesananmu. Kirim pesan & tunggu konfirmasi dari admin! 🎉</p>
-      <div style="background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);padding:16px;width:100%;margin-bottom:16px;">
-        <div style="font-size:.72rem;color:var(--tg-hint);line-height:1.9;font-family:'Courier New',monospace;white-space:pre-wrap;" id="successDetail"></div>
-      </div>
-      <button class="bot-pay-btn" onclick="openAdmin()" style="margin-bottom:12px;">📲 Buka Chat Admin</button>
-      <button class="back-home-btn" onclick="goHome()">🏠 Kembali ke Beranda</button>
-    </div>
-  </div>
+  <div class="scroll"><div class="success-wrap"><div class="success-ico">✅</div><div class="success-title">PESANAN MASUK!</div><p class="success-sub">Pesanan berhasil disimpan!<br/><br/>Chat admin sudah terbuka dengan detail pesananmu. Kirim pesan & tunggu konfirmasi dari admin! 🎉</p><div style="background:var(--tg-sec);border:1px solid var(--border);border-radius:var(--card-r);padding:16px;width:100%;margin-bottom:16px;"><div style="font-size:.72rem;color:var(--tg-hint);line-height:1.9;font-family:'Courier New',monospace;white-space:pre-wrap;" id="successDetail"></div></div><button class="bot-pay-btn" onclick="openAdmin()" style="margin-bottom:12px;">📲 Buka Chat Admin</button><button class="back-home-btn" onclick="goHome()">🏠 Kembali ke Beranda</button></div></div>
 </div>
-
-<!-- ══ SCREEN 5: CS CHAT ══ -->
 <div class="screen" id="s-cs">
-  <div class="back-hd">
-    <span class="back-title">💬 HUBUNGI ADMIN</span>
-    <span class="back-sub" style="color:var(--green);font-weight:600;">● Siap membantu</span>
-  </div>
+  <div class="back-hd"><span class="back-title">💬 HUBUNGI ADMIN</span><span class="back-sub" style="color:var(--green);font-weight:600;">● Siap membantu</span></div>
   <div class="cs-wrap">
-    <!-- Banner guest (buka dari browser) -->
-    <div id="guestBanner" style="display:none;background:rgba(245,200,66,.07);border-bottom:1px solid rgba(245,200,66,.15);padding:8px 16px;font-size:.72rem;color:var(--gold);">
-      🌐 Mode Web — pesan dikirim via bot Telegram
-    </div>
-    <!-- Form identitas guest -->
-    <div id="guestFormWrap" class="guest-form-wrap" style="display:none;">
-      <div class="guest-form-box">
-        <h3>👤 SIAPA KAMU?</h3>
-        <p>Sebelum chat, isi data berikut agar admin bisa membalas kamu di Telegram.</p>
-        <input type="text" id="guestName" class="guest-input" placeholder="Nama kamu"/>
-        <input type="text" id="guestContact" class="guest-input" placeholder="Username Telegram (tanpa @)"/>
-        <button class="guest-submit-btn" id="guestStartBtn">💬 Mulai Chat</button>
-      </div>
-    </div>
-    <!-- Area pesan -->
-    <div class="cs-msgs" id="csMsgs" style="display:none;">
-      <div class="cs-empty" id="csEmpty">
-        <div style="font-size:2.5rem;margin-bottom:10px;">💬</div>
-        <p>Belum ada pesan.<br/>Kirim pertanyaan ke admin!</p>
-      </div>
-    </div>
-    <!-- Input chat -->
-    <div class="cs-input-wrap" style="display:none;">
-      <textarea class="cs-input" id="csInput" placeholder="Tulis pesan..." rows="1"></textarea>
-      <button class="cs-send-btn" id="csSendBtn">➤</button>
-    </div>
+    <div id="guestBanner" style="display:none;background:rgba(245,200,66,.07);border-bottom:1px solid rgba(245,200,66,.15);padding:8px 16px;font-size:.72rem;color:var(--gold);">🌐 Mode Web — pesan dikirim via bot Telegram</div>
+    <div id="guestFormWrap" class="guest-form-wrap" style="display:none;"><div class="guest-form-box"><h3>👤 SIAPA KAMU?</h3><p>Sebelum chat, isi data berikut agar admin bisa membalas kamu di Telegram.</p><input type="text" id="guestName" class="guest-input" placeholder="Nama kamu"/><input type="text" id="guestContact" class="guest-input" placeholder="Username Telegram (tanpa @)"/><button class="guest-submit-btn" id="guestStartBtn">💬 Mulai Chat</button></div></div>
+    <div class="cs-msgs" id="csMsgs" style="display:none;"><div class="cs-empty" id="csEmpty"><div style="font-size:2.5rem;margin-bottom:10px;">💬</div><p>Belum ada pesan.<br/>Kirim pertanyaan ke admin!</p></div></div>
+    <div class="cs-input-wrap" style="display:none;"><textarea class="cs-input" id="csInput" placeholder="Tulis pesan..." rows="1"></textarea><button class="cs-send-btn" id="csSendBtn">➤</button></div>
   </div>
 </div>
-
-<!-- ══ SCREEN 6: SETTINGS ══ -->
 <div class="screen" id="s-settings">
-  <div class="back-hd">
-    <span class="back-title">⚙️ PENGATURAN</span>
-    <span class="back-sub" id="settingsAdminBadge" style="color:var(--red);display:none;">🔒 Perlu Login Admin</span>
-  </div>
+  <div class="back-hd"><span class="back-title">⚙️ PENGATURAN</span><span class="back-sub" id="settingsAdminBadge" style="color:var(--red);display:none;">🔒 Perlu Login Admin</span></div>
   <div class="scroll">
     <div class="sec" style="padding-top:16px;">
-
-      <!-- Info username aktif -->
       <div class="sec-hd"><span class="sec-title">📌 TUJUAN CHAT</span></div>
-      <div style="font-size:.73rem;color:var(--tg-hint);margin-bottom:12px;line-height:1.6;">
-        Username Telegram admin / bot yang akan <strong style="color:var(--gold)">menerima pesan CS</strong> dan <strong style="color:var(--gold)">checkout produk</strong> secara default (jika produk tidak punya admin tersendiri).
-      </div>
-      <div class="admin-cfg-row" id="cfgCurrentBot">
-        <div class="admin-cfg-ico">🤖</div>
-        <div class="admin-cfg-info">
-          <div class="admin-cfg-lbl">Bot / Admin Aktif</div>
-          <div class="admin-cfg-val" id="cfgBotVal">@loading...</div>
-        </div>
-      </div>
-      <div class="admin-cfg-row" id="cfgCurrentAdmin" style="margin-bottom:16px;">
-        <div class="admin-cfg-ico">👤</div>
-        <div class="admin-cfg-info">
-          <div class="admin-cfg-lbl">Admin TG Username</div>
-          <div class="admin-cfg-val" id="cfgAdminVal">@loading...</div>
-        </div>
-      </div>
-
-      <!-- Form ubah (hanya admin) -->
+      <div style="font-size:.73rem;color:var(--tg-hint);margin-bottom:12px;line-height:1.6;">Username Telegram admin / bot yang akan <strong style="color:var(--gold)">menerima pesan CS</strong> dan <strong style="color:var(--gold)">checkout produk</strong> secara default.</div>
+      <div class="admin-cfg-row"><div class="admin-cfg-ico">🤖</div><div class="admin-cfg-info"><div class="admin-cfg-lbl">Bot / Admin Aktif</div><div class="admin-cfg-val" id="cfgBotVal">@loading...</div></div></div>
+      <div class="admin-cfg-row" style="margin-bottom:16px;"><div class="admin-cfg-ico">👤</div><div class="admin-cfg-info"><div class="admin-cfg-lbl">Admin TG Username</div><div class="admin-cfg-val" id="cfgAdminVal">@loading...</div></div></div>
       <div id="settingsForm" style="display:none;">
         <div class="sec-hd" style="margin-top:8px;"><span class="sec-title">✏️ UBAH USERNAME</span></div>
-        <div class="sfg">
-          <label>Username Bot CS / Asisten</label>
-          <div class="hint" style="margin-bottom:8px;">Bot yang menjawab chat dari halaman <strong>💬 Admin</strong>.</div>
-          <div class="at-input-wrap">
-            <span class="at-prefix">@</span>
-            <input type="text" id="setCfgBot" placeholder="namabot"/>
-          </div>
-        </div>
-        <div class="sfg">
-          <label>Username Admin TG (untuk checkout)</label>
-          <div class="hint" style="margin-bottom:8px;">Admin yang menerima detail order saat pelanggan checkout (bisa sama dengan bot).</div>
-          <div class="at-input-wrap">
-            <span class="at-prefix">@</span>
-            <input type="text" id="setCfgAdmin" placeholder="namaadmin"/>
-          </div>
-        </div>
+        <div class="sfg"><label>Username Bot CS / Asisten</label><div class="hint" style="margin-bottom:8px;">Bot yang menjawab chat dari halaman <strong>💬 Admin</strong>.</div><div class="at-input-wrap"><span class="at-prefix">@</span><input type="text" id="setCfgBot" placeholder="namabot"/></div></div>
+        <div class="sfg"><label>Username Admin TG (untuk checkout)</label><div class="hint" style="margin-bottom:8px;">Admin yang menerima detail order saat pelanggan checkout.</div><div class="at-input-wrap"><span class="at-prefix">@</span><input type="text" id="setCfgAdmin" placeholder="namaadmin"/></div></div>
         <button class="save-btn" id="saveCfgBtn" style="width:100%;margin-top:4px;">💾 Simpan Pengaturan</button>
       </div>
+      <div id="settingsLoginHint" style="text-align:center;padding:16px 0;"><p style="font-size:.78rem;color:var(--tg-hint);margin-bottom:12px;">Login sebagai admin untuk mengubah pengaturan ini.</p><button class="save-btn" style="width:auto;padding:10px 28px;" onclick="openModal('loginModal')">🔑 Login Admin</button></div>
 
-      <!-- Tombol login jika belum admin -->
-      <div id="settingsLoginHint" style="text-align:center;padding:16px 0;">
-        <p style="font-size:.78rem;color:var(--tg-hint);margin-bottom:12px;">Login sebagai admin untuk mengubah pengaturan ini.</p>
-        <button class="save-btn" style="width:auto;padding:10px 28px;" onclick="openModal('loginModal')">🔑 Login Admin</button>
+      <!-- BGM Setting -->
+      <div class="sec-hd" style="margin-top:16px;"><span class="sec-title">🎵 BACKGROUND MUSIC</span></div>
+      <div class="admin-cfg-row" style="cursor:pointer;" onclick="bgToggleUI()">
+        <div class="admin-cfg-ico">🎵</div>
+        <div class="admin-cfg-info"><div class="admin-cfg-lbl">Ambient Lo-Fi BGM</div><div class="admin-cfg-val" id="bgSettingStatus">Memuat...</div></div>
+        <div style="font-size:1.3rem;" id="bgSettingToggle">🔊</div>
       </div>
-
+      <div style="font-size:.7rem;color:var(--tg-hint);line-height:1.6;margin-bottom:8px;">Music ambient otomatis berbunyi saat kamu membuka halaman. Volume pelan sebagai suasana background.</div>
     </div>
     <div style="height:16px;"></div>
   </div>
 </div>
 
-<!-- ══ BOTTOM NAV ══ -->
 <div class="bottom-nav" id="bottomNav">
-  <div class="bn-item active" id="nav-shop" onclick="navTo('s-shop','nav-shop')">
-    <span class="bn-icon">👑</span>
-    <span class="bn-label">PAKET</span>
-  </div>
-  <div class="bn-item" id="nav-cart" onclick="navTo('s-cart','nav-cart')">
-    <span class="bn-icon">🛒</span>
-    <span class="bn-label">KERANJANG</span>
-    <span class="bn-badge" id="cartBadge">0</span>
-  </div>
-  <div class="bn-item" id="nav-cs" onclick="navTo('s-cs','nav-cs');clearCsBadge();">
-    <span class="bn-icon">💬</span>
-    <span class="bn-label">ADMIN</span>
-    <span class="bn-badge" id="csBadge"></span>
-  </div>
-  <div class="bn-item" id="nav-settings" onclick="navTo('s-settings','nav-settings')">
-    <span class="bn-icon">⚙️</span>
-    <span class="bn-label">SETTING</span>
-  </div>
+  <div class="bn-item active" id="nav-shop" onclick="navTo('s-shop','nav-shop')"><span class="bn-icon">👑</span><span class="bn-label">PAKET</span></div>
+  <div class="bn-item" id="nav-cart" onclick="navTo('s-cart','nav-cart')"><span class="bn-icon">🛒</span><span class="bn-label">KERANJANG</span><span class="bn-badge" id="cartBadge">0</span></div>
+  <div class="bn-item" id="nav-cs" onclick="navTo('s-cs','nav-cs');clearCsBadge();"><span class="bn-icon">💬</span><span class="bn-label">ADMIN</span><span class="bn-badge" id="csBadge"></span></div>
+  <div class="bn-item" id="nav-settings" onclick="navTo('s-settings','nav-settings')"><span class="bn-icon">⚙️</span><span class="bn-label">SETTING</span></div>
 </div>
 
-<!-- MODAL: LOGIN ADMIN -->
-<div class="overlay" id="loginModal">
-  <div class="sheet" style="max-width:400px;">
-    <div class="sheet-handle"></div>
-    <button class="sheet-close" onclick="closeModal('loginModal')">✕</button>
-    <div style="text-align:center;font-size:2.2rem;margin-bottom:10px;">🔐</div>
-    <h2 style="text-align:center;">ADMIN LOGIN</h2>
-    <p class="sheet-sub" style="text-align:center;">Masukkan password admin</p>
-    <div class="sfg">
-      <label>Password</label>
-      <div class="pw-wrap">
-        <input type="password" id="pwInput" placeholder="••••••••"/>
-        <button class="pw-eye" id="pwEye">👁️</button>
-      </div>
-    </div>
-    <div class="login-err" id="loginErr">❌ Password salah!</div>
-    <button class="save-btn" id="loginBtn" style="width:100%;margin-top:10px;">🔓 Masuk Admin</button>
-  </div>
-</div>
+<!-- Floating BGM toggle button -->
+<button class="bg-music-btn" id="bgFloatBtn" onclick="bgToggleUI()" title="Toggle BGM">🎵</button>
 
-<!-- MODAL: PRODUK -->
-<div class="overlay" id="prodModal">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <button class="sheet-close" onclick="closeModal('prodModal')">✕</button>
-    <h2 id="modalTitle">TAMBAH PAKET</h2>
-    <p class="sheet-sub" id="modalSub"></p>
-    <input type="hidden" id="fId"/>
-    <div class="sfg">
-      <label>Gambar / Banner</label>
-      <div class="img-upload" id="imgUpload">
-        <div class="up-ico">🖼️</div>
-        <div class="up-hint">Klik upload gambar</div>
-        <img id="imgPreview" style="display:none;"/>
-      </div>
-      <input type="file" id="fileInput" accept="image/*" style="display:none;"/>
-    </div>
-    <div class="frow">
-      <div class="sfg"><label>Nama Paket *</label><input type="text" id="fName" placeholder="VIP Permanen"/></div>
-      <div class="sfg">
-        <label>Tipe</label>
-        <select id="fTier">
-          <option value="tier-permanen">♾️ Permanen</option>
-          <option value="tier-bulanan">📅 Bulanan</option>
-          <option value="tier-gold">⭐ Gold</option>
-          <option value="tier-silver">🥈 Silver</option>
-          <option value="tier-diamond">💎 Diamond</option>
-          <option value="tier-custom">✦ Custom</option>
-        </select>
-      </div>
-    </div>
-    <div class="frow">
-      <div class="sfg"><label>Harga *</label><input type="text" id="fPrice" placeholder="50000"/></div>
-      <div class="sfg"><label>Label Harga</label><input type="text" id="fPer" placeholder="/ bulan"/></div>
-    </div>
-    <div class="sfg"><label>Deskripsi *</label><textarea id="fDesc" placeholder="Deskripsi singkat paket VIP ini..."></textarea></div>
-    <div class="sfg"><label>Fitur (1 baris = 1 fitur)</label><textarea id="fFeats" placeholder="Akses semua konten VIP&#10;Update setiap hari&#10;Priority support"></textarea></div>
-    <div class="sfg">
-      <label>Admin / Bot Checkout <span style="color:var(--tg-hint);font-weight:400;">(opsional)</span></label>
-      <div class="hint" style="margin-bottom:8px;">Username TG yang akan menerima order produk ini. Kosongkan = pakai admin default.</div>
-      <div class="at-input-wrap">
-        <span class="at-prefix">@</span>
-        <input type="text" id="fAdmin" placeholder="username_admin_atau_bot"/>
-      </div>
-    </div>
-
-    <div class="btn-row">
-      <button class="cancel-btn" onclick="closeModal('prodModal')">Batal</button>
-      <button class="save-btn" id="saveProd">💾 Simpan Paket</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: HAPUS -->
-<div class="overlay" id="delModal">
-  <div class="sheet" style="max-width:360px;text-align:center;">
-    <div class="sheet-handle"></div>
-    <div style="font-size:2rem;margin-bottom:8px;">🗑️</div>
-    <h2>HAPUS PAKET?</h2>
-    <p class="sheet-sub" id="delSub" style="margin-bottom:14px;"></p>
-    <div class="btn-row">
-      <button class="cancel-btn" onclick="closeModal('delModal')">Batal</button>
-      <button class="del-btn-big" id="confirmDel">🗑️ Hapus</button>
-    </div>
-  </div>
-</div>
+<div class="overlay" id="loginModal"><div class="sheet" style="max-width:400px;"><div class="sheet-handle"></div><button class="sheet-close" onclick="closeModal('loginModal')">✕</button><div style="text-align:center;font-size:2.2rem;margin-bottom:10px;">🔐</div><h2 style="text-align:center;">ADMIN LOGIN</h2><p class="sheet-sub" style="text-align:center;">Masukkan password admin</p><div class="sfg"><label>Password</label><div class="pw-wrap"><input type="password" id="pwInput" placeholder="••••••••"/><button class="pw-eye" id="pwEye">👁️</button></div></div><div class="login-err" id="loginErr">❌ Password salah!</div><button class="save-btn" id="loginBtn" style="width:100%;margin-top:10px;">🔓 Masuk Admin</button></div></div>
+<div class="overlay" id="prodModal"><div class="sheet"><div class="sheet-handle"></div><button class="sheet-close" onclick="closeModal('prodModal')">✕</button><h2 id="modalTitle">TAMBAH PAKET</h2><p class="sheet-sub" id="modalSub"></p><input type="hidden" id="fId"/><div class="sfg"><label>Gambar / Banner</label><div class="img-upload" id="imgUpload"><div class="up-ico">🖼️</div><div class="up-hint">Klik upload gambar</div><img id="imgPreview" style="display:none;"/></div><input type="file" id="fileInput" accept="image/*" style="display:none;"/></div><div class="frow"><div class="sfg"><label>Nama Paket *</label><input type="text" id="fName" placeholder="VIP Permanen"/></div><div class="sfg"><label>Tipe</label><select id="fTier"><option value="tier-permanen">♾️ Permanen</option><option value="tier-bulanan">📅 Bulanan</option><option value="tier-gold">⭐ Gold</option><option value="tier-silver">🥈 Silver</option><option value="tier-diamond">💎 Diamond</option><option value="tier-custom">✦ Custom</option></select></div></div><div class="frow"><div class="sfg"><label>Harga *</label><input type="text" id="fPrice" placeholder="50000"/></div><div class="sfg"><label>Label Harga</label><input type="text" id="fPer" placeholder="/ bulan"/></div></div><div class="sfg"><label>Deskripsi *</label><textarea id="fDesc" placeholder="Deskripsi singkat paket VIP ini..."></textarea></div><div class="sfg"><label>Fitur (1 baris = 1 fitur)</label><textarea id="fFeats" placeholder="Akses semua konten VIP&#10;Update setiap hari&#10;Priority support"></textarea></div><div class="sfg"><label>Admin / Bot Checkout <span style="color:var(--tg-hint);font-weight:400;">(opsional)</span></label><div class="hint" style="margin-bottom:8px;">Username TG yang akan menerima order produk ini. Kosongkan = pakai admin default.</div><div class="at-input-wrap"><span class="at-prefix">@</span><input type="text" id="fAdmin" placeholder="username_admin_atau_bot"/></div></div><div class="btn-row"><button class="cancel-btn" onclick="closeModal('prodModal')">Batal</button><button class="save-btn" id="saveProd">💾 Simpan Paket</button></div></div></div>
+<div class="overlay" id="delModal"><div class="sheet" style="max-width:360px;text-align:center;"><div class="sheet-handle"></div><div style="font-size:2rem;margin-bottom:8px;">🗑️</div><h2>HAPUS PAKET?</h2><p class="sheet-sub" id="delSub" style="margin-bottom:14px;"></p><div class="btn-row"><button class="cancel-btn" onclick="closeModal('delModal')">Batal</button><button class="del-btn-big" id="confirmDel">🗑️ Hapus</button></div></div></div>
 
 <div class="toast" id="toast"></div>
 <div class="watermark" id="watermarkEl"></div>
 
 <script>
-// ══ CONFIG ══
-var CFG={
-  adminPassword:'Malik10_',
-  supabaseUrl:'https://lgjcsefaqkqvidkuuomo.supabase.co',
-  supabaseKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxnamNzZWZhcWtxdmlka3V1b21vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3ODMwMDEsImV4cCI6MjA4ODM1OTAwMX0.gw4GKzcaJQagpbmFyeJyeMpxXXWst-1cuXJgLdOrMJM',
-  adminTgUsername:'Cs_viphunter_xbot',
-  botUsername:'Cs_viphunter_xbot',
-  watermark:'@elzstore_id',
-  botToken:'8050084420:AAG-yShtIRHSj5HBKkIUgzZbAWRze-7N-Ig',
-  adminIds:[5918905984, 5734902794],
-};
+var CFG={adminPassword:'Malik10_',supabaseUrl:'https://lgjcsefaqkqvidkuuomo.supabase.co',supabaseKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxnamNzZWZhcWtxdmlka3V1b21vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3ODMwMDEsImV4cCI6MjA4ODM1OTAwMX0.gw4GKzcaJQagpbmFyeJyeMpxXXWst-1cuXJgLdOrMJM',adminTgUsername:'Cs_viphunter_xbot',botUsername:'Cs_viphunter_xbot',watermark:'@elzstore_id',botToken:'8050084420:AAG-yShtIRHSj5HBKkIUgzZbAWRze-7N-Ig',adminIds:[5918905984,5734902794]};
 (function(){var el=document.getElementById('watermarkEl');if(el&&CFG.watermark)el.textContent=CFG.watermark;})();
-
-// ══ TELEGRAM ══
 var tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:{ready:function(){},expand:function(){},HapticFeedback:{impactOccurred:function(){},notificationOccurred:function(){}},BackButton:{show:function(){},hide:function(){},onClick:function(){},offClick:function(){}},initDataUnsafe:{user:null}};
 tg.ready();tg.expand();
-
-// ══ SUPABASE — harus didefinisikan SEBELUM semua fungsi yang memakainya ══
 var SB=CFG.supabaseUrl.replace(/\/$/,'')+'/rest/v1';
 var SBH={'apikey':CFG.supabaseKey,'Authorization':'Bearer '+CFG.supabaseKey,'Content-Type':'application/json'};
-
-async function sbFetchTimeout(url,opts,ms){
-  ms=ms||8000;
-  var ctrl=new AbortController();
-  var tid=setTimeout(function(){ctrl.abort();},ms);
-  try{
-    var r=await fetch(url,Object.assign({},opts,{signal:ctrl.signal}));
-    clearTimeout(tid);return r;
-  }catch(e){clearTimeout(tid);throw e;}
-}
-async function sbGet(tbl,q){
-  var r=await sbFetchTimeout(SB+'/'+tbl+(q||'?select=*&order=created_at.asc'),{headers:SBH});
-  if(!r.ok)throw new Error(await r.text());
-  return r.json();
-}
+async function sbFetchTimeout(url,opts,ms){ms=ms||8000;var ctrl=new AbortController();var tid=setTimeout(function(){ctrl.abort();},ms);try{var r=await fetch(url,Object.assign({},opts,{signal:ctrl.signal}));clearTimeout(tid);return r;}catch(e){clearTimeout(tid);throw e;}}
+async function sbGet(tbl,q){var r=await sbFetchTimeout(SB+'/'+tbl+(q||'?select=*&order=created_at.asc'),{headers:SBH});if(!r.ok)throw new Error(await r.text());return r.json();}
 async function sbPost(tbl,d){var r=await sbFetchTimeout(SB+'/'+tbl,{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());}
 async function sbPatch(tbl,id,d){var r=await sbFetchTimeout(SB+'/'+tbl+'?id=eq.'+id,{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());}
 async function sbDelete(tbl,id){var r=await sbFetchTimeout(SB+'/'+tbl+'?id=eq.'+id,{method:'DELETE',headers:SBH});if(!r.ok)throw new Error(await r.text());}
-
-// ══ APP CONFIG (username admin/bot dinamis) ══
-function renderCfgDisplay(){
-  var bv=document.getElementById('cfgBotVal');
-  var av=document.getElementById('cfgAdminVal');
-  if(bv)bv.textContent='@'+CFG.botUsername;
-  if(av)av.textContent='@'+CFG.adminTgUsername;
-}
-
-async function loadAppCfg(){
-  // Load dari localStorage dulu (instan, tidak blocking)
-  try{
-    var a=localStorage.getItem('cfg_adminTgUsername');
-    var b=localStorage.getItem('cfg_botUsername');
-    if(a)CFG.adminTgUsername=a;
-    if(b)CFG.botUsername=b;
-  }catch(ex){}
-  renderCfgDisplay();
-  // Update dari Supabase di background (tidak blocking loadVIP)
-  try{
-    var rows=await sbGet('app_config','?select=*');
-    if(rows&&rows.length){
-      rows.forEach(function(row){
-        if(row.key==='adminTgUsername'&&row.value){CFG.adminTgUsername=row.value;try{localStorage.setItem('cfg_adminTgUsername',row.value);}catch(e){}}
-        if(row.key==='botUsername'&&row.value){CFG.botUsername=row.value;try{localStorage.setItem('cfg_botUsername',row.value);}catch(e){}}
-      });
-      renderCfgDisplay();
-    }
-  }catch(e){console.warn('loadAppCfg:',e.message);}
-}
-
+function renderCfgDisplay(){var bv=document.getElementById('cfgBotVal');var av=document.getElementById('cfgAdminVal');if(bv)bv.textContent='@'+CFG.botUsername;if(av)av.textContent='@'+CFG.adminTgUsername;}
+async function loadAppCfg(){try{var a=localStorage.getItem('cfg_adminTgUsername');var b=localStorage.getItem('cfg_botUsername');if(a)CFG.adminTgUsername=a;if(b)CFG.botUsername=b;}catch(ex){}renderCfgDisplay();try{var rows=await sbGet('app_config','?select=*');if(rows&&rows.length){rows.forEach(function(row){if(row.key==='adminTgUsername'&&row.value){CFG.adminTgUsername=row.value;try{localStorage.setItem('cfg_adminTgUsername',row.value);}catch(e){}}if(row.key==='botUsername'&&row.value){CFG.botUsername=row.value;try{localStorage.setItem('cfg_botUsername',row.value);}catch(e){}}});renderCfgDisplay();}}catch(e){console.warn('loadAppCfg:',e.message);}}
 async function saveAppCfg(botU,adminU){
   try{localStorage.setItem('cfg_botUsername',botU);localStorage.setItem('cfg_adminTgUsername',adminU);}catch(e){}
   try{
     var r1=await sbFetchTimeout(SB+'/app_config?key=eq.botUsername',{method:'GET',headers:SBH});
     var d1=await r1.json();
-    if(d1&&d1.length){await sbFetchTimeout(SB+'/app_config?key=eq.botUsername',{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({value:botU})});}
-    else{await sbFetchTimeout(SB+'/app_config',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({key:'botUsername',value:botU})});}
+    if(d1&&d1.length){
+      await sbFetchTimeout(SB+'/app_config?key=eq.botUsername',{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({value:botU})});
+    }else{
+      await sbFetchTimeout(SB+'/app_config',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({key:'botUsername',value:botU})});
+    }
     var r2=await sbFetchTimeout(SB+'/app_config?key=eq.adminTgUsername',{method:'GET',headers:SBH});
     var d2=await r2.json();
-    if(d2&&d2.length){await sbFetchTimeout(SB+'/app_config?key=eq.adminTgUsername',{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({value:adminU})});}
-    else{await sbFetchTimeout(SB+'/app_config',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({key:'adminTgUsername',value:adminU})});}
+    if(d2&&d2.length){
+      await sbFetchTimeout(SB+'/app_config?key=eq.adminTgUsername',{method:'PATCH',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({value:adminU})});
+    }else{
+      await sbFetchTimeout(SB+'/app_config',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},SBH),body:JSON.stringify({key:'adminTgUsername',value:adminU})});
+    }
   }catch(e){console.warn('saveAppCfg:',e.message);}
-  CFG.botUsername=botU;
-  CFG.adminTgUsername=adminU;
-  renderCfgDisplay();
+  CFG.botUsername=botU;CFG.adminTgUsername=adminU;renderCfgDisplay();
 }
-
-var allVIP=[],cart=[],isAdmin=false,isEdit=false,uploadedImg='',pendingDelId=null;
-var csMessages=[],csLastCount=0;
+var allVIP=[],cart=[],isAdmin=false,isEdit=false,uploadedImg='',pendingDelId=null,csMessages=[],csLastCount=0;
 var tgUser=tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null;
 var tgUserId=tgUser?tgUser.id:null;
 var tgDisplayName=tgUser?(((tgUser.first_name||'')+(tgUser.last_name?' '+tgUser.last_name:'')).trim()||'Pelanggan'):'Pelanggan';
 var tgUsername=tgUser&&tgUser.username?tgUser.username:'';
-
-// Jika buka dari browser biasa (bukan Telegram), buat guest ID
-var isGuestMode = false;
-if(!tgUserId){
-  isGuestMode = true;
-  var storedGuestId=null;
-  try{storedGuestId=localStorage.getItem('vip_guest_id');}catch(e){}
-  if(!storedGuestId){storedGuestId='guest_'+Date.now()+'_'+Math.floor(Math.random()*9999);try{localStorage.setItem('vip_guest_id',storedGuestId);}catch(e){}}
-  tgUserId=storedGuestId;
-  var savedGuestName='';var savedGuestContact='';
-  try{savedGuestName=localStorage.getItem('vip_guest_name')||'';savedGuestContact=localStorage.getItem('vip_guest_contact')||'';}catch(e){}
-  tgDisplayName=savedGuestName||'Tamu (Web)';
-  tgUsername=savedGuestContact||'';
-}
-
+var isGuestMode=false;
+if(!tgUserId){isGuestMode=true;var storedGuestId=null;try{storedGuestId=localStorage.getItem('vip_guest_id');}catch(e){}if(!storedGuestId){storedGuestId='guest_'+Date.now()+'_'+Math.floor(Math.random()*9999);try{localStorage.setItem('vip_guest_id',storedGuestId);}catch(e){}}tgUserId=storedGuestId;var savedGuestName='';var savedGuestContact='';try{savedGuestName=localStorage.getItem('vip_guest_name')||'';savedGuestContact=localStorage.getItem('vip_guest_contact')||'';}catch(e){}tgDisplayName=savedGuestName||'Tamu (Web)';tgUsername=savedGuestContact||'';}
 function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast show'+(t?' '+t:'');clearTimeout(el._t);el._t=setTimeout(function(){el.className='toast';},3200);}
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
@@ -683,553 +149,134 @@ function fmtRp(n){return 'Rp '+n.toLocaleString('id-ID');}
 function haptic(t){try{tg.HapticFeedback.impactOccurred(t||'light');}catch(e){}}
 function fmtTime(d){return new Date(d).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});}
 function escHtml(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br/>');}
-
-// ══ ROUTING ══
 var currentScreen='s-shop';
 var noNavScreens=['s-payment','s-success'];
-
-function goTo(id){
-  document.getElementById(currentScreen).classList.remove('active');
-  document.getElementById(id).classList.add('active');
-  currentScreen=id;
-  var nav=document.getElementById('bottomNav');
-  if(noNavScreens.includes(id)){nav.style.display='none';tg.BackButton.show();}
-  else{nav.style.display='flex';tg.BackButton.hide();}
-  if(id==='s-cart')renderCart();
-  if(id==='s-payment')renderPayment();
-  if(id==='s-cs'){renderCS();clearCsBadge();}
-}
-function navTo(sid,nid){
-  document.querySelectorAll('.bn-item').forEach(function(el){el.classList.remove('active');});
-  document.getElementById(nid).classList.add('active');
-  goTo(sid);haptic('light');
-}
-tg.BackButton.onClick(function(){
-  var map={'s-payment':'s-cart','s-success':'s-shop'};
-  if(map[currentScreen])goTo(map[currentScreen]);else goTo('s-shop');
-});
+function goTo(id){document.getElementById(currentScreen).classList.remove('active');document.getElementById(id).classList.add('active');currentScreen=id;var nav=document.getElementById('bottomNav');if(noNavScreens.includes(id)){nav.style.display='none';tg.BackButton.show();}else{nav.style.display='flex';tg.BackButton.hide();}if(id==='s-cart')renderCart();if(id==='s-payment')renderPayment();if(id==='s-cs'){renderCS();clearCsBadge();}}
+function navTo(sid,nid){document.querySelectorAll('.bn-item').forEach(function(el){el.classList.remove('active');});document.getElementById(nid).classList.add('active');goTo(sid);haptic('light');}
+tg.BackButton.onClick(function(){var map={'s-payment':'s-cart','s-success':'s-shop'};if(map[currentScreen])goTo(map[currentScreen]);else goTo('s-shop');});
 function goHome(){cart=[];updateBadge();renderGrid();navTo('s-shop','nav-shop');}
-
-// ══ BUKA ADMIN / BOT ══
-function openCSBot(){
-  var url='https://t.me/'+CFG.botUsername;
-  try{if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){Telegram.WebApp.openLink(url);return;}}catch(e){}
-  window.open(url,'_blank');
-}
+function openCSBot(){var url='https://t.me/'+CFG.botUsername;try{if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){Telegram.WebApp.openLink(url);return;}}catch(e){}window.open(url,'_blank');}
 function openAdmin(){openCSBot();}
 function openBot(){openCSBot();}
-
-// ══ BUAT PESAN ORDER UNTUK ADMIN ══
-function buildOrderMessage(orderId, now){
-  var ds=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
-  var ts=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-  var total=cartTotal();
-
-  var lines=[];
-  lines.push('🛒 *ORDER BARU - VIP HUNTER*');
-  lines.push('━━━━━━━━━━━━━━━━━━━━');
-  lines.push('📋 *ID Order:* `'+orderId+'`');
-  lines.push('🗓 *Waktu:* '+ds+', '+ts);
-  lines.push('');
-  lines.push('👤 *Data Pembeli*');
-  lines.push('• Nama: '+tgDisplayName);
-  if(tgUsername)lines.push('• Username: @'+tgUsername);
-  if(tgUserId)lines.push('• TG ID: `'+tgUserId+'`');
-  lines.push('');
-  lines.push('📦 *Detail Pesanan*');
-  lines.push('─────────────────────');
-
-  var no=1;
-  cart.forEach(function(item){
-    var subtotal=parseNum(item.price)*item.qty;
-    lines.push(no+'. *'+item.name+'*');
-    lines.push('   Qty: '+item.qty+' × '+fmtRp(parseNum(item.price))+(item.per?' '+item.per:''));
-    lines.push('   Subtotal: *'+fmtRp(subtotal)+'*');
-    no++;
-  });
-
-  lines.push('─────────────────────');
-  lines.push('💰 *TOTAL: '+fmtRp(total)+'*');
-  lines.push('━━━━━━━━━━━━━━━━━━━━');
-  lines.push('📌 Status: *Menunggu Pembayaran*');
-  lines.push('');
-  // Tunjukkan admin tujuan jika ada per-produk
-  var pa='';if(cart.length===1&&cart[0].admin_username){pa=cart[0].admin_username;}
-  else{var ads=cart.map(function(x){return x.admin_username||'';}).filter(Boolean);var ua=[...new Set(ads)];if(ua.length===1)pa=ua[0];}
-  if(pa)lines.push('🎯 Admin Tujuan: @'+pa);
-  lines.push('');
-  lines.push('Mohon kirim QRIS untuk pembayaran, terima kasih! 🙏');
-
-  return lines.join('\n');
-}
-
-// ══ LOAD VIP ══
-async function loadVIP(){
-  var g=document.getElementById('grid');
-
-  try{
-    var cached=localStorage.getItem('vip_cache');
-    if(cached){
-      var arr=JSON.parse(cached);
-      if(arr&&arr.length){allVIP=arr;renderAll();}
-    }
-  }catch(e){}
-
-  try{
-    var fresh=await sbGet('vip_packages');
-    allVIP=fresh||[];
-    try{localStorage.setItem('vip_cache',JSON.stringify(allVIP));}catch(e){}
-    renderAll();
-  }catch(e){
-    console.warn('loadVIP error:',e.message);
-    if(!allVIP.length){
-      g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;">'
-        +'<div style="font-size:2rem;margin-bottom:10px;">⚠️</div>'
-        +'<p style="color:var(--red);font-size:.78rem;margin-bottom:4px;">Gagal memuat paket.</p>'
-        +'<p style="color:var(--tg-hint);font-size:.72rem;margin-bottom:14px;">'+e.message+'</p>'
-        +'<button onclick="loadVIP()" style="background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.3);color:var(--gold);font-family:\'Outfit\',sans-serif;font-size:.8rem;font-weight:700;padding:8px 20px;border-radius:20px;cursor:pointer;">🔄 Coba Lagi</button>'
-        +'</div>';
-      document.getElementById('tProduk').textContent='error';
-    }
-  }
-}
+function buildOrderMessage(orderId,now){var ds=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});var ts=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});var total=cartTotal();var lines=['🛒 *ORDER BARU - VIP HUNTER*','━━━━━━━━━━━━━━━━━━━━','📋 *ID Order:* `'+orderId+'`','🗓 *Waktu:* '+ds+', '+ts,'','👤 *Data Pembeli*','• Nama: '+tgDisplayName];if(tgUsername)lines.push('• Username: @'+tgUsername);if(tgUserId)lines.push('• TG ID: `'+tgUserId+'`');lines.push('','📦 *Detail Pesanan*','─────────────────────');var no=1;cart.forEach(function(item){var subtotal=parseNum(item.price)*item.qty;lines.push(no+'. *'+item.name+'*');lines.push('   Qty: '+item.qty+' × '+fmtRp(parseNum(item.price))+(item.per?' '+item.per:''));lines.push('   Subtotal: *'+fmtRp(subtotal)+'*');no++;});lines.push('─────────────────────','💰 *TOTAL: '+fmtRp(total)+'*','━━━━━━━━━━━━━━━━━━━━','📌 Status: *Menunggu Pembayaran*','');var pa='';if(cart.length===1&&cart[0].admin_username){pa=cart[0].admin_username;}else{var ads=cart.map(function(x){return x.admin_username||'';}).filter(Boolean);var ua=[...new Set(ads)];if(ua.length===1)pa=ua[0];}if(pa)lines.push('🎯 Admin Tujuan: @'+pa);lines.push('','Mohon kirim QRIS untuk pembayaran, terima kasih! 🙏');return lines.join('\n');}
+async function loadVIP(){var g=document.getElementById('grid');try{var cached=localStorage.getItem('vip_cache');if(cached){var arr=JSON.parse(cached);if(arr&&arr.length){allVIP=arr;renderAll();}}}catch(e){}try{var fresh=await sbGet('vip_packages');allVIP=fresh||[];try{localStorage.setItem('vip_cache',JSON.stringify(allVIP));}catch(e){}renderAll();}catch(e){console.warn('loadVIP error:',e.message);if(!allVIP.length){g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;"><div style="font-size:2rem;margin-bottom:10px;">⚠️</div><p style="color:var(--red);font-size:.78rem;margin-bottom:4px;">Gagal memuat paket.</p><p style="color:var(--tg-hint);font-size:.72rem;margin-bottom:14px;">'+e.message+'</p><button onclick="loadVIP()" style="background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.3);color:var(--gold);font-family:\'Outfit\',sans-serif;font-size:.8rem;font-weight:700;padding:8px 20px;border-radius:20px;cursor:pointer;">🔄 Coba Lagi</button></div>';document.getElementById('tProduk').textContent='error';}}}
 var TL={'tier-permanen':'♾️ Permanen','tier-bulanan':'📅 Bulanan','tier-gold':'⭐ Gold','tier-silver':'🥈 Silver','tier-diamond':'💎 Diamond','tier-custom':'✦ Custom'};
 function renderAll(){document.getElementById('tProduk').textContent=allVIP.length+' paket';renderGrid();}
-function renderGrid(){
-  var g=document.getElementById('grid');
-  g.innerHTML='';
-  if(!allVIP.length){
-    g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--tg-hint);font-size:.85rem;">'
-      +'<div style="font-size:2.5rem;margin-bottom:10px;">👑</div>'
-      +'<p>'+(isAdmin?'Belum ada paket. Tambah sekarang!':'Paket VIP segera hadir.')+'</p>'
-      +'</div>';
-    if(isAdmin){
-      var ac=document.createElement('div');
-      ac.className='add-card';
-      ac.innerHTML='<div class="add-card-icon">➕</div><div class="add-card-txt">Tambah Paket VIP</div>';
-      ac.onclick=openAddModal;
-      g.appendChild(ac);
-    }
-    return;
-  }
-  allVIP.forEach(function(p,i){
-    var inCart=cart.some(function(x){return x.id===p.id;});
-    var imgH=p.img?'<div class="vcard-img"><img src="'+p.img+'" loading="lazy" alt=""/></div>':'<div class="vcard-img">👑</div>';
-    var tier=p.tier||'tier-gold';
-    var feats=(p.features||[]).slice(0,3).map(function(f){return '<div class="feat-row">'+f+'</div>';}).join('');
-    var card=document.createElement('div');
-    card.className='vcard';card.style.animationDelay=(i*0.06)+'s';card.style.animation='fadeUp .4s ease both';
-    card.innerHTML=imgH+'<div class="vcard-tier '+tier+'">'+(TL[tier]||'VIP')+'</div>'+
-      '<div class="vcard-body"><div class="vcard-name">'+p.name+'</div>'+
-      (p.description?'<div class="vcard-desc">'+p.description+'</div>':'')+
-      (feats?'<div class="vcard-feats">'+feats+'</div>':'')+
-      '</div><div class="vcard-foot"><div class="price-lbl">Harga</div>'+
-      '<div class="price-val">'+fmtRp(parseNum(p.price||0))+'</div>'+
-      (p.per?'<div class="price-per">'+p.per+'</div>':'')+
-      (p.admin_username?'<div style="font-size:.58rem;color:var(--tg-hint);margin-bottom:5px;">📲 Admin: <span style="color:var(--gold);">@'+p.admin_username+'</span></div>':'')+
-      '<button class="cart-add-btn'+(inCart?' added':'')+'" data-id="'+p.id+'">'+(inCart?'✅ Ditambahkan':'🛒 Tambah')+'</button>'+
-      '</div><div class="admin-acts">'+
-      '<button class="ae-btn" data-id="'+p.id+'">✏️ Edit</button>'+
-      '<button class="ad-btn" data-id="'+p.id+'" data-name="'+p.name+'">🗑️ Hapus</button>'+
-      '</div>';
-    g.appendChild(card);
-  });
-  g.querySelectorAll('.cart-add-btn').forEach(function(b){b.onclick=function(){haptic('light');addToCart(b.dataset.id);};});
-  g.querySelectorAll('.ae-btn').forEach(function(b){b.onclick=function(e){e.stopPropagation();openEditModal(b.dataset.id);};});
-  g.querySelectorAll('.ad-btn').forEach(function(b){
-    b.onclick=function(e){e.stopPropagation();pendingDelId=b.dataset.id;
-      document.getElementById('delSub').innerHTML='Paket <strong style="color:var(--gold)">'+b.dataset.name+'</strong> akan dihapus permanen.';
-      openModal('delModal');};
-  });
-  if(isAdmin){var ac=document.createElement('div');ac.className='add-card';ac.innerHTML='<div class="add-card-icon">➕</div><div class="add-card-txt">Tambah Paket VIP</div>';ac.onclick=openAddModal;g.appendChild(ac);}
-}
-
-// ══ CART ══
-function addToCart(id){
-  var p=allVIP.find(function(x){return x.id===id;});if(!p)return;
-  var ex=cart.find(function(x){return x.id===id;});
-  if(ex){ex.qty++;toast('🛒 '+p.name+' +1','ok');}
-  else{cart.push(Object.assign({},p,{qty:1}));toast('🛒 '+p.name+' ditambahkan!','ok');}
-  updateBadge();renderGrid();
-}
+function renderGrid(){var g=document.getElementById('grid');g.innerHTML='';if(!allVIP.length){g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--tg-hint);font-size:.85rem;"><div style="font-size:2.5rem;margin-bottom:10px;">👑</div><p>'+(isAdmin?'Belum ada paket. Tambah sekarang!':'Paket VIP segera hadir.')+'</p></div>';if(isAdmin){var ac=document.createElement('div');ac.className='add-card';ac.innerHTML='<div class="add-card-icon">➕</div><div class="add-card-txt">Tambah Paket VIP</div>';ac.onclick=openAddModal;g.appendChild(ac);}return;}allVIP.forEach(function(p,i){var inCart=cart.some(function(x){return x.id===p.id;});var imgH=p.img?'<div class="vcard-img"><img src="'+p.img+'" loading="lazy" alt=""/></div>':'<div class="vcard-img">👑</div>';var tier=p.tier||'tier-gold';var feats=(p.features||[]).slice(0,3).map(function(f){return '<div class="feat-row">'+f+'</div>';}).join('');var card=document.createElement('div');card.className='vcard';card.style.animationDelay=(i*0.06)+'s';card.style.animation='fadeUp .4s ease both';card.innerHTML=imgH+'<div class="vcard-tier '+tier+'">'+(TL[tier]||'VIP')+'</div><div class="vcard-body"><div class="vcard-name">'+p.name+'</div>'+(p.description?'<div class="vcard-desc">'+p.description+'</div>':'')+(feats?'<div class="vcard-feats">'+feats+'</div>':'')+'</div><div class="vcard-foot"><div class="price-lbl">Harga</div><div class="price-val">'+fmtRp(parseNum(p.price||0))+'</div>'+(p.per?'<div class="price-per">'+p.per+'</div>':'')+(p.admin_username?'<div style="font-size:.58rem;color:var(--tg-hint);margin-bottom:5px;">📲 Admin: <span style="color:var(--gold);">@'+p.admin_username+'</span></div>':'')+'<button class="cart-add-btn'+(inCart?' added':'')+'" data-id="'+p.id+'">'+(inCart?'✅ Ditambahkan':'🛒 Tambah')+'</button></div><div class="admin-acts"><button class="ae-btn" data-id="'+p.id+'">✏️ Edit</button><button class="ad-btn" data-id="'+p.id+'" data-name="'+p.name+'">🗑️ Hapus</button></div>';g.appendChild(card);});g.querySelectorAll('.cart-add-btn').forEach(function(b){b.onclick=function(){haptic('light');addToCart(b.dataset.id);};});g.querySelectorAll('.ae-btn').forEach(function(b){b.onclick=function(e){e.stopPropagation();openEditModal(b.dataset.id);};});g.querySelectorAll('.ad-btn').forEach(function(b){b.onclick=function(e){e.stopPropagation();pendingDelId=b.dataset.id;document.getElementById('delSub').innerHTML='Paket <strong style="color:var(--gold)">'+b.dataset.name+'</strong> akan dihapus permanen.';openModal('delModal');};});if(isAdmin){var ac=document.createElement('div');ac.className='add-card';ac.innerHTML='<div class="add-card-icon">➕</div><div class="add-card-txt">Tambah Paket VIP</div>';ac.onclick=openAddModal;g.appendChild(ac);}}
+function addToCart(id){var p=allVIP.find(function(x){return x.id===id;});if(!p)return;var ex=cart.find(function(x){return x.id===id;});if(ex){ex.qty++;toast('🛒 '+p.name+' +1','ok');}else{cart.push(Object.assign({},p,{qty:1}));toast('🛒 '+p.name+' ditambahkan!','ok');}updateBadge();renderGrid();}
 function removeFromCart(id){cart=cart.filter(function(x){return x.id!==id;});updateBadge();renderCart();}
 function setQty(id,qty){if(qty<=0){removeFromCart(id);return;}var item=cart.find(function(x){return x.id===id;});if(item){item.qty=qty;updateBadge();renderCart();}}
 function clearCart(){cart=[];updateBadge();renderCart();renderGrid();toast('🗑️ Keranjang dikosongkan');}
-function updateBadge(){
-  var n=cart.reduce(function(s,x){return s+x.qty;},0);
-  var b=document.getElementById('cartBadge');b.textContent=n;
-  n>0?b.classList.add('show'):b.classList.remove('show');
-  var cc=document.getElementById('cartCount');if(cc)cc.textContent=n+' item';
-}
+function updateBadge(){var n=cart.reduce(function(s,x){return s+x.qty;},0);var b=document.getElementById('cartBadge');b.textContent=n;n>0?b.classList.add('show'):b.classList.remove('show');var cc=document.getElementById('cartCount');if(cc)cc.textContent=n+' item';}
 function cartTotal(){return cart.reduce(function(s,x){return s+parseNum(x.price)*x.qty;},0);}
-function renderCart(){
-  var items=document.getElementById('cartItems'),empty=document.getElementById('cartEmpty'),summary=document.getElementById('cartSummary'),foot=document.getElementById('cartFootBtns');
-  if(!cart.length){items.innerHTML='';empty.style.display='block';summary.style.display='none';foot.style.display='none';return;}
-  empty.style.display='none';summary.style.display='block';foot.style.display='flex';
-  items.innerHTML=cart.map(function(item){
-    var sub=parseNum(item.price)*item.qty;
-    var imgH=item.img?'<div class="ci-img"><img src="'+item.img+'"/></div>':'<div class="ci-img">👑</div>';
-    return '<div class="cart-item">'+imgH+'<div class="ci-info"><div class="ci-name">'+item.name+'</div>'+
-      '<div class="ci-price">'+fmtRp(parseNum(item.price))+' '+(item.per||'')+'</div>'+
-      (item.qty>1?'<div class="ci-sub">Sub: '+fmtRp(sub)+'</div>':'')+
-      '</div><div class="ci-ctrl"><button class="qb" onclick="setQty(\''+item.id+'\','+(item.qty-1)+')">−</button>'+
-      '<span class="qv">'+item.qty+'</span><button class="qb" onclick="setQty(\''+item.id+'\','+(item.qty+1)+')">+</button>'+
-      '<button class="ci-del" onclick="removeFromCart(\''+item.id+'\')">✕</button></div></div>';
-  }).join('');
-  document.getElementById('cartSumItems').innerHTML=cart.map(function(x){
-    return '<div class="sum-row"><span class="lbl">'+x.name+' ×'+x.qty+'</span><span class="val">'+fmtRp(parseNum(x.price)*x.qty)+'</span></div>';
-  }).join('');
-  document.getElementById('cartTotalVal').textContent=fmtRp(cartTotal());
-}
-
-// ══ PAYMENT ══
-function renderPayment(){
-  var total=cartTotal();
-  var rows=cart.map(function(item,i){
-    return '<div class="order-mini-row"><span class="lbl">'+(i+1)+'. '+item.name+' ×'+item.qty+'</span><span class="val">'+fmtRp(parseNum(item.price)*item.qty)+'</span></div>';
-  }).join('');
-  document.getElementById('payOrderMini').innerHTML=rows+'<hr class="order-mini-divider"/><div class="order-mini-total"><span class="lbl">Total</span><span class="val">'+fmtRp(total)+'</span></div>';
-}
-
-// ══ CHECKOUT → REDIRECT KE ADMIN TELEGRAM ══
-document.getElementById('botPayBtn').addEventListener('click',async function(){
-  if(!cart.length){toast('❌ Keranjang kosong!','err');return;}
-  var btn=document.getElementById('botPayBtn');
-  btn.disabled=true;btn.textContent='⏳ Menyimpan pesanan...';haptic('medium');
-
-  var total=cartTotal();
-  var now=new Date();
-  var orderId='VH'+Date.now();
-
-  try{
-    // 1. Simpan order ke Supabase
-    await sbPost('orders',{
-      id:orderId,
-      customer_name:tgDisplayName,
-      customer_tg:tgUsername,
-      customer_tg_id:String(tgUserId||'guest_'+Date.now()),
-      items:cart,
-      total:total,
-      status:'pending_payment',
-      created_at:now.toISOString()
-    });
-
-    // 2. Bangun pesan untuk admin
-    var orderMsg=buildOrderMessage(orderId, now);
-
-    // 3. Tampilkan sukses
-    var ds=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
-    var ts=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-    document.getElementById('successDetail').textContent=
-      '📦 ORDER ID: '+orderId+'\n'+
-      '💰 Total  : '+fmtRp(total)+'\n'+
-      '🗓 Waktu  : '+ds+' '+ts+'\n'+
-      '📌 Status : Menunggu Konfirmasi Admin';
-
-    haptic('heavy');
-    goTo('s-success');
-
-    // 4. Redirect ke Telegram admin dengan pesan terisi otomatis
-    // Gunakan t.me/username?text=... agar pesan sudah terisi di kolom chat
-    var encodedMsg=encodeURIComponent(orderMsg);
-    // Cek apakah ada produk dengan admin_username tersendiri
-    var productAdmin='';
-    if(cart.length===1&&cart[0].admin_username){productAdmin=cart[0].admin_username;}
-    else{
-      // Jika semua produk punya admin yang sama, pakai itu
-      var admins=cart.map(function(x){return x.admin_username||'';}).filter(Boolean);
-      var uniqueAdmins=[...new Set(admins)];
-      if(uniqueAdmins.length===1)productAdmin=uniqueAdmins[0];
-    }
-    var targetAdmin=(productAdmin||CFG.adminTgUsername).replace(/^@/,'');
-    var adminUrl='https://t.me/'+targetAdmin+'?text='+encodedMsg;
-
-    // Delay sedikit agar screen sukses sempat tampil
-    setTimeout(function(){
-      try{
-        if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){
-          Telegram.WebApp.openLink(adminUrl);
-        }else{
-          window.open(adminUrl,'_blank');
-        }
-      }catch(e){window.open(adminUrl,'_blank');}
-    }, 800);
-
-  }catch(e){
-    toast('❌ Gagal: '+e.message,'err');
-    btn.disabled=false;btn.textContent='📲 Konfirmasi & Hubungi Admin';
-  }
-});
-
-// ══ CS CHAT ══
-function renderCS(){
-  // Tampilkan banner jika buka dari browser (bukan Telegram)
-  var isTgUser=tg.initDataUnsafe&&tg.initDataUnsafe.user;
-  var banner=document.getElementById('guestBanner');
-  var guestForm=document.getElementById('guestFormWrap');
-  var csMsgsEl=document.getElementById('csMsgs');
-  var csInputWrap=document.querySelector('.cs-input-wrap');
-
-  if(!isTgUser){
-    // Cek apakah sudah isi nama
-    var savedName='';try{savedName=localStorage.getItem('vip_guest_name')||'';}catch(e){}
-    if(!savedName){
-      // Belum isi nama — tampilkan form, sembunyikan chat
-      if(banner)banner.style.display='none';
-      if(guestForm)guestForm.style.display='flex';
-      if(csMsgsEl)csMsgsEl.style.display='none';
-      if(csInputWrap)csInputWrap.style.display='none';
-      return;
-    }else{
-      // Sudah isi nama — tampilkan banner & chat
-      if(banner)banner.style.display='block';
-      if(guestForm)guestForm.style.display='none';
-      if(csMsgsEl)csMsgsEl.style.display='flex';
-      if(csInputWrap)csInputWrap.style.display='flex';
-    }
-  }else{
-    if(banner)banner.style.display='none';
-    if(guestForm)guestForm.style.display='none';
-    if(csMsgsEl)csMsgsEl.style.display='flex';
-    if(csInputWrap)csInputWrap.style.display='flex';
-  }
-
-  var container=document.getElementById('csMsgs');
-  container.querySelectorAll('.cs-bubble-wrap').forEach(function(el){el.remove();});
-  if(!csMessages.length){document.getElementById('csEmpty').style.display='block';return;}
-  document.getElementById('csEmpty').style.display='none';
-  csMessages.forEach(function(msg){appendBubble(msg,false);});
-  container.scrollTop=container.scrollHeight;
-}
-function appendBubble(msg,doScroll){
-  var container=document.getElementById('csMsgs');
-  document.getElementById('csEmpty').style.display='none';
-  var wrap=document.createElement('div');
-  wrap.className='cs-bubble-wrap '+(msg.from_admin?'them':'me');
-  wrap.dataset.msgId=msg.id;
-  wrap.innerHTML='<div class="cs-bubble">'+escHtml(msg.text)+'</div>'+
-    '<div class="cs-time">'+(msg.from_admin?'👨‍💼 Admin':'Kamu')+' · '+fmtTime(msg.created_at)+'</div>'+
-    (msg.from_admin?'':'<div class="cs-sent-tag">✅ Pesan terkirim ke admin</div>');
-  container.appendChild(wrap);
-  if(doScroll!==false)container.scrollTop=container.scrollHeight;
-}
-async function sendToTelegram(text){
-  var results=[];
-  for(var i=0;i<CFG.adminIds.length;i++){
-    try{
-      var r=await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendMessage',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({chat_id:CFG.adminIds[i],text:text,parse_mode:'HTML'})
-      });
-      var d=await r.json();
-      results.push(d.ok);
-    }catch(e){results.push(false);}
-  }
-  return results.some(Boolean);
-}
-
-async function sendCSMessage(){
-  var input=document.getElementById('csInput');
-  var text=input.value.trim();
-  if(!text)return;
-  input.value='';input.style.height='auto';haptic('light');
-
-  var now=new Date().toISOString();
-  var ticketId='WEB-'+Date.now();
-  var nama=tgDisplayName||'Tamu (Web)';
-  var kontak=tgUsername||'-';
-
-  // Tampilkan bubble dulu di UI
-  var msg={id:'cs_'+Date.now(),customer_tg_id:String(tgUserId),customer_name:nama,customer_tg:kontak,text:text,from_admin:false,created_at:now};
-  csMessages.push(msg);appendBubble(msg,true);
-
-  // Bangun pesan ke admin
-  var tgText=
-    '🌐 <b>PESAN DARI WEB</b>\n'+
-    '━━━━━━━━━━━━━━━━━━━━\n'+
-    '👤 <b>Nama:</b> '+nama+'\n'+
-    '📲 <b>Telegram:</b> @'+kontak+'\n'+
-    '🎫 <b>Ref:</b> <code>'+ticketId+'</code>\n'+
-    '━━━━━━━━━━━━━━━━━━━━\n'+
-    '💬 '+text+'\n\n'+
-    '💡 <i>Balas pelanggan langsung via @'+kontak+'</i>';
-
-  var ok=await sendToTelegram(tgText);
-  if(ok){
-    toast('✅ Pesan terkirim ke admin!','ok');
-    // Simpan juga ke Supabase sebagai backup
-    try{await sbPost('cs_messages',msg);}catch(e){}
-  }else{
-    toast('❌ Gagal kirim ke admin, coba lagi.','err');
-  }
-}
-async function pollCS(){
-  if(!tgUserId)return;
-  try{
-    var msgs=await sbGet('cs_messages','?customer_tg_id=eq.'+tgUserId+'&order=created_at.asc');
-    if(!msgs||!msgs.length)return;
-    var newMsgs=msgs.filter(function(m){return !csMessages.find(function(x){return x.id===m.id;});});
-    newMsgs.forEach(function(m){
-      csMessages.push(m);
-      if(currentScreen==='s-cs'){appendBubble(m,true);}
-      else if(m.from_admin){
-        var b=document.getElementById('csBadge');
-        var cur=parseInt(b.textContent||'0');
-        b.textContent=cur+1;b.classList.add('show');
-        haptic('medium');
-      }
-    });
-  }catch(e){console.warn('CS poll error',e);}
-}
+function renderCart(){var items=document.getElementById('cartItems'),empty=document.getElementById('cartEmpty'),summary=document.getElementById('cartSummary'),foot=document.getElementById('cartFootBtns');if(!cart.length){items.innerHTML='';empty.style.display='block';summary.style.display='none';foot.style.display='none';return;}empty.style.display='none';summary.style.display='block';foot.style.display='flex';items.innerHTML=cart.map(function(item){var sub=parseNum(item.price)*item.qty;var imgH=item.img?'<div class="ci-img"><img src="'+item.img+'"/></div>':'<div class="ci-img">👑</div>';return '<div class="cart-item">'+imgH+'<div class="ci-info"><div class="ci-name">'+item.name+'</div><div class="ci-price">'+fmtRp(parseNum(item.price))+' '+(item.per||'')+'</div>'+(item.qty>1?'<div class="ci-sub">Sub: '+fmtRp(sub)+'</div>':'')+'</div><div class="ci-ctrl"><button class="qb" onclick="setQty(\''+item.id+'\','+(item.qty-1)+')">−</button><span class="qv">'+item.qty+'</span><button class="qb" onclick="setQty(\''+item.id+'\','+(item.qty+1)+')">+</button><button class="ci-del" onclick="removeFromCart(\''+item.id+'\')">✕</button></div></div>';}).join('');document.getElementById('cartSumItems').innerHTML=cart.map(function(x){return '<div class="sum-row"><span class="lbl">'+x.name+' ×'+x.qty+'</span><span class="val">'+fmtRp(parseNum(x.price)*x.qty)+'</span></div>';}).join('');document.getElementById('cartTotalVal').textContent=fmtRp(cartTotal());}
+function renderPayment(){var total=cartTotal();var rows=cart.map(function(item,i){return '<div class="order-mini-row"><span class="lbl">'+(i+1)+'. '+item.name+' ×'+item.qty+'</span><span class="val">'+fmtRp(parseNum(item.price)*item.qty)+'</span></div>';}).join('');document.getElementById('payOrderMini').innerHTML=rows+'<hr class="order-mini-divider"/><div class="order-mini-total"><span class="lbl">Total</span><span class="val">'+fmtRp(total)+'</span></div>';}
+document.getElementById('botPayBtn').addEventListener('click',async function(){if(!cart.length){toast('❌ Keranjang kosong!','err');return;}var btn=document.getElementById('botPayBtn');btn.disabled=true;btn.textContent='⏳ Menyimpan pesanan...';haptic('medium');var total=cartTotal();var now=new Date();var orderId='VH'+Date.now();try{await sbPost('orders',{id:orderId,customer_name:tgDisplayName,customer_tg:tgUsername,customer_tg_id:String(tgUserId||'guest_'+Date.now()),items:cart,total:total,status:'pending_payment',created_at:now.toISOString()});var orderMsg=buildOrderMessage(orderId,now);var ds=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});var ts=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});document.getElementById('successDetail').textContent='📦 ORDER ID: '+orderId+'\n💰 Total  : '+fmtRp(total)+'\n🗓 Waktu  : '+ds+' '+ts+'\n📌 Status : Menunggu Konfirmasi Admin';haptic('heavy');goTo('s-success');var encodedMsg=encodeURIComponent(orderMsg);var productAdmin='';if(cart.length===1&&cart[0].admin_username){productAdmin=cart[0].admin_username;}else{var admins=cart.map(function(x){return x.admin_username||'';}).filter(Boolean);var uniqueAdmins=[...new Set(admins)];if(uniqueAdmins.length===1)productAdmin=uniqueAdmins[0];}var targetAdmin=(productAdmin||CFG.adminTgUsername).replace(/^@/,'');var adminUrl='https://t.me/'+targetAdmin+'?text='+encodedMsg;setTimeout(function(){try{if(window.Telegram&&window.Telegram.WebApp&&Telegram.WebApp.openLink){Telegram.WebApp.openLink(adminUrl);}else{window.open(adminUrl,'_blank');}}catch(e){window.open(adminUrl,'_blank');}},800);}catch(e){toast('❌ Gagal: '+e.message,'err');btn.disabled=false;btn.textContent='📲 Konfirmasi & Hubungi Admin';}});
+function renderCS(){var isTgUser=tg.initDataUnsafe&&tg.initDataUnsafe.user;var banner=document.getElementById('guestBanner');var guestForm=document.getElementById('guestFormWrap');var csMsgsEl=document.getElementById('csMsgs');var csInputWrap=document.querySelector('.cs-input-wrap');if(!isTgUser){var savedName='';try{savedName=localStorage.getItem('vip_guest_name')||'';}catch(e){}if(!savedName){if(banner)banner.style.display='none';if(guestForm)guestForm.style.display='flex';if(csMsgsEl)csMsgsEl.style.display='none';if(csInputWrap)csInputWrap.style.display='none';return;}else{if(banner)banner.style.display='block';if(guestForm)guestForm.style.display='none';if(csMsgsEl)csMsgsEl.style.display='flex';if(csInputWrap)csInputWrap.style.display='flex';}}else{if(banner)banner.style.display='none';if(guestForm)guestForm.style.display='none';if(csMsgsEl)csMsgsEl.style.display='flex';if(csInputWrap)csInputWrap.style.display='flex';}var container=document.getElementById('csMsgs');container.querySelectorAll('.cs-bubble-wrap').forEach(function(el){el.remove();});if(!csMessages.length){document.getElementById('csEmpty').style.display='block';return;}document.getElementById('csEmpty').style.display='none';csMessages.forEach(function(msg){appendBubble(msg,false);});container.scrollTop=container.scrollHeight;}
+function appendBubble(msg,doScroll){var container=document.getElementById('csMsgs');document.getElementById('csEmpty').style.display='none';var wrap=document.createElement('div');wrap.className='cs-bubble-wrap '+(msg.from_admin?'them':'me');wrap.dataset.msgId=msg.id;wrap.innerHTML='<div class="cs-bubble">'+escHtml(msg.text)+'</div><div class="cs-time">'+(msg.from_admin?'👨‍💼 Admin':'Kamu')+' · '+fmtTime(msg.created_at)+'</div>'+(msg.from_admin?'':'<div class="cs-sent-tag">✅ Pesan terkirim ke admin</div>');container.appendChild(wrap);if(doScroll!==false)container.scrollTop=container.scrollHeight;}
+async function sendToTelegram(text){var results=[];for(var i=0;i<CFG.adminIds.length;i++){try{var r=await fetch('https://api.telegram.org/bot'+CFG.botToken+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CFG.adminIds[i],text:text,parse_mode:'HTML'})});var d=await r.json();results.push(d.ok);}catch(e){results.push(false);}}return results.some(Boolean);}
+async function sendCSMessage(){var input=document.getElementById('csInput');var text=input.value.trim();if(!text)return;input.value='';input.style.height='auto';haptic('light');var now=new Date().toISOString();var ticketId='WEB-'+Date.now();var nama=tgDisplayName||'Tamu (Web)';var kontak=tgUsername||'-';var msg={id:'cs_'+Date.now(),customer_tg_id:String(tgUserId),customer_name:nama,customer_tg:kontak,text:text,from_admin:false,created_at:now};csMessages.push(msg);appendBubble(msg,true);var tgText='🌐 <b>PESAN DARI WEB</b>\n━━━━━━━━━━━━━━━━━━━━\n👤 <b>Nama:</b> '+nama+'\n📲 <b>Telegram:</b> @'+kontak+'\n🎫 <b>Ref:</b> <code>'+ticketId+'</code>\n━━━━━━━━━━━━━━━━━━━━\n💬 '+text+'\n\n💡 <i>Balas pelanggan langsung via @'+kontak+'</i>';var ok=await sendToTelegram(tgText);if(ok){toast('✅ Pesan terkirim ke admin!','ok');try{await sbPost('cs_messages',msg);}catch(e){}}else{toast('❌ Gagal kirim ke admin, coba lagi.','err');}}
+async function pollCS(){if(!tgUserId)return;try{var msgs=await sbGet('cs_messages','?customer_tg_id=eq.'+tgUserId+'&order=created_at.asc');if(!msgs||!msgs.length)return;var newMsgs=msgs.filter(function(m){return !csMessages.find(function(x){return x.id===m.id;});});newMsgs.forEach(function(m){csMessages.push(m);if(currentScreen==='s-cs'){appendBubble(m,true);}else if(m.from_admin){var b=document.getElementById('csBadge');var cur=parseInt(b.textContent||'0');b.textContent=cur+1;b.classList.add('show');haptic('medium');}});}catch(e){console.warn('CS poll error',e);}}
 function clearCsBadge(){var b=document.getElementById('csBadge');b.textContent='';b.classList.remove('show');}
 setInterval(pollCS,8000);
 document.getElementById('csSendBtn').onclick=sendCSMessage;
-
-// Handler form identitas guest
-document.getElementById('guestStartBtn').addEventListener('click',function(){
-  var name=document.getElementById('guestName').value.trim();
-  var contact=document.getElementById('guestContact').value.trim().replace(/^@/,'');
-  if(!name){toast('❌ Nama wajib diisi!','err');document.getElementById('guestName').focus();return;}
-  if(!contact){toast('❌ Username Telegram wajib diisi!','err');document.getElementById('guestContact').focus();return;}
-  try{localStorage.setItem('vip_guest_name',name);localStorage.setItem('vip_guest_contact',contact);}catch(e){}
-  tgDisplayName=name;
-  tgUsername=contact;
-  haptic('medium');
-  toast('✅ Siap! Kamu bisa mulai chat.','ok');
-  renderCS();
-  pollCS();
-});
+document.getElementById('guestStartBtn').addEventListener('click',function(){var name=document.getElementById('guestName').value.trim();var contact=document.getElementById('guestContact').value.trim().replace(/^@/,'');if(!name){toast('❌ Nama wajib diisi!','err');document.getElementById('guestName').focus();return;}if(!contact){toast('❌ Username Telegram wajib diisi!','err');document.getElementById('guestContact').focus();return;}try{localStorage.setItem('vip_guest_name',name);localStorage.setItem('vip_guest_contact',contact);}catch(e){}tgDisplayName=name;tgUsername=contact;haptic('medium');toast('✅ Siap! Kamu bisa mulai chat.','ok');renderCS();pollCS();});
 document.getElementById('csInput').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCSMessage();}});
 document.getElementById('csInput').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';});
-
-// ══ ADMIN ══
-function setAdmin(on){
-  isAdmin=on;
-  document.body.classList.toggle('admin-mode',on);
-  document.getElementById('adminDot').classList.toggle('show',on);
-  renderGrid();
-  // Settings screen
-  var sf=document.getElementById('settingsForm');
-  var sh=document.getElementById('settingsLoginHint');
-  var sb=document.getElementById('settingsAdminBadge');
-  if(sf)sf.style.display=on?'block':'none';
-  if(sh)sh.style.display=on?'none':'block';
-  if(sb)sb.style.display=on?'none':'block';
-  if(on){
-    // Populate settings inputs with current CFG
-    var bi=document.getElementById('setCfgBot');
-    var ai=document.getElementById('setCfgAdmin');
-    if(bi)bi.value=CFG.botUsername.replace(/^@/,'');
-    if(ai)ai.value=CFG.adminTgUsername.replace(/^@/,'');
-  }
-}
-document.getElementById('keyBtn').onclick=function(){
-  if(isAdmin)openAddModal();
-  else{openModal('loginModal');setTimeout(function(){document.getElementById('pwInput').focus();},200);}
-};
-function doLogin(){
-  var pw=document.getElementById('pwInput').value;
-  if(pw===CFG.adminPassword){
-    document.getElementById('loginErr').classList.remove('show');document.getElementById('pwInput').value='';
-    closeModal('loginModal');setAdmin(true);toast('👑 Selamat datang, Admin!','ok');
-  }else{
-    document.getElementById('loginErr').classList.add('show');document.getElementById('pwInput').value='';document.getElementById('pwInput').focus();
-  }
-}
+function setAdmin(on){isAdmin=on;document.body.classList.toggle('admin-mode',on);document.getElementById('adminDot').classList.toggle('show',on);renderGrid();var sf=document.getElementById('settingsForm');var sh=document.getElementById('settingsLoginHint');var sb=document.getElementById('settingsAdminBadge');if(sf)sf.style.display=on?'block':'none';if(sh)sh.style.display=on?'none':'block';if(sb)sb.style.display=on?'none':'block';if(on){var bi=document.getElementById('setCfgBot');var ai=document.getElementById('setCfgAdmin');if(bi)bi.value=CFG.botUsername.replace(/^@/,'');if(ai)ai.value=CFG.adminTgUsername.replace(/^@/,'');}}
+document.getElementById('keyBtn').onclick=function(){if(isAdmin)openAddModal();else{openModal('loginModal');setTimeout(function(){document.getElementById('pwInput').focus();},200);}};
+function doLogin(){var pw=document.getElementById('pwInput').value;if(pw===CFG.adminPassword){document.getElementById('loginErr').classList.remove('show');document.getElementById('pwInput').value='';closeModal('loginModal');setAdmin(true);toast('👑 Selamat datang, Admin!','ok');}else{document.getElementById('loginErr').classList.add('show');document.getElementById('pwInput').value='';document.getElementById('pwInput').focus();}}
 document.getElementById('loginBtn').onclick=doLogin;
 document.getElementById('pwInput').onkeydown=function(e){if(e.key==='Enter')doLogin();};
 document.getElementById('pwEye').onclick=function(){var i=document.getElementById('pwInput');i.type=i.type==='password'?'text':'password';};
-
-// ══ ADMIN FORM ══
 function resetImg(){uploadedImg='';var pv=document.getElementById('imgPreview');pv.src='';pv.style.display='none';document.getElementById('imgUpload').querySelector('.up-ico').style.display='block';document.getElementById('imgUpload').querySelector('.up-hint').style.display='block';document.getElementById('fileInput').value='';}
 function clearForm(){['fId','fName','fDesc','fFeats','fPrice','fPer','fAdmin'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('fTier').value='tier-permanen';resetImg();}
 function openAddModal(){isEdit=false;clearForm();document.getElementById('modalTitle').textContent='TAMBAH PAKET';document.getElementById('modalSub').textContent='Isi detail paket VIP baru.';document.getElementById('saveProd').textContent='💾 Simpan Paket';openModal('prodModal');}
-function openEditModal(id){
-  var p=allVIP.find(function(x){return x.id===id;});if(!p)return;
-  isEdit=true;clearForm();
-  document.getElementById('fId').value=p.id;document.getElementById('fName').value=p.name;
-  document.getElementById('fTier').value=p.tier||'tier-permanen';document.getElementById('fPrice').value=p.price;
-  document.getElementById('fPer').value=p.per||'';document.getElementById('fDesc').value=p.description;
-  document.getElementById('fFeats').value=(p.features||[]).join('\n');
-  document.getElementById('fAdmin').value=(p.admin_username||'').replace(/^@/,'');
-  if(p.img){uploadedImg=p.img;var pv=document.getElementById('imgPreview');pv.src=p.img;pv.style.display='block';document.getElementById('imgUpload').querySelector('.up-ico').style.display='none';document.getElementById('imgUpload').querySelector('.up-hint').style.display='none';}
-  document.getElementById('modalTitle').textContent='EDIT PAKET';document.getElementById('modalSub').textContent='Ubah data lalu simpan.';document.getElementById('saveProd').textContent='💾 Simpan Perubahan';openModal('prodModal');
-}
-document.getElementById('saveProd').addEventListener('click',async function(){
-  var name=document.getElementById('fName').value.trim();
-  var desc=document.getElementById('fDesc').value.trim();
-  if(!name||!desc){toast('❌ Nama & deskripsi wajib!','err');return;}
-  var btn=document.getElementById('saveProd');btn.disabled=true;btn.textContent='⏳...';
-  var fr=document.getElementById('fFeats').value.trim();
-  var data={
-    name:name,
-    tier:document.getElementById('fTier').value,
-    price:document.getElementById('fPrice').value.trim()||'0',
-    per:document.getElementById('fPer').value.trim()||'',
-    description:desc,
-    features:fr?fr.split('\n').map(function(f){return f.trim();}).filter(Boolean):[],
-    img:uploadedImg,
-    admin_username:document.getElementById('fAdmin').value.trim().replace(/^@/,'')||''
-  };
-  try{
-    if(isEdit){
-      await sbPatch('vip_packages',document.getElementById('fId').value,data);
-      toast('✅ Paket diperbarui!','ok');
-    }else{
-      data.id='vip_'+Date.now();
-      var r=await fetch(SB+'/vip_packages',{method:'POST',headers:Object.assign({'Prefer':'return=representation'},SBH),body:JSON.stringify(data)});
-      if(!r.ok)throw new Error(await r.text());
-      toast('✅ Paket ditambahkan!','ok');
-    }
-    closeModal('prodModal');await loadVIP();
-  }catch(e){toast('❌ Gagal: '+e.message,'err');}
-  btn.disabled=false;btn.textContent=isEdit?'💾 Simpan Perubahan':'💾 Simpan Paket';
-});
-document.getElementById('confirmDel').addEventListener('click',async function(){
-  if(!pendingDelId)return;
-  var btn=document.getElementById('confirmDel');btn.disabled=true;btn.textContent='⏳...';
-  try{await sbDelete('vip_packages',pendingDelId);toast('🗑️ Paket dihapus');pendingDelId=null;closeModal('delModal');await loadVIP();}
-  catch(e){toast('❌ Gagal: '+e.message,'err');}
-  btn.disabled=false;btn.textContent='🗑️ Hapus';
-});
+function openEditModal(id){var p=allVIP.find(function(x){return x.id===id;});if(!p)return;isEdit=true;clearForm();document.getElementById('fId').value=p.id;document.getElementById('fName').value=p.name;document.getElementById('fTier').value=p.tier||'tier-permanen';document.getElementById('fPrice').value=p.price;document.getElementById('fPer').value=p.per||'';document.getElementById('fDesc').value=p.description;document.getElementById('fFeats').value=(p.features||[]).join('\n');document.getElementById('fAdmin').value=(p.admin_username||'').replace(/^@/,'');if(p.img){uploadedImg=p.img;var pv=document.getElementById('imgPreview');pv.src=p.img;pv.style.display='block';document.getElementById('imgUpload').querySelector('.up-ico').style.display='none';document.getElementById('imgUpload').querySelector('.up-hint').style.display='none';}document.getElementById('modalTitle').textContent='EDIT PAKET';document.getElementById('modalSub').textContent='Ubah data lalu simpan.';document.getElementById('saveProd').textContent='💾 Simpan Perubahan';openModal('prodModal');}
+document.getElementById('saveProd').addEventListener('click',async function(){var name=document.getElementById('fName').value.trim();var desc=document.getElementById('fDesc').value.trim();if(!name||!desc){toast('❌ Nama & deskripsi wajib!','err');return;}var btn=document.getElementById('saveProd');btn.disabled=true;btn.textContent='⏳...';var fr=document.getElementById('fFeats').value.trim();var data={name:name,tier:document.getElementById('fTier').value,price:document.getElementById('fPrice').value.trim()||'0',per:document.getElementById('fPer').value.trim()||'',description:desc,features:fr?fr.split('\n').map(function(f){return f.trim();}).filter(Boolean):[],img:uploadedImg,admin_username:document.getElementById('fAdmin').value.trim().replace(/^@/,'')||''};try{if(isEdit){await sbPatch('vip_packages',document.getElementById('fId').value,data);toast('✅ Paket diperbarui!','ok');}else{data.id='vip_'+Date.now();var r=await fetch(SB+'/vip_packages',{method:'POST',headers:Object.assign({'Prefer':'return=representation'},SBH),body:JSON.stringify(data)});if(!r.ok)throw new Error(await r.text());toast('✅ Paket ditambahkan!','ok');}closeModal('prodModal');await loadVIP();}catch(e){toast('❌ Gagal: '+e.message,'err');}btn.disabled=false;btn.textContent=isEdit?'💾 Simpan Perubahan':'💾 Simpan Paket';});
+document.getElementById('confirmDel').addEventListener('click',async function(){if(!pendingDelId)return;var btn=document.getElementById('confirmDel');btn.disabled=true;btn.textContent='⏳...';try{await sbDelete('vip_packages',pendingDelId);toast('🗑️ Paket dihapus');pendingDelId=null;closeModal('delModal');await loadVIP();}catch(e){toast('❌ Gagal: '+e.message,'err');}btn.disabled=false;btn.textContent='🗑️ Hapus';});
 document.getElementById('imgUpload').onclick=function(){document.getElementById('fileInput').click();};
-document.getElementById('fileInput').addEventListener('change',function(e){
-  var file=e.target.files[0];if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(ev){
-    var img=new Image();
-    img.onload=function(){
-      var MAX=600,w=img.width,h=img.height;
-      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}}else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}}
-      var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
-      uploadedImg=c.toDataURL('image/jpeg',.65);
-      var pv=document.getElementById('imgPreview');pv.src=uploadedImg;pv.style.display='block';
-      document.getElementById('imgUpload').querySelector('.up-ico').style.display='none';
-      document.getElementById('imgUpload').querySelector('.up-hint').style.display='none';
-    };img.src=ev.target.result;
-  };reader.readAsDataURL(file);
-});
+document.getElementById('fileInput').addEventListener('change',function(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){var img=new Image();img.onload=function(){var MAX=600,w=img.width,h=img.height;if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}}else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}}var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);uploadedImg=c.toDataURL('image/jpeg',.65);var pv=document.getElementById('imgPreview');pv.src=uploadedImg;pv.style.display='block';document.getElementById('imgUpload').querySelector('.up-ico').style.display='none';document.getElementById('imgUpload').querySelector('.up-hint').style.display='none';};img.src=ev.target.result;};reader.readAsDataURL(file);});
 ['loginModal','prodModal','delModal'].forEach(function(id){document.getElementById(id).addEventListener('click',function(e){if(e.target.id===id)closeModal(id);});});
-
 loadVIP();
 loadAppCfg();
 pollCS();
+document.getElementById('saveCfgBtn').addEventListener('click',async function(){if(!isAdmin){toast('❌ Harus login admin dulu!','err');return;}var botU=(document.getElementById('setCfgBot').value||'').trim().replace(/^@/,'');var adminU=(document.getElementById('setCfgAdmin').value||'').trim().replace(/^@/,'');if(!botU||!adminU){toast('❌ Kedua username wajib diisi!','err');return;}var btn=this;btn.disabled=true;btn.textContent='⏳ Menyimpan...';try{await saveAppCfg(botU,adminU);toast('✅ Pengaturan disimpan!','ok');renderCfgDisplay();}catch(e){toast('❌ Gagal: '+e.message,'err');}btn.disabled=false;btn.textContent='💾 Simpan Pengaturan';});
 
-// ══ SETTINGS ══
-document.getElementById('saveCfgBtn').addEventListener('click', async function(){
-  if(!isAdmin){toast('❌ Harus login admin dulu!','err');return;}
-  var botU=(document.getElementById('setCfgBot').value||'').trim().replace(/^@/,'');
-  var adminU=(document.getElementById('setCfgAdmin').value||'').trim().replace(/^@/,'');
-  if(!botU||!adminU){toast('❌ Kedua username wajib diisi!','err');return;}
-  var btn=this;btn.disabled=true;btn.textContent='⏳ Menyimpan...';
-  try{
-    await saveAppCfg(botU,adminU);
-    toast('✅ Pengaturan disimpan!','ok');
-    renderCfgDisplay();
-  }catch(e){toast('❌ Gagal: '+e.message,'err');}
-  btn.disabled=false;btn.textContent='💾 Simpan Pengaturan';
-});
+// ══════════════════════════════════════════════════
+// BAGSOUND — Ambient Lo-Fi BGM otomatis
+// ══════════════════════════════════════════════════
+(function(){
+  var _bg=new Audio('https://listen.openstream.co/6273/audio');
+  _bg.loop=true;
+  _bg.volume=0.10;
+  _bg.preload='none';
+  var _bgOn=true,_bgStarted=false;
+
+  // Ingat preferensi user
+  try{if(localStorage.getItem('vip_bgm')==='0')_bgOn=false;}catch(e){}
+
+  function _upd(){
+    var fb=document.getElementById('bgFloatBtn');
+    var ss=document.getElementById('bgSettingStatus');
+    var st=document.getElementById('bgSettingToggle');
+    if(fb){fb.textContent=_bgOn?'🎵':'🔇';fb.classList.toggle('muted',!_bgOn);}
+    if(ss)ss.textContent=_bgOn?'Aktif — tap untuk matikan':'Mati — tap untuk aktifkan';
+    if(st)st.textContent=_bgOn?'🔊':'🔇';
+  }
+
+  function _play(){
+    if(!_bgOn||_bgStarted)return;
+    _bgStarted=true;
+    _bg.play().catch(function(){_bgStarted=false;});
+  }
+
+  // Fungsi toggle dipanggil dari tombol
+  window.bgToggleUI=function(){
+    _bgOn=!_bgOn;
+    try{localStorage.setItem('vip_bgm',_bgOn?'1':'0');}catch(e){}
+    if(_bgOn){_bgStarted=false;_play();toast('🎵 BGM aktif','ok');}
+    else{_bg.pause();_bgStarted=false;toast('🔇 BGM dimatikan');}
+    haptic('light');
+    _upd();
+  };
+
+  // Mulai setelah interaksi pertama (browser autoplay policy)
+  var _init=false;
+  function _start(){if(_init)return;_init=true;if(_bgOn)_play();}
+  document.addEventListener('click',_start,{once:true});
+  document.addEventListener('touchstart',_start,{once:true});
+
+  _upd();
+})();
+
+// ══ BAGSOUND — ambient lo-fi BGM otomatis ══
+(function(){
+  // Audio element tersembunyi sebagai background music
+  var _bg = new Audio();
+  _bg.src = 'https://archive.org/download/smoke-mood-just-relax-chill-house-deep-house-mix-chill-deep-feelings-stress-relief-1/Smoke%20Mood%20-%20Just%20Relax%20_%20Chill%20House%20%26%20Deep%20House%20Mix%20%F0%9F%8E%A7%20Chill%20_%20Deep%20Feelings%20_%20Stress%20Relief%20%281%29.mp3';
+  _bg.loop = true;
+  _bg.volume = 0.10; // volume pelan, feel ambient
+  _bg.preload = 'none';
+
+  var _bgStarted = false;
+
+  function _bgPlay(){
+    if(_bgStarted) return;
+    _bgStarted = true;
+    _bg.play().catch(function(){ _bgStarted = false; });
+  }
+
+  // Mulai setelah interaksi pertama (wajib untuk autoplay policy browser)
+  document.addEventListener('click',    function(){ _bgPlay(); }, {once:true});
+  document.addEventListener('touchstart', function(){ _bgPlay(); }, {once:true});
+
+  // Fungsi global untuk mute/unmute bagsound dari luar
+  window.bgMute   = function(){ _bg.pause(); _bgStarted = false; };
+  window.bgUnmute = function(){ _bgStarted = false; _bgPlay(); };
+  window.bgVol    = function(v){ _bg.volume = Math.min(1, Math.max(0, v)); };
+})();
+
 </script>
 </body>
 </html>
